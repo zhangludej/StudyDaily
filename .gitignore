@@ -22,3 +22,6 @@ StudyDaily-离线版.apk
 StudyDailyPC/build-pyi/
 StudyDailyPC/dist/
 StudyDailyPC/app.ico
+
+# 桌面版内置网页资源（由 StudyDaily/ 同步生成）
+StudyDailyPC/web/
