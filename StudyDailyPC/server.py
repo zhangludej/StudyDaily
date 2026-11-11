@@ -18,6 +18,7 @@ import time
 import queue
 import subprocess
 import webbrowser
+from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -698,6 +699,97 @@ def start_server() -> int:
     return port
 
 
+def wait_ready(port: int, seconds: float = 6.0) -> bool:
+    """确认服务真的能应答，再开窗口——否则 Edge 只会显示拒绝连接"""
+    deadline = time.time() + seconds
+    while time.time() < deadline:
+        try:
+            with urllib.request.urlopen("http://127.0.0.1:%d/api/ping" % port,
+                                        timeout=1) as r:
+                if json.loads(r.read().decode("utf-8")).get("server") == "StudyDaily-PC":
+                    return True
+        except Exception:
+            time.sleep(0.1)
+    return False
+
+
+def setup_log() -> None:
+    """打包成 windowed exe 后 stdout/stderr 都看不见了，落一份日志到数据目录"""
+    try:
+        f = open(DATA_DIR / "log.txt", "a", encoding="utf-8", buffering=1)
+        sys.stdout = f
+        sys.stderr = f
+        print("\n==== %s 启动 pid=%d ====" % (datetime.now().strftime("%m-%d %H:%M:%S"), os.getpid()))
+        print("exe:", sys.executable)
+        print("data:", DATA_DIR, " local_course:", LOCAL_COURSE)
+    except Exception:
+        pass
+
+
+def alert(msg: str) -> None:
+    """启动失败时至少弹个窗，而不是让用户对着拒绝连接的页面发呆"""
+    try:
+        import ctypes
+        ctypes.windll.user32.MessageBoxW(0, msg, "StudyDaily", 0x10)
+    except Exception:
+        pass
+
+
+def run_window_mode() -> None:
+    existing = ping_existing()
+    if existing is not None:
+        if wait_ready(existing, 3):
+            open_window("http://127.0.0.1:%d/" % existing)
+            return
+        # 旧实例已经名存实亡（比如被安全软件关了），继续自己起一份
+    port = start_server()
+    print("server on port", port)
+    if not wait_ready(port):
+        alert("内部服务启动失败。\n\n日志位置：%s\\log.txt" % DATA_DIR)
+        return
+    url = "http://127.0.0.1:%d/" % port
+    proc = open_window(url)
+    if proc is not None:
+        # 窗口关掉就退出，避免后台残留进程
+        proc.wait()
+    else:
+        try:
+            while True:
+                time.sleep(3600)
+        except KeyboardInterrupt:
+            pass
+
+
+def main() -> None:
+    setup_log()
+    # 维护用：只跑服务、不开窗口，方便自检
+    if "--server-only" in sys.argv or "--no-window" in sys.argv:
+        try:
+            port = start_server()
+            (DATA_DIR / "last_port.txt").write_text(str(port), encoding="utf-8")
+            print("server-only on port", port)
+            while True:
+                time.sleep(3600)
+        except KeyboardInterrupt:
+            pass
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            alert("服务启动失败：%s\n\n详细信息见 %s\\log.txt" % (e, DATA_DIR))
+        return
+
+    try:
+        run_window_mode()
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        alert("启动失败：%s\n\n详细信息见 %s\\log.txt" % (e, DATA_DIR))
+
+
+if __name__ == "__main__":
+    main()
+
+
 def find_edge() -> str | None:
     for p in (r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
               r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
@@ -746,38 +838,3 @@ def ping_existing() -> int | None:
     return None
 
 
-def main() -> None:
-    # 维护用：只跑服务、不开窗口，方便自检
-    if "--server-only" in sys.argv or "--no-window" in sys.argv:
-        port = start_server()
-        try:
-            (DATA_DIR / "last_port.txt").write_text(str(port), encoding="utf-8")
-        except OSError:
-            pass
-        try:
-            while True:
-                time.sleep(3600)
-        except KeyboardInterrupt:
-            pass
-        return
-
-    existing = ping_existing()
-    if existing is not None:
-        open_window("http://127.0.0.1:%d/" % existing)
-        return
-    port = start_server()
-    url = "http://127.0.0.1:%d/" % port
-    proc = open_window(url)
-    if proc is not None:
-        # 窗口关掉就退出，避免后台残留进程
-        proc.wait()
-    else:
-        try:
-            while True:
-                time.sleep(3600)
-        except KeyboardInterrupt:
-            pass
-
-
-if __name__ == "__main__":
-    main()
