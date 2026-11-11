@@ -396,8 +396,8 @@ public class MiniServer {
             return;
         }
 
-        // 3) 视频但本地/缓存都没有：云端边下边播，同时后台存一份
-        if (path.startsWith("/videos/")) {
+        // 3) 视频 / 练习册页：本地和缓存都没有就走云端，边用边缓存
+        if (path.startsWith("/videos/") || path.startsWith("/workbooks/")) {
             serveRemoteVideo(path, headers, out, headOnly);
             return;
         }
@@ -696,7 +696,7 @@ public class MiniServer {
         if (dir == null) return;
         List<File> files = new ArrayList<File>();
         long total = 0;
-        collectCacheFiles(new File(dir, "videos"), files);
+        collectCacheFiles(dir, files);
         for (int i = 0; i < files.size(); i++) total += files.get(i).length();
         if (total <= CACHE_LIMIT) return;
         // 按最后访问时间升序删
@@ -728,7 +728,7 @@ public class MiniServer {
         List<File> files = new ArrayList<File>();
         long total = 0;
         if (dir != null) {
-            collectCacheFiles(new File(dir, "videos"), files);
+            collectCacheFiles(dir, files);
             for (int i = 0; i < files.size(); i++) total += files.get(i).length();
         }
         StringBuilder sb = new StringBuilder();
@@ -752,7 +752,7 @@ public class MiniServer {
     private void clearCache() {
         File dir = cacheDir;
         if (dir == null) return;
-        deleteTree(new File(dir, "videos"));
+        deleteTree(dir);
     }
 
     private void deleteTree(File f) {

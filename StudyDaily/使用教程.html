@@ -266,7 +266,7 @@ python tools/prepare_courses.py --src "D:/幼小衔接课程" --dry-run</pre>
   <li>每本书都会<b>记住看到第几页</b>，下次翻开接着做；书架封面下方会显示「看到第 X 页」</li>
   <li>翻开时小熊会念书名并提示「点下面的箭头翻页」，孩子不识字也能自己操作</li>
   <li>练习册<b>不占用每天的 30 分钟</b>，也不影响排课，随时想看就看；翻到最后一页会提示「这是最后一页啦」</li>
-  <li>这些扫描页占用约 59 MB，放在平板 <code>/内部存储/StudyDaily/workbooks/</code> 文件夹里，<b>不占 APK 空间</b>。把整个 StudyDaily 文件夹拷到平板时练习册就一起带过去了</li>
+  <li>这些扫描页约 59 MB，<b>不占 APK 空间</b>：默认从云端按页加载（翻到哪页取哪页，一页约 90 KB），看过的页自动缓存；也可以把整个 StudyDaily 文件夹拷进平板当作完全离线版</li>
   <li>想加新书：把 PDF 放进一个文件夹，在电脑上运行 <code>python tools/build_workbooks.py --src "PDF所在文件夹"</code>，再运行 <code>python tools/make_voice.py</code> 补语音，最后重新打包安装</li>
 </ul>
 
