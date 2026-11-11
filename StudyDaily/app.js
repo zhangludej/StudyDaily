@@ -702,7 +702,32 @@
       $('#wbReader').classList.remove('hidden');
       $('#wbBookTitle').textContent = b.title;
       showPage(true);
+      warmBook(b);
       Speech.sayParts([b.say || b.title, '翻开啦，点下面的箭头翻页'], true);
+    }
+
+    // 练习册页不在安装包里：打开一本就在后台把整本拉进本机缓存（每次最多两页并发），
+    // 这样第一遍之后翻页是本地读取，秒开。已经缓存过的页请求会立刻返回，几乎不费流量。
+    var warmToken = 0;
+    function warmBook(b) {
+      var token = ++warmToken;
+      var i = 0, running = 0;
+      function next() {
+        if (token !== warmToken) return;
+        while (running < 2 && i < b.pages) {
+          var n = i++;
+          running++;
+          var img = new Image();
+          var done = function () {
+            running--;
+            next();
+          };
+          img.onload = done;
+          img.onerror = done;
+          img.src = encodePath(b.folder + '/p' + ('00' + (n + 1)).slice(-3) + '.jpg');
+        }
+      }
+      next();
     }
 
     function showPage(keep) {
@@ -730,11 +755,14 @@
 
     function backToShelf() {
       cur = null;
+      warmToken++;          // 停止后台预取，别占着网
       $('#wbReader').classList.add('hidden');
       showShelf();
     }
 
     function closeShelf() {
+      cur = null;
+      warmToken++;
       $('#wbView').classList.add('hidden');
       $('#kidView').classList.remove('hidden');
     }

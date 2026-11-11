@@ -53,8 +53,17 @@ public class MiniServer {
             "https://ghfast.top/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
             "https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/"
     };
-    /** 缓存上限：超过就按最久未看淘汰 */
-    private static final long CACHE_LIMIT = 2L * 1024 * 1024 * 1024;
+    /**
+     * 练习册页、海报这类几十 KB 的小图走 CDN（jsDelivr 对静态小文件命中快），
+     * 视频那种几十 MB 的文件才用 github 代理。
+     */
+    private static final String[] PAGE_BASES = new String[]{
+            "https://cdn.jsdelivr.net/gh/zhangludej/StudyDaily-courseware@main/",
+            "https://gh-proxy.com/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
+            "https://gcore.jsdelivr.net/gh/zhangludej/StudyDaily-courseware@main/",
+            "https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/"
+    };
+    /** 缓存上限：超过就按最久未看淘汰 */    private static final long CACHE_LIMIT = 2L * 1024 * 1024 * 1024;
     /** 单集下载上限，防止异常响应写爆磁盘 */
     private static final long SINGLE_FILE_LIMIT = 260L * 1024 * 1024;
     /** 公益代理首包慢且抖，连接/读取超时都给足，否则第一集之后全部失败 */
@@ -860,6 +869,21 @@ public class MiniServer {
         return list.toArray(new String[list.size()]);
     }
 
+    /** 小图（练习册页、海报）：按近期成功率挑顺序，CDN 优先 */
+    private String[] orderedPageBases() {
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < PAGE_BASES.length; i++) list.add(PAGE_BASES[i]);
+        java.util.Collections.sort(list, new java.util.Comparator<String>() {
+            @Override
+            public int compare(String a, String b) {
+                int fa = failsOf(a), fb = failsOf(b);
+                if (fa != fb) return fa - fb;
+                return 0;
+            }
+        });
+        return list.toArray(new String[list.size()]);
+    }
+
     private int failsOf(String base) {
         Integer v = baseFails.get(base);
         return v == null ? 0 : v.intValue();
@@ -950,7 +974,9 @@ public class MiniServer {
     private void serveRemoteVideo(String path, Map<String, String> headers,
                                   OutputStream out, boolean headOnly) {
         File target = cacheFileOf(path);
-        if (target != null && !target.isFile()) {
+        // 练习册页/海报是小整图：边发边存，不再额外开一路后台下载（省一半流量）
+        boolean page = path.startsWith("/workbooks/") || path.startsWith("/posters/");
+        if (!page && target != null && !target.isFile()) {
             startBackgroundDownload(path, target);
         }
 
@@ -977,9 +1003,10 @@ public class MiniServer {
             }
 
             long deadline = System.currentTimeMillis() + FIRST_BYTE_BUDGET;
+            // 小图走 CDN 源，视频走 gh 代理源
             // 两轮：第一轮按健康度试所有源，第二轮再给主力源一次机会（首包抖动很常见）
             for (int round = 0; round < 2 && !started; round++) {
-                String[] bases = orderedBases();
+                String[] bases = page ? orderedPageBases() : orderedBases();
                 for (int i = 0; i < bases.length; i++) {
                     long remain = deadline - System.currentTimeMillis();
                     if (started) break;
@@ -1024,18 +1051,47 @@ public class MiniServer {
                             return;
                         }
                         activeStreams.incrementAndGet();
+                        File part = null;
+                        FileOutputStream cos = null;
+                        boolean cacheInline = page && code == 200 && target != null;
                         try {
                             InputStream is = conn.getInputStream();
+                            if (cacheInline) {
+                                try {
+                                    File parent = target.getParentFile();
+                                    if (parent != null) parent.mkdirs();
+                                    part = new File(target.getPath() + ".part");
+                                    cos = new FileOutputStream(part);
+                                } catch (Exception e) {
+                                    part = null;
+                                    cos = null;
+                                }
+                            }
                             OutputStream bout = new java.io.BufferedOutputStream(out, 64 * 1024);
                             try {
                                 byte[] buf = new byte[64 * 1024];
                                 int n;
-                                while ((n = is.read(buf)) > 0) bout.write(buf, 0, n);
+                                while ((n = is.read(buf)) > 0) {
+                                    bout.write(buf, 0, n);
+                                    if (cos != null) cos.write(buf, 0, n);
+                                }
                                 bout.flush();
                             } finally {
                                 try { is.close(); } catch (IOException ignored) { }
                             }
                         } finally {
+                            if (cos != null) {
+                                try { cos.close(); } catch (IOException ignored) { }
+                            }
+                            if (part != null) {
+                                if (part.length() > 1024) {
+                                    if (target.exists()) target.delete();
+                                    part.renameTo(target);
+                                    evictIfNeeded();
+                                } else {
+                                    part.delete();
+                                }
+                            }
                             activeStreams.decrementAndGet();
                             conn.disconnect();
                         }

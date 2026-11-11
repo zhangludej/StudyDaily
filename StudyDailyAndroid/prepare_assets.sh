@@ -23,8 +23,7 @@ mkdir -p "$DST/voice"
 cp "$SRC"/voice/*.mp3 "$DST/voice/" 2>/dev/null || true
 cp "$SRC"/voice/index.json "$DST/voice/" 2>/dev/null || true
 cp "$SRC"/icons/*.png "$DST/icons/"
-# 练习册 619 页 + 课程海报：内置后书页秒开，不依赖网络（59MB）
-cp -r "$SRC/workbooks" "$DST/workbooks"
+# 课程海报 1.5MB，云端仓库里没有，必须内置
 cp -r "$SRC/posters" "$DST/posters"
 cp "$SRC/使用教程.html" "$DST/guide.html"
 

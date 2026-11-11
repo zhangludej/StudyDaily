@@ -32,6 +32,21 @@ REMOTE_BASES = [
     "https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
 ]
 
+# 练习册页、海报这类几十 KB 的小图：CDN 命中比 github 代理快
+PAGE_BASES = [
+    "https://cdn.jsdelivr.net/gh/zhangludej/StudyDaily-courseware@main/",
+    "https://gh-proxy.com/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
+    "https://gcore.jsdelivr.net/gh/zhangludej/StudyDaily-courseware@main/",
+    "https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
+]
+
+
+def bases_for(rel: str) -> list:
+    """小图走 CDN，视频走 gh 代理"""
+    if rel.startswith("workbooks/") or rel.startswith("posters/"):
+        return PAGE_BASES
+    return REMOTE_BASES
+
 CONNECT_TIMEOUT = 20
 READ_TIMEOUT = 60
 FIRST_BYTE_BUDGET = 50          # 拿到首字节的总预算（秒）
@@ -138,9 +153,12 @@ def mark_ok(base: str) -> None:
             save_fastest(base)
 
 
-def ordered_bases() -> list[str]:
+def ordered_bases(rel: str = "") -> list[str]:
+    pool = bases_for(rel)
+    if pool is PAGE_BASES:
+        return sorted(pool, key=fails_of)
     best = fastest
-    return sorted(REMOTE_BASES,
+    return sorted(pool,
                   key=lambda b: (0 if b == best else 1, fails_of(b)))
 
 
@@ -229,7 +247,7 @@ def download_worker() -> None:
 def download_one(rel: str, target: Path) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     part = target.with_suffix(target.suffix + ".part")
-    for base in ordered_bases():
+    for base in ordered_bases(rel):
         try:
             req = urllib.request.Request(base + rel, headers={
                 "User-Agent": USER_AGENT, "Accept-Encoding": "identity"})
@@ -534,7 +552,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def serve_remote(self, rel: str, head_only: bool):
         target = cache_path_of(rel)
-        if target is not None and not target.is_file():
+        # 练习册页/海报是小整图：边发边存，不再额外排队下载一份（省一半流量）
+        is_page = rel.startswith("workbooks/") or rel.startswith("posters/")
+        if (not is_page) and target is not None and not target.is_file():
             enqueue_download(rel, target)
 
         rng = self.headers.get("Range")
@@ -547,7 +567,7 @@ class Handler(BaseHTTPRequestHandler):
         last_err = None
         try:
             for rnd in range(2):
-                bases = ordered_bases()
+                bases = ordered_bases(rel)
                 for i, base in enumerate(bases):
                     if started:
                         break
@@ -589,13 +609,38 @@ class Handler(BaseHTTPRequestHandler):
                             resp.close()
                             return
                         inc_stream()
+                        cos = None
+                        part = None
+                        if is_page and code == 200 and target is not None:
+                            try:
+                                target.parent.mkdir(parents=True, exist_ok=True)
+                                part = target.with_suffix(target.suffix + ".part")
+                                cos = open(part, "wb")
+                            except OSError:
+                                cos, part = None, None
                         try:
                             while True:
                                 buf = resp.read(CHUNK)
                                 if not buf:
                                     break
                                 self.wfile.write(buf)
+                                if cos is not None:
+                                    cos.write(buf)
                         finally:
+                            if cos is not None:
+                                try:
+                                    cos.close()
+                                except OSError:
+                                    pass
+                            if part is not None and part.is_file():
+                                try:
+                                    if part.stat().st_size > 1024:
+                                        part.replace(target)
+                                        evict_if_needed()
+                                    else:
+                                        part.unlink()
+                                except OSError:
+                                    pass
                             dec_stream()
                             resp.close()
                         return
