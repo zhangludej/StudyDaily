@@ -1,6 +1,12 @@
 package com.studydaily.app;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.DocumentsContract;
+import android.provider.OpenableColumns;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -83,8 +89,17 @@ public class MiniServer {
     private final ExecutorService downloadPool = Executors.newSingleThreadExecutor();
     /** 最快源持久化文件（下次启动不用再等测速） */
     private volatile File netBestFile = null;
-    /** 家长要求启用本地课件时的回调（Activity 弹授权） */
+    /** 家长要求启用本地课件时的回调（Activity 弹文件夹选择器） */
     private volatile Runnable onRequestLocalAccess = null;
+    /** 家长用系统文件选择器指定的离线课件文件夹（免「所有文件访问」权限） */
+    private volatile Uri treeUri = null;
+    private volatile ContentResolver resolver = null;
+    private volatile String treeName = "";
+    /** 课件文件夹是否真的能用，验证一次后缓存，避免每次请求都探测 */
+    private volatile Boolean treeOk = null;
+    /** 已定位过的课件文件（拖动进度条会发很多次 Range 请求，缓存省掉重复查找） */
+    private final Map<String, TreeFile> treeCache =
+            java.util.Collections.synchronizedMap(new HashMap<String, TreeFile>());
     private ServerSocket serverSocket;
     private ExecutorService pool;
     private int port = 0;
@@ -99,10 +114,49 @@ public class MiniServer {
         this.root = dir;
     }
 
-    /** 本机课件文件夹是否可用（有 courses.json 才算完整） */
+    /** 本机课件文件夹是否可用：直接目录看 courses.json，选定的文件夹看有没有视频 */
     public boolean localReady() {
         File r = root;
-        return r != null && new File(r, "courses.json").isFile();
+        if (r != null && new File(r, "courses.json").isFile()) return true;
+        if (treeUri == null || resolver == null) return false;
+        Boolean known = treeOk;
+        if (known != null) return known.booleanValue();
+        boolean ok = false;
+        String[] probes = new String[]{"videos/u01/001.mp4", "videos/u02/001.mp4",
+                "videos/u03/001.mp4", "videos/u04/001.mp4"};
+        for (int i = 0; i < probes.length && !ok; i++) {
+            ok = statInTree(probes[i]) != null;
+        }
+        treeOk = Boolean.valueOf(ok);
+        return ok;
+    }
+
+    /** 家长用系统文件选择器选好了课件文件夹（支持只选含 videos 的那一层） */
+    public void setLocalTree(Context ctx, Uri uri) {
+        if (ctx == null || uri == null) {
+            treeUri = null;
+            treeOk = null;
+            return;
+        }
+        resolver = ctx.getApplicationContext().getContentResolver();
+        treeUri = uri;
+        treeOk = null;
+        treeCache.clear();
+        String n = uri.getLastPathSegment();
+        if (n != null) {
+            int c = n.indexOf(':');
+            treeName = c >= 0 ? n.substring(c + 1) : n;
+        } else {
+            treeName = "";
+        }
+    }
+
+    public Uri getLocalTree() {
+        return treeUri;
+    }
+
+    public String getLocalTreeName() {
+        return treeName == null ? "" : treeName;
     }
 
     /** 家长点「使用本地课件」时回调，由 Activity 弹出系统授权页 */
@@ -393,8 +447,14 @@ public class MiniServer {
             if (r != null) {
                 dir = r.getAbsolutePath().replace("\\", "\\\\").replace("\"", "\\\"");
             }
+            if (dir.length() == 0 && treeUri != null) {
+                dir = ("已选择的文件夹 " + (treeName == null ? "" : treeName))
+                        .replace("\\", "\\\\").replace("\"", "\\\"");
+            }
             sendText(out, 200, "OK", "application/json; charset=utf-8",
-                    "{\"ok\":true,\"ready\":" + ready + ",\"dir\":\"" + dir + "\"}");
+                    "{\"ok\":true,\"ready\":" + ready
+                            + ",\"picked\":" + (treeUri != null)
+                            + ",\"dir\":\"" + dir + "\"}");
             return;
         }
 
@@ -484,6 +544,15 @@ public class MiniServer {
             return;
         }
 
+        // 1.5) 家长选定的离线课件文件夹（SAF，手机存任意位置都行，不需要存储权限）
+        if (treeUri != null && (path.startsWith("/videos/") || path.startsWith("/workbooks/"))) {
+            TreeFile tf = statInTree(path.substring(1));
+            if (tf != null) {
+                serveTreeFile(tf, path, headers, out, headOnly);
+                return;
+            }
+        }
+
         // 2) 云端看过的课：缓存里有一份就直接播（离线可用，秒开）
         File cached = cacheFileOf(path);
         if (cached != null && cached.isFile()) {
@@ -524,6 +593,196 @@ public class MiniServer {
         }
 
         sendText(out, 404, "Not Found", "text/plain; charset=utf-8", "找不到文件：" + path);
+    }
+
+    // ------------------------------------------------- 离线课件文件夹（SAF）
+
+    /** 选定文件夹里的一个文件 */
+    private static final class TreeFile {
+        final Uri uri;
+        final long size;
+        final String name;
+
+        TreeFile(Uri uri, long size, String name) {
+            this.uri = uri;
+            this.size = size;
+            this.name = name;
+        }
+    }
+
+    /**
+     * 在选定的文件夹里按相对路径找文件。
+     * 家长可能选的是「含 videos 的那一层」，也可能直接选了 videos 文件夹，两种都试。
+     */
+    private TreeFile statInTree(String rel) {
+        if (rel == null || rel.length() == 0) return null;
+        TreeFile cached = treeCache.get(rel);
+        if (cached != null) return cached;
+        TreeFile f = statRel(rel);
+        if (f == null) {
+            if (rel.startsWith("videos/")) {
+                f = statRel(rel.substring(7));
+            } else if (rel.startsWith("workbooks/")) {
+                f = statRel(rel.substring(10));
+            }
+        }
+        // 有些文件管理器（下载、网盘类）的文档 id 不是路径，只能逐层按名字找
+        if (f == null) f = walkTree(rel);
+        if (f == null && rel.startsWith("videos/")) f = walkTree(rel.substring(7));
+        if (f == null && rel.startsWith("workbooks/")) f = walkTree(rel.substring(10));
+        if (f != null) {
+            if (treeCache.size() > 800) treeCache.clear();
+            treeCache.put(rel, f);
+        }
+        return f;
+    }
+
+    /** 逐层按名字查找（videos/u01/001.mp4 最多三层），兼容各种文档提供方 */
+    private TreeFile walkTree(String rel) {
+        ContentResolver cr = resolver;
+        Uri tree = treeUri;
+        if (cr == null || tree == null) return null;
+        try {
+            String parentId = DocumentsContract.getTreeDocumentId(tree);
+            if (parentId == null) return null;
+            String[] parts = rel.split("/");
+            for (int i = 0; i < parts.length; i++) {
+                boolean lastPart = (i == parts.length - 1);
+                Uri children = DocumentsContract.buildChildDocumentsUriUsingTree(tree, parentId);
+                Cursor c = cr.query(children, new String[]{
+                        DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+                        OpenableColumns.DISPLAY_NAME,
+                        OpenableColumns.SIZE}, null, null, null);
+                if (c == null) return null;
+                String hitId = null;
+                long hitSize = -1L;
+                try {
+                    while (c.moveToNext()) {
+                        String id = c.getString(0);
+                        String name = c.getString(1);
+                        if (name != null && name.equals(parts[i])) {
+                            hitId = id;
+                            hitSize = c.isNull(2) ? -1L : c.getLong(2);
+                            break;
+                        }
+                    }
+                } finally {
+                    c.close();
+                }
+                if (hitId == null) return null;
+                if (lastPart) {
+                    Uri doc = DocumentsContract.buildDocumentUriUsingTree(tree, hitId);
+                    return new TreeFile(doc, hitSize, parts[i]);
+                }
+                parentId = hitId;
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private TreeFile statRel(String rel) {
+        ContentResolver cr = resolver;
+        Uri tree = treeUri;
+        if (cr == null || tree == null) return null;
+        try {
+            String docId = DocumentsContract.getTreeDocumentId(tree);
+            if (docId == null) return null;
+            String childId = docId;
+            if (!childId.endsWith("/")) childId = childId + "/";
+            childId = childId + rel;
+            Uri doc = DocumentsContract.buildDocumentUriUsingTree(tree, childId);
+            long size = -1L;
+            String name = null;
+            Cursor c = cr.query(doc,
+                    new String[]{OpenableColumns.SIZE, OpenableColumns.DISPLAY_NAME},
+                    null, null, null);
+            if (c != null) {
+                try {
+                    if (c.moveToFirst()) {
+                        if (!c.isNull(0)) size = c.getLong(0);
+                        if (!c.isNull(1)) name = c.getString(1);
+                    }
+                } finally {
+                    c.close();
+                }
+            }
+            if (size < 0) return null;
+            return new TreeFile(doc, size, name);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /** 从选定文件夹里读文件，支持 Range（拖进度条、边下边播都靠它） */
+    private void serveTreeFile(TreeFile tf, String path, Map<String, String> headers,
+                               OutputStream out, boolean headOnly) throws IOException {
+        long len = tf.size;
+        String mime = mimeOf(tf.name != null ? tf.name : path);
+        String range = headers.get("range");
+        long start = 0, end = len - 1;
+        boolean partial = false;
+        if (range != null && range.startsWith("bytes=") && len > 0) {
+            long[] rp = parseRange(range, len);
+            if (rp == null) {
+                writeHead(out, "416 Requested Range Not Satisfiable",
+                        "Content-Range", "bytes */" + len,
+                        "Content-Type", mime,
+                        "Accept-Ranges", "bytes");
+                return;
+            }
+            start = rp[0];
+            end = rp[1];
+            partial = true;
+        }
+        long want = (len == 0) ? 0 : (end - start + 1);
+        Map<String, String> h = new LinkedHashMap<String, String>();
+        h.put("Content-Type", mime);
+        h.put("Accept-Ranges", "bytes");
+        h.put("Content-Length", String.valueOf(want));
+        h.put("Cache-Control", "no-cache");
+        if (partial) h.put("Content-Range", "bytes " + start + "-" + end + "/" + len);
+        writeHead(out, partial ? "206 Partial Content" : "200 OK", h);
+        if (headOnly || want == 0) {
+            safeFlush(out);
+            return;
+        }
+
+        InputStream is = null;
+        try {
+            ContentResolver cr = resolver;
+            if (cr == null) throw new IOException("no resolver");
+            is = cr.openInputStream(tf.uri);
+            if (is == null) throw new IOException("open failed");
+            byte[] buf = new byte[64 * 1024];
+            long dropped = 0;
+            while (dropped < start) {
+                long s = is.skip(start - dropped);
+                if (s > 0) {
+                    dropped += s;
+                    continue;
+                }
+                int n = is.read(buf, 0, (int) Math.min(buf.length, start - dropped));
+                if (n < 0) break;
+                dropped += n;
+            }
+            long sent = 0;
+            while (sent < want) {
+                int n = is.read(buf, 0, (int) Math.min(buf.length, want - sent));
+                if (n < 0) break;
+                out.write(buf, 0, n);
+                sent += n;
+            }
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+        safeFlush(out);
     }
 
     private void serveFile(File file, Map<String, String> headers,

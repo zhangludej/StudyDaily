@@ -1209,13 +1209,17 @@
       .then(function (d) {
         var btn = $('#localEnable');
         if (d && d.ready) {
-          el.textContent = '已启用：' + (d.dir || '本地文件夹')
+          el.textContent = '已开启：' + (d.dir || '本机文件夹')
             + '　视频和练习册都从本机读取，完全断网也能用。';
           if (btn) btn.classList.add('hidden');
         } else {
-          el.textContent = '未启用（当前走云端点播，第一次看新的一集需要联网）。';
-          if (btn) btn.classList.remove('hidden');
-          if (d && d.dir) el.textContent += ' 检测到的文件夹：' + d.dir + '（缺少 courses.json）';
+          el.textContent = '还没选文件夹（现在走云端点播，第一次看新的一集要联网）。'
+            + '如果本机已经存好视频，点下面的按钮选一次，之后完全不用网。';
+          if (btn) {
+            btn.classList.remove('hidden');
+            btn.textContent = '选择离线课件文件夹';
+          }
+          if (d && d.picked) el.textContent = '上次选的文件夹里没找到视频，请重新选一次。';
         }
       })
       .catch(function () {
@@ -1225,12 +1229,14 @@
 
   function enableLocal() {
     fetch('api/local', { method: 'POST' })
-      .then(function (r) { return r.json(); })
       .then(function () {
-        toast('请在系统设置里打开「允许访问所有文件」，返回后自动生效');
+        toast('请在弹出的窗口里选中存视频的那个文件夹（能看到 u01、u02 那一层）');
       })
       .catch(function () { toast('操作失败，稍后再试'); });
   }
+
+  // 安卓壳选完文件夹后会调用它来刷新这一块
+  window.sdRefreshLocal = loadLocalInfo;
 
   // ---------------- 缓存（云端点播留下的视频） ----------------
   function loadCacheInfo() {

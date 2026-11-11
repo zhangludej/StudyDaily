@@ -39,6 +39,8 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "StudyDaily";
     private static final int REQ_STORAGE = 1001;
+    private static final int REQ_TREE = 1002;
+    private static final String PREF_TREE = "local_tree";
 
     private WebView webView;
     private MiniServer server;
@@ -74,19 +76,82 @@ public class MainActivity extends Activity {
             server.setCacheDir(new File(cacheBase, "cw"));
         } catch (Throwable ignored) {
         }
-        // 家长在设置页点「使用本地课件」时，弹系统授权页（可选功能，不影响默认的云端点播）
+        // 家长在设置页点「选择离线课件文件夹」时，弹系统文件选择器（不需要「所有文件访问」权限）
         server.setLocalAccessHandler(new Runnable() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        requestStorageAccess();
+                        pickCourseFolder();
                     }
                 });
             }
         });
+        restoreCourseFolder();
         startAndLoad();
+    }
+
+    /** 上次选过的课件文件夹，重装/重启后继续生效 */
+    private void restoreCourseFolder() {
+        try {
+            String s = getPreferences(MODE_PRIVATE).getString(PREF_TREE, null);
+            if (s != null && s.length() > 0) {
+                server.setLocalTree(this, Uri.parse(s));
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    /** 打开系统「选择文件夹」，家长选 videos 所在的那一层即可 */
+    private void pickCourseFolder() {
+        try {
+            Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+            try {
+                i.putExtra("android.content.extra.SHOW_ADVANCED", true);
+            } catch (Exception ignored) {
+            }
+            startActivityForResult(i, REQ_TREE);
+        } catch (Exception e) {
+            // 极老的系统没有文件选择器，退回到「授权读取存储」
+            requestStorageAccess();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != REQ_TREE) return;
+        if (resultCode != RESULT_OK || data == null || data.getData() == null) {
+            return;
+        }
+        Uri uri = data.getData();
+        try {
+            int flags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+            getContentResolver().takePersistableUriPermission(
+                    uri, flags != 0 ? flags : Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } catch (Exception ignored) {
+        }
+        try {
+            getPreferences(MODE_PRIVATE).edit().putString(PREF_TREE, uri.toString()).apply();
+        } catch (Exception ignored) {
+        }
+        server.setLocalTree(this, uri);
+        if (server.localReady()) {
+            Toast.makeText(this, "离线课件已开启，现在断网也能看", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this,
+                    "这个文件夹里没找到 videos（应能看到 u01、u02 等子文件夹），请重新选一次",
+                    Toast.LENGTH_LONG).show();
+        }
+        if (webView != null) {
+            // 只刷新「离线课件」那一块，不整页跳回首页
+            webView.evaluateJavascript(
+                    "(function(){try{if(window.sdRefreshLocal)window.sdRefreshLocal();}catch(e){}})()",
+                    null);
+        }
     }
 
     // ------------------------------------------------------------ 目录与权限
@@ -355,7 +420,7 @@ public class MainActivity extends Activity {
                         + "return '0';})()",
                 new ValueCallback<String>() {
                     @Override
-                    public void onValueChange(String value) {
+                    public void onReceiveValue(String value) {
                         if (value == null || value.indexOf('1') < 0) {
                             MainActivity.super.onBackPressed();
                         }
