@@ -13,3 +13,7 @@ StudyDailyAndroid/keystore/
 *.log
 .DS_Store
 Thumbs.db
+
+# 本地打包产物（体积大，仅本地留存）
+StudyDaily-*.zip
+StudyDaily-离线版.apk

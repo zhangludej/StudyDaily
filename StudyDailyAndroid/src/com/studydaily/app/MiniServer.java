@@ -38,17 +38,28 @@ public class MiniServer {
     private static final String ASSET_PREFIX = "www";
     private static final int MAX_HEADER = 32 * 1024;
 
-    /** 云端课件源，按实测速度排序；启动时还会再测一次把最快的提到第一位 */
+    /**
+     * 云端课件源。只保留实测能通的三家：源越少，失败时用户等的时间越短。
+     * 顺序会被 fastestBase（实测最快）和健康度重排。
+     */
     private static final String[] REMOTE_BASES = new String[]{
             "https://gh-proxy.com/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
             "https://ghfast.top/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
-            "https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
-            "https://ghproxy.net/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/"
+            "https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/"
     };
     /** 缓存上限：超过就按最久未看淘汰 */
     private static final long CACHE_LIMIT = 2L * 1024 * 1024 * 1024;
     /** 单集下载上限，防止异常响应写爆磁盘 */
     private static final long SINGLE_FILE_LIMIT = 260L * 1024 * 1024;
+    /** 公益代理首包慢且抖，连接/读取超时都给足，否则第一集之后全部失败 */
+    private static final int CONNECT_TIMEOUT = 20000;
+    private static final int READ_TIMEOUT = 60000;
+    /** 拿到首字节的总预算：超过就放弃，避免用户干等 */
+    private static final long FIRST_BYTE_BUDGET = 50000L;
+    /** 云端回源并发上限：代理对单 IP 限速，开太多路反而每路都更慢 */
+    private static final int MAX_REMOTE_STREAMS = 6;
+    /** 后台缓存下载限速 + 让路，保证播放优先 */
+    private static final long BG_DOWNLOAD_BPS = 200L * 1024L;
 
     private final AssetManager assets;
     private final File progressFile;
@@ -59,6 +70,19 @@ public class MiniServer {
     /** 实测最快的源，联网正常时会在启动后几秒内确定 */
     private volatile String fastestBase = null;
     private volatile boolean probed = false;
+    /** 各源近期失败次数，用来把不靠谱的源排到后面 */
+    private final Map<String, Integer> baseFails =
+            java.util.Collections.synchronizedMap(new HashMap<String, Integer>());
+    /** 正在给客户端吐流的连接数，后台下载看到 >0 就让路 */
+    private final java.util.concurrent.atomic.AtomicInteger activeStreams =
+            new java.util.concurrent.atomic.AtomicInteger(0);
+    /** 云端回源并发闸门 */
+    private final java.util.concurrent.Semaphore remoteGate =
+            new java.util.concurrent.Semaphore(MAX_REMOTE_STREAMS, true);
+    /** 后台缓存下载队列：串行，一次只下一集，避免把带宽吃光 */
+    private final ExecutorService downloadPool = Executors.newSingleThreadExecutor();
+    /** 最快源持久化文件（下次启动不用再等测速） */
+    private volatile File netBestFile = null;
     /** 家长要求启用本地课件时的回调（Activity 弹授权） */
     private volatile Runnable onRequestLocalAccess = null;
     private ServerSocket serverSocket;
@@ -129,7 +153,7 @@ public class MiniServer {
         serverSocket = ss;
         port = p;
         running = true;
-        pool = Executors.newFixedThreadPool(8);
+        pool = Executors.newFixedThreadPool(24);
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -138,6 +162,7 @@ public class MiniServer {
         }, "mini-http-accept");
         t.setDaemon(true);
         t.start();
+        loadFastestBase();
         probeAsync();
     }
 
@@ -153,6 +178,47 @@ public class MiniServer {
                 pool.awaitTermination(1, TimeUnit.SECONDS);
             } catch (InterruptedException ignored) {
             }
+        }
+        downloadPool.shutdownNow();
+    }
+
+    /** 上次测出的最快源，直接复用，省掉首播前的等待 */
+    private void loadFastestBase() {
+        try {
+            File p = progressFile.getParentFile();
+            if (p == null) return;
+            File f = new File(p, "netbest.txt");
+            netBestFile = f;
+            if (!f.isFile()) return;
+            RandomAccessFile raf = new RandomAccessFile(f, "r");
+            try {
+                byte[] b = new byte[(int) Math.min(512, raf.length())];
+                raf.readFully(b);
+                String s = new String(b, "UTF-8").trim();
+                for (int i = 0; i < REMOTE_BASES.length; i++) {
+                    if (REMOTE_BASES[i].equals(s)) {
+                        fastestBase = s;
+                        break;
+                    }
+                }
+            } finally {
+                raf.close();
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void saveFastestBase(String base) {
+        File f = netBestFile;
+        if (f == null || base == null) return;
+        try {
+            FileOutputStream fos = new FileOutputStream(f);
+            try {
+                fos.write(base.getBytes("UTF-8"));
+            } finally {
+                fos.close();
+            }
+        } catch (Exception ignored) {
         }
     }
 
@@ -517,17 +583,43 @@ public class MiniServer {
 
     // ---------------------------------------------------------------- 云端回源 + 边看边缓存
 
-    /** 公益镜像在墙内通常比 GitHub 直连稳，启动后测速挑最快的排最前 */
+    /** 公益镜像在墙内通常比 GitHub 直连稳，启动后测速挑最快的排最前，其次按近期失败次数排 */
     private String[] orderedBases() {
-        String best = fastestBase;
-        if (best == null) return REMOTE_BASES;
-        String[] arr = new String[REMOTE_BASES.length];
-        arr[0] = best;
-        int k = 1;
-        for (int i = 0; i < REMOTE_BASES.length; i++) {
-            if (!REMOTE_BASES[i].equals(best)) arr[k++] = REMOTE_BASES[i];
+        final String best = fastestBase;
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < REMOTE_BASES.length; i++) list.add(REMOTE_BASES[i]);
+        java.util.Collections.sort(list, new java.util.Comparator<String>() {
+            @Override
+            public int compare(String a, String b) {
+                boolean ba = a.equals(best), bb = b.equals(best);
+                if (ba != bb) return ba ? -1 : 1;
+                int fa = failsOf(a), fb = failsOf(b);
+                if (fa != fb) return fa - fb;
+                return 0;
+            }
+        });
+        return list.toArray(new String[list.size()]);
+    }
+
+    private int failsOf(String base) {
+        Integer v = baseFails.get(base);
+        return v == null ? 0 : v.intValue();
+    }
+
+    private void markFail(String base) {
+        baseFails.put(base, Integer.valueOf(Math.min(9, failsOf(base) + 1)));
+        if (base.equals(fastestBase) && failsOf(base) >= 2) {
+            // 曾经最快的源连续失败，让位给别人，下次成功再回来
+            fastestBase = null;
         }
-        return arr;
+    }
+
+    private void markOk(String base) {
+        if (failsOf(base) > 0) baseFails.put(base, Integer.valueOf(0));
+        if (!base.equals(fastestBase)) {
+            fastestBase = base;
+            saveFastestBase(base);
+        }
     }
 
     /** 取每源各 128KB 粗测速，几秒内定出首选源 */
@@ -537,41 +629,48 @@ public class MiniServer {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                String probePath = "videos/u01/001.mp4";
+                // 用两集各测一次，避免只预热到某一集造成的误判
+                String[] probePaths = new String[]{"videos/u01/001.mp4", "videos/u02/001.mp4"};
                 String best = null;
                 long bestSpeed = 0;
                 for (int i = 0; i < REMOTE_BASES.length; i++) {
-                    HttpURLConnection conn = null;
-                    try {
-                        conn = (HttpURLConnection) new URL(REMOTE_BASES[i] + probePath).openConnection();
-                        conn.setConnectTimeout(4000);
-                        conn.setReadTimeout(4000);
-                        conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
-                        conn.setRequestProperty("Range", "bytes=0-131071");
-                        int code = conn.getResponseCode();
-                        if (code != 206 && code != 200) {
+                    long total = 0;
+                    for (int k = 0; k < probePaths.length; k++) {
+                        HttpURLConnection conn = null;
+                        try {
+                            conn = (HttpURLConnection) new URL(REMOTE_BASES[i] + probePaths[k]).openConnection();
+                            conn.setConnectTimeout(6000);
+                            conn.setReadTimeout(6000);
+                            conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
+                            conn.setRequestProperty("Range", "bytes=0-131071");
+                            int code = conn.getResponseCode();
+                            if (code != 206 && code != 200) {
+                                conn.disconnect();
+                                continue;
+                            }
+                            long t0 = System.currentTimeMillis();
+                            InputStream is = conn.getInputStream();
+                            byte[] buf = new byte[16 * 1024];
+                            long got = 0;
+                            int n;
+                            while (got < 131072 && (n = is.read(buf)) > 0) got += n;
+                            long dt = Math.max(1L, System.currentTimeMillis() - t0);
+                            if (got > 0) total += got * 1000L / dt;
+                            try { is.close(); } catch (IOException ignored) { }
                             conn.disconnect();
-                            continue;
+                        } catch (Exception e) {
+                            if (conn != null) conn.disconnect();
                         }
-                        long t0 = System.currentTimeMillis();
-                        InputStream is = conn.getInputStream();
-                        byte[] buf = new byte[16 * 1024];
-                        long got = 0;
-                        int n;
-                        while (got < 131072 && (n = is.read(buf)) > 0) got += n;
-                        long dt = Math.max(1L, System.currentTimeMillis() - t0);
-                        long speed = got * 1000L / dt;
-                        try { is.close(); } catch (IOException ignored) { }
-                        conn.disconnect();
-                        if (speed > bestSpeed) {
-                            bestSpeed = speed;
-                            best = REMOTE_BASES[i];
-                        }
-                    } catch (Exception e) {
-                        if (conn != null) conn.disconnect();
+                    }
+                    if (total > bestSpeed) {
+                        bestSpeed = total;
+                        best = REMOTE_BASES[i];
                     }
                 }
-                if (best != null) fastestBase = best;
+                if (best != null && !best.equals(fastestBase)) {
+                    fastestBase = best;
+                    saveFastestBase(best);
+                }
             }
         }, "cw-probe");
         t.setDaemon(true);
@@ -585,8 +684,9 @@ public class MiniServer {
     }
 
     /**
-     * 云端点播：把 WebView 的 Range 请求原样转发给云端，边收边吐，
-     * 同时后台拉一份完整文件进缓存，下次直接本地播（离线可用）。
+     * 云端点播：把 WebView 的 Range 请求原样转发给云端，边收边吐。
+     * 首包慢是公益代理的常态，所以给足超时并允许换源重试；
+     * 同时限制回源并发，避免多路请求互相抢带宽把每一路都拖死。
      */
     private void serveRemoteVideo(String path, Map<String, String> headers,
                                   OutputStream out, boolean headOnly) {
@@ -597,133 +697,210 @@ public class MiniServer {
 
         String range = headers.get("range");
         Exception last = null;
-        String[] bases = orderedBases();
         boolean started = false;   // 已经开始往客户端吐数据后，就不再换源（换了也会错乱）
-        for (int i = 0; i < bases.length; i++) {
-            HttpURLConnection conn = null;
-            try {
-                conn = (HttpURLConnection) new URL(bases[i] + path.substring(1)).openConnection();
-                conn.setConnectTimeout(8000);
-                conn.setReadTimeout(45000);
-                conn.setInstanceFollowRedirects(true);
-                conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
-                conn.setRequestProperty("Accept-Encoding", "identity");
-                if (range != null) conn.setRequestProperty("Range", range);
+        boolean gateHeld = false;
+        String usedBase = null;
 
-                int code = conn.getResponseCode();
-                if (code != 200 && code != 206) {
-                    last = new IOException("HTTP " + code);
-                    conn.disconnect();
-                    continue;
-                }
-                String mime = conn.getContentType();
-                if (mime == null || mime.length() == 0) mime = mimeOf(path);
-                Map<String, String> h = new LinkedHashMap<String, String>();
-                h.put("Content-Type", mime);
-                h.put("Accept-Ranges", "bytes");
-                h.put("Cache-Control", "no-cache");
-                String cl = conn.getHeaderField("Content-Length");
-                if (cl != null) h.put("Content-Length", cl);
-                String cr = conn.getHeaderField("Content-Range");
-                if (cr != null) h.put("Content-Range", cr);
-                writeHead(out, code == 206 ? "206 Partial Content" : "200 OK", h);
-                started = true;
-                if (headOnly) {
-                    safeFlush(out);
-                    conn.disconnect();
-                    return;
-                }
-                InputStream is = conn.getInputStream();
+        try {
+            // 闸门：最多 4 路并发回源，拿不到就排队（图片请求会插队完成）
+            try {
+                gateHeld = remoteGate.tryAcquire(35, TimeUnit.SECONDS);
+            } catch (InterruptedException ignored) {
+                Thread.currentThread().interrupt();
+            }
+            if (!gateHeld) {
                 try {
-                    byte[] buf = new byte[64 * 1024];
-                    int n;
-                    while ((n = is.read(buf)) > 0) out.write(buf, 0, n);
-                } finally {
-                    try { is.close(); } catch (IOException ignored) { }
-                    conn.disconnect();
+                    sendText(out, 503, "Busy", "text/plain; charset=utf-8",
+                            "网络有点忙，稍等一下再点这一课");
+                } catch (IOException ignored) {
                 }
-                safeFlush(out);
                 return;
-            } catch (Exception e) {
-                last = e;
-                if (conn != null) conn.disconnect();
-                if (started) {
-                    // 已经在播了，只是这一路断了，别再换源重来
-                    return;
+            }
+
+            long deadline = System.currentTimeMillis() + FIRST_BYTE_BUDGET;
+            // 两轮：第一轮按健康度试所有源，第二轮再给主力源一次机会（首包抖动很常见）
+            for (int round = 0; round < 2 && !started; round++) {
+                String[] bases = orderedBases();
+                for (int i = 0; i < bases.length; i++) {
+                    long remain = deadline - System.currentTimeMillis();
+                    if (started) break;
+                    if (remain < 4000L) break;
+                    // 第二轮只重试排在前面的两个源，避免用户等太久
+                    if (round > 0 && i >= 2) break;
+
+                    HttpURLConnection conn = null;
+                    try {
+                        conn = (HttpURLConnection) new URL(bases[i] + path.substring(1)).openConnection();
+                        conn.setConnectTimeout((int) Math.min(CONNECT_TIMEOUT, Math.max(6000L, remain)));
+                        conn.setReadTimeout(READ_TIMEOUT);
+                        conn.setInstanceFollowRedirects(true);
+                        conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
+                        conn.setRequestProperty("Accept-Encoding", "identity");
+                        if (range != null) conn.setRequestProperty("Range", range);
+
+                        int code = conn.getResponseCode();
+                        if (code != 200 && code != 206) {
+                            last = new IOException("HTTP " + code);
+                            markFail(bases[i]);
+                            conn.disconnect();
+                            continue;
+                        }
+                        String mime = conn.getContentType();
+                        if (mime == null || mime.length() == 0) mime = mimeOf(path);
+                        Map<String, String> h = new LinkedHashMap<String, String>();
+                        h.put("Content-Type", mime);
+                        h.put("Accept-Ranges", "bytes");
+                        h.put("Cache-Control", "no-cache");
+                        String cl = conn.getHeaderField("Content-Length");
+                        if (cl != null) h.put("Content-Length", cl);
+                        String cr = conn.getHeaderField("Content-Range");
+                        if (cr != null) h.put("Content-Range", cr);
+                        writeHead(out, code == 206 ? "206 Partial Content" : "200 OK", h);
+                        started = true;
+                        usedBase = bases[i];
+                        markOk(bases[i]);
+                        if (headOnly) {
+                            safeFlush(out);
+                            conn.disconnect();
+                            return;
+                        }
+                        activeStreams.incrementAndGet();
+                        try {
+                            InputStream is = conn.getInputStream();
+                            OutputStream bout = new java.io.BufferedOutputStream(out, 64 * 1024);
+                            try {
+                                byte[] buf = new byte[64 * 1024];
+                                int n;
+                                while ((n = is.read(buf)) > 0) bout.write(buf, 0, n);
+                                bout.flush();
+                            } finally {
+                                try { is.close(); } catch (IOException ignored) { }
+                            }
+                        } finally {
+                            activeStreams.decrementAndGet();
+                            conn.disconnect();
+                        }
+                        safeFlush(out);
+                        return;
+                    } catch (Exception e) {
+                        last = e;
+                        if (conn != null) conn.disconnect();
+                        if (started) {
+                            // 已经在播了，只是这一路断了，别再换源重来
+                            return;
+                        }
+                        markFail(bases[i]);
+                    }
                 }
             }
-        }
-        // 所有源都失败：多半是没联网，且这集还没缓存
-        try {
-            sendText(out, 504, "Gateway Timeout", "text/plain; charset=utf-8",
-                    "这一集还没存到本机，需要连接网络才能看" + (last == null ? "" : "（" + last.getMessage() + "）"));
-        } catch (IOException ignored) {
+            // 所有源都失败：多半是没联网，且这集还没缓存
+            try {
+                sendText(out, 504, "Gateway Timeout", "text/plain; charset=utf-8",
+                        "这一集还没存到本机，需要连接网络才能看" + (last == null ? "" : "（" + last.getMessage() + "）"));
+            } catch (IOException ignored) {
+            }
+        } finally {
+            if (gateHeld) remoteGate.release();
         }
     }
 
-    /** 后台整集下载：单线程、先写 .part、完成再改名，避免半截文件被当成缓存 */
+    /**
+     * 后台整集下载：串行队列（一次只下一集）、限速、且有播放时自动让路。
+     * 之前是每开一集就并行拉整集，几集连点就把代理带宽吃光，后面的课全部超时。
+     */
     private void startBackgroundDownload(final String path, final File target) {
         if (cacheDir == null) return;
         if (!downloading.add(path)) return;
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                File parent = target.getParentFile();
-                if (parent != null) parent.mkdirs();
-                File part = new File(target.getPath() + ".part");
-                try {
-                    String[] bases = orderedBases();
-                    for (int i = 0; i < bases.length; i++) {
-                        HttpURLConnection conn = null;
-                        OutputStream os = null;
+        try {
+            downloadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        downloadOne(path, target);
+                    } finally {
+                        downloading.remove(path);
+                    }
+                }
+            });
+        } catch (RuntimeException e) {
+            downloading.remove(path);
+        }
+    }
+
+    private void downloadOne(String path, File target) {
+        File parent = target.getParentFile();
+        if (parent != null) parent.mkdirs();
+        File part = new File(target.getPath() + ".part");
+        String[] bases = orderedBases();
+        for (int i = 0; i < bases.length; i++) {
+            HttpURLConnection conn = null;
+            OutputStream os = null;
+            try {
+                conn = (HttpURLConnection) new URL(bases[i] + path.substring(1)).openConnection();
+                conn.setConnectTimeout(CONNECT_TIMEOUT);
+                conn.setReadTimeout(READ_TIMEOUT);
+                conn.setInstanceFollowRedirects(true);
+                conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
+                conn.setRequestProperty("Accept-Encoding", "identity");
+                if (conn.getResponseCode() != 200) {
+                    conn.disconnect();
+                    markFail(bases[i]);
+                    continue;
+                }
+                os = new FileOutputStream(part);
+                InputStream is = conn.getInputStream();
+                byte[] buf = new byte[32 * 1024];
+                int n;
+                long total = 0;
+                boolean tooBig = false;
+                long t0 = System.currentTimeMillis();
+                long gaveWay = 0;
+                while ((n = is.read(buf)) > 0) {
+                    // 有人在看视频就让路，最多让 2 分钟，免得连接被代理掐掉
+                    while (activeStreams.get() > 0 && gaveWay < 120000L) {
                         try {
-                            conn = (HttpURLConnection) new URL(bases[i] + path.substring(1)).openConnection();
-                            conn.setConnectTimeout(8000);
-                            conn.setReadTimeout(25000);
-                            conn.setInstanceFollowRedirects(true);
-                            conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
-                            conn.setRequestProperty("Accept-Encoding", "identity");
-                            if (conn.getResponseCode() != 200) {
-                                conn.disconnect();
-                                continue;
-                            }
-                            os = new FileOutputStream(part);
-                            InputStream is = conn.getInputStream();
-                            byte[] buf = new byte[64 * 1024];
-                            int n;
-                            long total = 0;
-                            boolean tooBig = false;
-                            while ((n = is.read(buf)) > 0) {
-                                os.write(buf, 0, n);
-                                total += n;
-                                if (total > SINGLE_FILE_LIMIT) { tooBig = true; break; }
-                            }
-                            try { is.close(); } catch (IOException ignored) { }
-                            try { os.close(); } catch (IOException ignored) { }
-                            os = null;
-                            conn.disconnect();
-                            if (tooBig) { part.delete(); break; }
-                            if (part.length() > 4096) {
-                                if (target.exists()) target.delete();
-                                part.renameTo(target);
-                                evictIfNeeded();
-                            } else {
-                                part.delete();
-                            }
-                            return;
-                        } catch (Exception e) {
-                            try { if (os != null) os.close(); } catch (IOException ignored) { }
-                            if (conn != null) conn.disconnect();
-                            if (part.exists()) part.delete();
+                            Thread.sleep(500);
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                        gaveWay += 500;
+                    }
+                    os.write(buf, 0, n);
+                    total += n;
+                    if (total > SINGLE_FILE_LIMIT) { tooBig = true; break; }
+                    // 限速：别和播放抢带宽
+                    long expect = total * 1000L / BG_DOWNLOAD_BPS;
+                    long spent = System.currentTimeMillis() - t0;
+                    if (expect > spent) {
+                        try {
+                            Thread.sleep(Math.min(1000L, expect - spent));
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            break;
                         }
                     }
-                } finally {
-                    downloading.remove(path);
                 }
+                try { is.close(); } catch (IOException ignored) { }
+                try { os.close(); } catch (IOException ignored) { }
+                os = null;
+                conn.disconnect();
+                if (tooBig) { part.delete(); return; }
+                if (part.length() > 4096) {
+                    if (target.exists()) target.delete();
+                    part.renameTo(target);
+                    evictIfNeeded();
+                    markOk(bases[i]);
+                } else {
+                    part.delete();
+                }
+                return;
+            } catch (Exception e) {
+                try { if (os != null) os.close(); } catch (IOException ignored) { }
+                if (conn != null) conn.disconnect();
+                if (part.exists()) part.delete();
             }
-        }, "cw-download");
-        t.setDaemon(true);
-        t.start();
+        }
     }
 
     /** 超上限就按「最久未看」淘汰 */
