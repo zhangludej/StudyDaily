@@ -378,6 +378,17 @@ python tools/prepare_courses.py --src "..." --pdf-minutes 5</pre>
   </div>
 
   <!-- 一节学完 -->
+  <!-- 通用确认（学完确认 / 重学确认），防小孩误点 -->
+  <div id="askModal" class="modal hidden">
+    <div class="next-kid">
+      <div class="next-face" id="askFace">🤔</div>
+      <h2 id="askTitle">这一节学完了吗？</h2>
+      <p class="ask-sub" id="askSub">点「学完啦」才会记下来</p>
+      <button id="askOk" class="btn-kid-next">学完啦 ✓</button>
+      <button id="askCancel" class="btn-kid-later">还想再看看</button>
+    </div>
+  </div>
+
   <div id="nextOverlay" class="modal hidden">
     <div class="next-kid">
       <div class="next-face"><img src="assets/img/hugging_face.png" alt=""></div>

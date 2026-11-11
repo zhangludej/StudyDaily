@@ -420,4 +420,56 @@ test('自由拓展日（周六）不做搭配强排，严格按预算装箱', ()
   assert.deepStrictEqual(subjectsOf(s.plan), ['u02-1']);
 });
 
+test('撤销「学完了」：新课退回未学，今日统计一起回退', () => {
+  const c = catalog4({ pinyin: 0, english: 0, literacy: 4, math: 4 });
+  let s = P.buildPlan({}, c, M).state;
+  const first = s.plan.items[0].id;
+  const beforeCount = (s.history && s.history[M]) ? s.history[M].doneCount : 0;
+  s = P.completeItem(s, c, first, 'good', M);
+  assert.strictEqual(s.lessons[first].status, 'done', '完成后标记 done');
+  assert.strictEqual(s.plan.items.find(i => i.id === first).done, true);
+
+  s = P.undoComplete(s, c, first, M);
+  assert.strictEqual(s.lessons[first].status, 'new', '退回未学');
+  assert.strictEqual(s.lessons[first].completedAt, null, '清掉完成日期');
+  assert.strictEqual(s.lessons[first].nextReviewAt, null, '不再安排复习');
+  assert.strictEqual(s.plan.items.find(i => i.id === first).done, false, '今日重新变未完成');
+  assert.strictEqual((s.history[M] || {}).doneCount || 0, beforeCount, '今日完成数回退');
+  // 退回后可以重新学并再次完成
+  s = P.completeItem(s, c, first, 'good', M);
+  assert.strictEqual(s.lessons[first].status, 'done', '可以重新学完');
+});
+
+test('撤销「学完了」：复习节回退一档且今天仍算到期', () => {
+  const c = catalog4({ pinyin: 0, english: 0, literacy: 4, math: 4 });
+  let s = P.buildPlan({}, c, M).state;
+  const id = s.plan.items[0].id;
+  // 先在周一学完，并把复习时间改到今天
+  s = P.completeItem(s, c, id, 'good', M);
+  s.lessons[id].reviewStage = 1;
+  s.lessons[id].nextReviewAt = W;
+  s = P.buildPlan(s, c, W).state; // 周三应排进来复习
+  const rev = s.plan.items.find(i => i.id === id && i.origin === 'review');
+  assert.ok(rev, '周三应有这节的复习');
+  s = P.completeItem(s, c, id, 'good', W);
+  assert.strictEqual(s.lessons[id].reviewStage, 2, '复习推进到 2');
+
+  s = P.undoComplete(s, c, id, W);
+  assert.strictEqual(s.lessons[id].reviewStage, 1, '复习阶段回退一档');
+  assert.strictEqual(s.lessons[id].nextReviewAt, W, '今天仍算到期');
+  assert.strictEqual(s.lessons[id].status, 'done', '复习回退不影响"已学过"');
+});
+
+test('撤销「学完了」：不在今日队列的旧课也能重置', () => {
+  const c = catalog4({ pinyin: 0, english: 0, literacy: 4, math: 4 });
+  let s = P.buildPlan({}, c, M).state;
+  const id = s.plan.items[0].id;
+  s = P.completeItem(s, c, id, 'good', M);
+  // 换到周三（今日队列不含这节的完成项）
+  s = P.buildPlan(s, c, W).state;
+  s = P.undoComplete(s, c, id, W);
+  assert.strictEqual(s.lessons[id].status, 'new', '旧课也能退回未学');
+  assert.strictEqual(s.lessons[id].nextReviewAt, null, '清掉复习安排');
+});
+
 console.log('\n全部 ' + passed + ' 项通过');

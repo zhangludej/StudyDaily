@@ -494,6 +494,56 @@
     return state;
   }
 
+  /**
+   * 撤销「学完了」：孩子误点时用。这一节退回可学状态，
+   * 本次产生的复习安排和今日统计一起回退，就像没点过一样。
+   */
+  function undoComplete(state, catalog, id, today) {
+    today = today || todayStr();
+    state = normalize(state, catalog);
+    var item = null;
+    if (state.plan && state.plan.date === today && Array.isArray(state.plan.items)) {
+      state.plan.items.forEach(function (it) { if (it.id === id) item = it; });
+    }
+
+    // 不在今日队列里（比如以前学的）：只把这节退回未学，不动统计
+    if (!item || !item.done) {
+      var only = state.lessons[id];
+      if (only && only.status === 'done') {
+        only.status = 'new';
+        only.completedAt = null;
+        only.reviewStage = 0;
+        only.nextReviewAt = null;
+        only.failedCount = 0;
+        only.positionSec = 0;
+      }
+      return state;
+    }
+
+    item.done = false;
+    var ls = state.lessons[id];
+    if (ls) {
+      if (item.origin === 'review') {
+        // 复习被误标：回退一档，并让它今天仍算到期
+        ls.reviewStage = Math.max(0, (ls.reviewStage || 0) - 1);
+        ls.nextReviewAt = today;
+      } else if (!ls.completedAt || ls.completedAt === today) {
+        // 新课第一次学完被误标：整节退回未学
+        ls.status = 'new';
+        ls.completedAt = null;
+        ls.reviewStage = 0;
+        ls.nextReviewAt = null;
+      }
+      ls.watchedSec = Math.max(0, (ls.watchedSec || 0) - item.minutes * 60);
+      ls.positionSec = 0;
+    }
+    if (state.history[today]) {
+      state.history[today].doneCount = Math.max(0, (state.history[today].doneCount || 0) - 1);
+      state.history[today].minutes = Math.max(0, (state.history[today].minutes || 0) - item.minutes);
+    }
+    return state;
+  }
+
   /** 家长端：今天不学这节，之后也不再排 */
   function skipItem(state, catalog, id, today) {
     state = normalize(state, catalog);
@@ -622,6 +672,7 @@
     WEEK_DEFAULT: WEEK_DEFAULT,
     buildPlan: buildPlan,
     completeItem: completeItem,
+    undoComplete: undoComplete,
     skipItem: skipItem,
     moveItem: moveItem,
     addToPlan: addToPlan,

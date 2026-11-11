@@ -403,6 +403,9 @@ body.fs-lock .view.player .player-head { visibility: hidden; }
   animation: pop .42s cubic-bezier(.2,1.5,.4,1);
 }
 .next-face { font-size: 56px; line-height: 1; animation: bob 1.8s ease-in-out infinite; }
+.ask-sub {
+  margin: 0 0 18px; font-size: 16px; line-height: 1.6; color: var(--muted);
+}
 .next-kid h2 { margin: 8px 0 10px; font-size: 30px; font-weight: 900; color: var(--green-dark); }
 .next-thumb {
   width: 100%; aspect-ratio: 16/9; border-radius: 18px; overflow: hidden;

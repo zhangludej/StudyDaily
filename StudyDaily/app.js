@@ -1306,6 +1306,41 @@
     if (bl) bl.textContent = label;
   }
 
+  // ---------------- 确认弹窗（学完/重学，防误点） ----------------
+  var askCb = null;
+
+  function askConfirm(opt) {
+    var face = $('#askFace');
+    if (face) face.textContent = opt.face || '🤔';
+    $('#askTitle').textContent = opt.title;
+    $('#askSub').textContent = opt.sub || '';
+    $('#askOk').textContent = opt.ok || '好';
+    $('#askCancel').textContent = opt.cancel || '再想想';
+    askCb = opt.onOk || null;
+    $('#askModal').classList.remove('hidden');
+    if (opt.say !== false) Speech.say(opt.title);
+  }
+
+  function closeAsk() {
+    $('#askModal').classList.add('hidden');
+    askCb = null;
+  }
+
+  /** 这一节今天是否已经点过「学完了」 */
+  function isDoneToday(id) {
+    var it = itemById(id);
+    return !!(it && it.done);
+  }
+
+  /** 重学：退回未完成，然后进入播放页 */
+  function redoLesson(id) {
+    state = P.undoComplete(state, catalog, id);
+    save(true);
+    renderAll();
+    openPlayer(id);
+    toast('已退回「还没学完」，可以重新学啦');
+  }
+
   function lessonSpeech(l) {
     if (!l) return '';
     var look = lookOf(l.unitName);
@@ -1581,7 +1616,17 @@
       var it = itemById(card.getAttribute('data-id'));
       if (!it) return;
       Sfx.tap();
-      if (it.done) { toast('这节已经学完啦'); return; }
+      if (it.done) {
+        askConfirm({
+          face: '🤔',
+          title: '这一节已经学完啦',
+          sub: '要重新学一遍吗？重学会清掉这节课今天的记录',
+          ok: '重学一遍',
+          cancel: '不用了',
+          onOk: function () { redoLesson(it.id); }
+        });
+        return;
+      }
       openPlayer(it.id);
     });
 
@@ -1625,7 +1670,25 @@
       v.muted = !v.muted;
       $('#muteBtn').textContent = v.muted ? '🔇' : '🔊';
     });
-    $('#markDoneBtn').addEventListener('click', function () { Sfx.tap(); completeCurrent('good'); });    // 「再看一遍」只是重播，不算完成——孩子按错了不会误伤进度
+    $('#markDoneBtn').addEventListener('click', function () {
+      Sfx.tap();
+      // 先问一句，防止小孩手快误点（确认后才真正记账）
+      askConfirm({
+        face: '🎉',
+        title: '这一节学完了吗？',
+        sub: '点「学完啦」才会记下来哦',
+        ok: '学完啦 ✓',
+        cancel: '还想再看看',
+        onOk: function () { completeCurrent('good'); }
+      });
+    });
+    $('#askOk').addEventListener('click', function () {
+      Sfx.tap();
+      var cb = askCb;
+      closeAsk();
+      if (cb) cb();
+    });
+    $('#askCancel').addEventListener('click', function () { Sfx.tap(); closeAsk(); });
     $('#markAgainBtn').addEventListener('click', function () {
       if (currentType !== 'video') { toast('这一节可以左右滑动翻页'); return; }
       var v = $('#video');
