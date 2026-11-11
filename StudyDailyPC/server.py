@@ -457,13 +457,19 @@ class Handler(BaseHTTPRequestHandler):
         if not rel:
             rel = "index.html"
 
-        # 1) 本地课件目录（有就彻底离线）
+        # 1) 内置网页资源优先：保证界面永远是随程序更新的那一份，
+        #    不会被课件文件夹里的旧网页文件盖住
+        f = WEB_DIR / rel
+        if f.is_file():
+            return self.serve_file(f, head_only)
+
+        # 2) 本地课件目录（视频放这里就能彻底离线）
         if LOCAL_COURSE is not None:
             f = LOCAL_COURSE / rel
             if f.is_file():
                 return self.serve_file(f, head_only)
 
-        # 2) 缓存里看过的一份
+        # 3) 缓存里看过的一份
         cached = cache_path_of(rel)
         if cached is not None and cached.is_file():
             try:
@@ -472,12 +478,7 @@ class Handler(BaseHTTPRequestHandler):
                 pass
             return self.serve_file(cached, head_only)
 
-        # 3) 内置网页资源（练习册、海报、语音都在这里，直接命中）
-        f = WEB_DIR / rel
-        if f.is_file():
-            return self.serve_file(f, head_only)
-
-        # 4) 视频 / 练习册页在内置资源里没有，就走云端，边看边缓存
+        # 4) 视频 / 练习册页本地没有，就走云端，边看边缓存
         if rel.startswith("videos/") or rel.startswith("workbooks/"):
             return self.serve_remote(rel, head_only)
 
@@ -644,7 +645,9 @@ def start_server() -> int:
         raise RuntimeError("没有可用端口")
     server.daemon_threads = True
     load_fastest()
-    threading.Thread(target=probe_sources, daemon=True).start()
+    # 纯离线（本地有视频）就不用测速，省得白跑一趟网络
+    if LOCAL_COURSE is None:
+        threading.Thread(target=probe_sources, daemon=True).start()
     threading.Thread(target=download_worker, daemon=True).start()
     threading.Thread(target=server.serve_forever, daemon=True).start()
     return port

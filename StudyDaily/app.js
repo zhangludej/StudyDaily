@@ -96,18 +96,28 @@
   // 片段缺失时才退化为原生 TTS 桥（AndroidTTS）或浏览器 Web Speech。
   var Speech = (function () {
     var enabled = true, last = '', lastAt = 0;
-    var idx = null, loading = false;
+    var idx = null, loading = false, readyCbs = [];
     var audio = null, queue = [], playing = false, pending = null;
 
-    function loadIndex() {
+    function fireReady() {
+      var cbs = readyCbs;
+      readyCbs = [];
+      for (var i = 0; i < cbs.length; i++) {
+        try { cbs[i](); } catch (e) {}
+      }
+    }
+
+    // 索引是异步来的；要等它到位的调用方传回调，避免"第一次用 TTS、之后用录音"音色跳变
+    function loadIndex(cb) {
+      if (cb) { if (idx) { try { cb(); } catch (e) {} } else readyCbs.push(cb); }
       if (idx || loading) return;
       loading = true;
       try {
         fetch('voice/index.json', { cache: 'no-store' })
           .then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (j) { idx = j || {}; pump(); })
-          .catch(function () { idx = {}; });
-      } catch (e) { idx = {}; }
+          .then(function (j) { idx = j || {}; fireReady(); pump(); })
+          .catch(function () { idx = {}; fireReady(); });
+      } catch (e) { idx = {}; fireReady(); }
     }
     function bridge() {
       var b = window.AndroidTTS;
@@ -157,7 +167,15 @@
       var it = queue.shift();
       if (!it) return;
       var f = it.file || fileFor(it.text);
-      if (!f) { tts(it.text); pump(); return; }
+      if (!f) {
+        // 没有录音片段，只能用系统 TTS：它没有可靠的结束回调，
+        // 按字数估一个时长占住队列，否则多句会同时念出来变成"两个人声"
+        tts(it.text);
+        playing = true;
+        var wait = Math.min(6000, 400 + String(it.text || '').length * 220);
+        setTimeout(function () { playing = false; pump(); }, wait);
+        return;
+      }
       var a = ensureAudio();
       playing = true;
       a.src = 'voice/' + f;
@@ -178,9 +196,19 @@
       var now = Date.now();
       if (!force && key === last && now - lastAt < 3000) return;
       last = key; lastAt = now;
-      loadIndex();
-      queue = list.map(function (t) { return { text: t }; });
-      pump();
+      if (force) {
+        // 强制播报前先把上一条彻底掐掉，否则两条会同时出声
+        queue = []; playing = false; pending = null;
+        try { if (audio) audio.pause(); } catch (e) {}
+        try { if (webOk()) window.speechSynthesis.cancel(); } catch (e) {}
+        try { var b = bridge(); if (b && b.stop) b.stop(); } catch (e) {}
+      }
+      // 等语音索引就绪再播，否则第一句会退化成系统 TTS，和后面的录音音色对不上
+      loadIndex(function () {
+        queue = list.map(function (t) { return { text: t }; });
+        playing = false;
+        pump();
+      });
     }
     return {
       // 一句话；能命中预生成片段就播片段
@@ -190,13 +218,18 @@
       },
       // 一句课的介绍：按课程 id 找片段（124 节各有一句）
       sayLesson: function (id, text) {
-        loadIndex();
-        var f = lessonFile(id);
-        speak([f ? text || '' : (text || '')], true);
-        if (!f) return;
-        queue = [{ file: f, text: text }];
-        playing = false;
-        pump();
+        loadIndex(function () {
+          var f = lessonFile(id);
+          if (f) {
+            // 有整句录音就只播录音，绝不能再让 TTS 念一遍（否则两个声音叠在一起）
+            Speech.stop();
+            queue = [{ file: f, text: text }];
+            playing = false;
+            pump();
+            return;
+          }
+          speak([text || ''], true);
+        });
       },
       // 多句连读（表扬 + 继续/休息）
       sayParts: function (arr, force) { speak(arr || [], true); },
@@ -213,6 +246,7 @@
       stop: function () {
         queue = [];
         playing = false;
+        pending = null;
         try { if (audio) audio.pause(); } catch (e) {}
         try { var b = bridge(); if (b && b.stop) b.stop(); } catch (e) {}
         try { if (webOk()) window.speechSynthesis.cancel(); } catch (e) {}

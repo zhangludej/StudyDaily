@@ -74,6 +74,13 @@ def build_phrases(catalog: dict) -> dict:
         "quone": "第一题",
         "qutwo": "第二题",
         "quthree": "第三题",
+        # —— 确认框与状态提示：以前这几句没有录音，会临时调用系统 TTS，
+        #    和孩子熟悉的音色不一样，听起来像换了个人在说话 ——
+        "zconfirm": "这一节学完了吗？",
+        "zdone": "这一节已经学完啦",
+        "zagain": "要重新学一遍吗？",
+        "zsound": "声音打开啦",
+        "znonew": "今天没有新课",
     }
     # 今天有 N 节课 / 还剩 N 节
     for n in range(1, 13):
