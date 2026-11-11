@@ -735,6 +735,42 @@ def alert(msg: str) -> None:
         pass
 
 
+PROFILE_TOKEN = str(DATA_DIR / "profile")
+
+
+def browser_pids() -> list[int]:
+    """占用我们专用配置目录的 Edge 进程列表（不含用户日常用的浏览器）"""
+    ps = ("Get-CimInstance Win32_Process -Filter \"Name='msedge.exe'\" | "
+          "Where-Object { $_.CommandLine -like '*%s*' } | "
+          "Select-Object -ExpandProperty ProcessId" % PROFILE_TOKEN)
+    try:
+        flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+        r = subprocess.run(["powershell", "-NoProfile", "-Command", ps],
+                           capture_output=True, text=True, timeout=25,
+                           creationflags=flags)
+        return [int(x) for x in r.stdout.split() if x.strip().isdigit()]
+    except Exception as e:
+        print("browser_pids 失败:", e)
+        return []
+
+
+def kill_stale_browser() -> None:
+    """清掉上次异常退出残留的专用配置 Edge。
+    不清的话，新开的 msedge 会把开窗命令转交给旧进程后立刻退出，
+    主程序误以为窗口已关就退出、服务被杀，窗口只会显示拒绝连接。"""
+    pids = browser_pids()
+    if not pids:
+        return
+    print("清理残留浏览器进程:", pids)
+    for pid in pids:
+        try:
+            subprocess.run(["taskkill", "/F", "/PID", str(pid)],
+                           capture_output=True, timeout=15,
+                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        except Exception:
+            pass
+
+
 def run_window_mode() -> None:
     existing = ping_existing()
     if existing is not None:
@@ -742,6 +778,7 @@ def run_window_mode() -> None:
             open_window("http://127.0.0.1:%d/" % existing)
             return
         # 旧实例已经名存实亡（比如被安全软件关了），继续自己起一份
+    kill_stale_browser()
     port = start_server()
     print("server on port", port)
     if not wait_ready(port):
@@ -749,15 +786,21 @@ def run_window_mode() -> None:
         return
     url = "http://127.0.0.1:%d/" % port
     proc = open_window(url)
-    if proc is not None:
-        # 窗口关掉就退出，避免后台残留进程
-        proc.wait()
-    else:
+    if proc is None:
         try:
             while True:
                 time.sleep(3600)
         except KeyboardInterrupt:
             pass
+        return
+    proc.wait()
+    # 启动器把命令转交给已在运行的浏览器后会立刻退出；只要专用配置的
+    # 浏览器还活着（用户还看着窗口），就继续守着服务，别提前退出
+    while True:
+        pids = browser_pids()
+        if not pids:
+            break
+        time.sleep(2)
 
 
 def main() -> None:
