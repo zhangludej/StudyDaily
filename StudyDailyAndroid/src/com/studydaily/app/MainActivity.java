@@ -66,6 +66,13 @@ public class MainActivity extends Activity {
 
         File progress = new File(getFilesDir(), "progress.json");
         server = new MiniServer(getAssets(), progress);
+        // 云端点播缓存：应用私有外部目录，免存储权限，卸载即清
+        try {
+            File cacheBase = getExternalFilesDir(null);
+            if (cacheBase == null) cacheBase = getFilesDir();
+            server.setCacheDir(new File(cacheBase, "cw"));
+        } catch (Throwable ignored) {
+        }
         startAndLoad();
     }
 
@@ -189,14 +196,10 @@ public class MainActivity extends Activity {
         }
 
         if (root == null) {
-            showMissingFolderDialog();
-        } else if (!hasStorageAccess()) {
-            if (Build.VERSION.SDK_INT >= 30) {
-                showPermissionDialog();
-            } else {
-                requestRuntimeStorage();
-            }
+            // 没有本地课件目录也没关系：课程表在 APK 内置，视频按需从云端点播
+            Log.i(TAG, "无本地课程目录，使用内置课程表 + 云端课件");
         }
+        // 不再强制申请「访问所有文件」：视频边看边缓存到应用私有目录，免权限
     }
 
     private void showMissingFolderDialog() {

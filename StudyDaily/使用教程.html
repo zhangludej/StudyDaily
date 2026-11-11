@@ -193,16 +193,16 @@ python tools/prepare_courses.py --src "D:/幼小衔接课程" --dry-run</pre>
 
 <h2>三、上平板（只做一次）</h2>
 
-<div class="step"><div class="n">4</div><h3>拷贝整个文件夹</h3></div>
-<p>把 <strong>StudyDaily 整个文件夹</strong>（含 <code>index.html</code>、<code>courses.json</code>、<code>videos/</code>、<code>files/</code>、<code>pages/</code>）拷到平板<strong>根目录</strong>，即「内部存储」下，路径应为 <code>/内部存储/StudyDaily</code>。300 节 720p 大约 5–12 GB，先确认空间。</p>
+<div class="step"><div class="n">4</div><h3>安装 App（StudyDaily.apk）</h3></div>
+<p>把 <code>StudyDaily.apk</code>（约 14 MB）发到平板，点一下安装。系统可能提示「未知来源应用」，允许一次即可。装好后桌面出现 <strong>「每日学习」</strong> 图标——<strong>点开就是全屏儿童界面</strong>，不用开浏览器、不用装服务器 App、不用拷任何文件夹、也不用给存储权限。</p>
 
-<div class="step"><div class="n">5</div><h3>安装 App（StudyDaily.apk）</h3></div>
-<p>把 <code>StudyDaily.apk</code> 拷到平板，点一下安装。系统可能提示「未知来源应用」，允许一次即可。装好后桌面会出现 <strong>「每日学习」</strong> 图标——<strong>点开就是全屏儿童界面，不用再装任何服务器 App，也不用开浏览器</strong>。</p>
+<div class="step"><div class="n">5</div><h3>打开就能学（视频云端点播）</h3></div>
+<p>课程视频<strong>不占安装包</strong>：第一次点某节课时，App 会自动从云端边下边播（720p 只需约 100 KB/s，普通 WiFi 足够），同时把这集悄悄存到本机。之后这集就变成离线可用，没网也能看。</p>
+<p>所以第一次看新的一集需要联网，看过的课不需要。家长端「设置 → 课程缓存」能看到已缓存多少集、占用多少空间，也可以一键清空；占用超过 2 GB 时自动删掉最久没看的。</p>
+<div class="callout warn">如果提示「这一集还没存到本机」，说明当前没联网或网络被限制。连上 WiFi 后点「重试」即可，学习进度不受影响。</div>
 
-<div class="step"><div class="n">6</div><h3>首次打开：允许读取课件</h3></div>
-<p>第一次打开会弹窗要求「访问所有文件」，点「去授权」→ 在系统设置里打开开关 → 返回 App，课程会自动加载。学习进度存在 App 内部（<code>progress.json</code>），清浏览器数据、换浏览器都不会丢。</p>
-<div class="callout warn">如果提示「没找到课程文件夹」，说明第 4 步的文件夹没放到根目录，或者名字不是 <code>StudyDaily</code>。放好后点「重新检查」即可，不用重装 App。</div>
-<p>首次打开时，系统会<strong>自动算出今天学哪几节</strong>并显示在首页，不需要你做任何设置。以后每次打开，都会按当天日期和当前进度重新算。</p>
+<h3 style="margin-top:30px">可选：整包拷进平板（完全离线）</h3>
+<p>要出门、担心网络不好，可以按老办法把整个 <code>StudyDaily</code> 文件夹拷到平板<strong>内部存储</strong>（路径 <code>/内部存储/StudyDaily</code>）。App 优先读本地文件，本地有就完全不联网；没有的再从云端补。两种方式可以混用。</p>
 
 <h3 style="margin-top:30px">备选：不装 App，用浏览器</h3>
 <p>如果平板装不了 APK，也可以：装 <strong>Simple HTTP Server</strong> 之类 App，共享目录指向 StudyDaily 文件夹并开启「开机自启」；Chrome 打开它显示的地址（通常 <code>http://127.0.0.1:8080/</code>）→ 菜单「添加到主屏幕」。</p>

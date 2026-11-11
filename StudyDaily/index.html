@@ -246,6 +246,13 @@
       </div>
 
       <div class="panel">
+        <h3>课程缓存（离线看过的课）</h3>
+        <p class="tiny" id="cacheInfo">正在读取…</p>
+        <p class="tiny">视频不占安装包：第一次看某集时从云端边看边存，之后这集就能离线看。占用超过 2 GB 会自动删掉最久没看的。</p>
+        <button id="cacheClear" class="btn-ghost">清空缓存（释放空间）</button>
+      </div>
+
+      <div class="panel">
         <h3>孩子界面</h3>
         <label class="field checkbox"><input id="setSpeech" type="checkbox"><span>开启语音引导（App 内用系统语音朗读）</span></label>
         <label class="field checkbox"><input id="setSound" type="checkbox"><span>开启音效（完成时"叮咚"）</span></label>
@@ -295,8 +302,8 @@
           <li>电脑装好 Python + FFmpeg（有 PDF 再 <code>pip install pypdfium2</code>）</li>
           <li>把课件按 <code>01 拼音 / 02 识字 / …</code> 分单元放好，文件名加数字前缀</li>
           <li>先跑 <code>--dry-run</code> 看报告，再跑正式命令导入，自动生成 <code>courses.json</code></li>
-          <li>把整个 StudyDaily 文件夹拷到平板根目录（<code>/内部存储/StudyDaily</code>）</li>
-          <li>安装 <code>StudyDaily.apk</code>，首次打开允许「访问所有文件」</li>
+          <li>把整个 StudyDaily 文件夹拷到平板根目录（<code>/内部存储/StudyDaily</code>）——可选，不做也能用</li>
+          <li>安装 <code>StudyDaily.apk</code>，打开就能学（视频云端点播，无需权限）</li>
           <li>孩子每天点桌面「每日学习」图标即可，今天学什么由系统自动算好</li>
         </ol>
 

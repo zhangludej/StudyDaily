@@ -10,13 +10,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,9 +38,27 @@ public class MiniServer {
     private static final String ASSET_PREFIX = "www";
     private static final int MAX_HEADER = 32 * 1024;
 
+    /** 云端课件源，按实测速度排序；启动时还会再测一次把最快的提到第一位 */
+    private static final String[] REMOTE_BASES = new String[]{
+            "https://gh-proxy.com/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
+            "https://ghfast.top/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
+            "https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
+            "https://ghproxy.net/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/"
+    };
+    /** 缓存上限：超过就按最久未看淘汰 */
+    private static final long CACHE_LIMIT = 2L * 1024 * 1024 * 1024;
+    /** 单集下载上限，防止异常响应写爆磁盘 */
+    private static final long SINGLE_FILE_LIMIT = 260L * 1024 * 1024;
+
     private final AssetManager assets;
     private final File progressFile;
     private volatile File root;
+    private volatile File cacheDir;
+    private final java.util.Set<String> downloading =
+            java.util.Collections.synchronizedSet(new java.util.HashSet<String>());
+    /** 实测最快的源，联网正常时会在启动后几秒内确定 */
+    private volatile String fastestBase = null;
+    private volatile boolean probed = false;
     private ServerSocket serverSocket;
     private ExecutorService pool;
     private int port = 0;
@@ -49,6 +71,16 @@ public class MiniServer {
 
     public void setRoot(File dir) {
         this.root = dir;
+    }
+
+    /** 视频缓存目录：放在应用私有外部目录，不需要任何存储权限 */
+    public void setCacheDir(File dir) {
+        this.cacheDir = dir;
+        if (dir != null && !dir.isDirectory()) dir.mkdirs();
+    }
+
+    public File getCacheDir() {
+        return cacheDir;
     }
 
     public File getRoot() {
@@ -93,6 +125,7 @@ public class MiniServer {
         }, "mini-http-accept");
         t.setDaemon(true);
         t.start();
+        probeAsync();
     }
 
     public void stop() {
@@ -269,6 +302,17 @@ public class MiniServer {
                 return;
             }
         }
+        if (path.equals("/api/cache")) {
+            if ("GET".equals(method)) {
+                sendText(out, 200, "OK", "application/json; charset=utf-8", cacheStatsJson());
+                return;
+            }
+            if ("POST".equals(method)) {
+                clearCache();
+                sendText(out, 200, "OK", "application/json; charset=utf-8", "{\"ok\":true}");
+                return;
+            }
+        }
         sendText(out, 404, "Not Found", "application/json; charset=utf-8", "{\"ok\":false}");
     }
 
@@ -341,6 +385,20 @@ public class MiniServer {
         }
         if (file != null) {
             serveFile(file, headers, out, headOnly);
+            return;
+        }
+
+        // 2) 云端看过的课：缓存里有一份就直接播（离线可用，秒开）
+        File cached = cacheFileOf(path);
+        if (cached != null && cached.isFile()) {
+            cached.setLastModified(System.currentTimeMillis());
+            serveFile(cached, headers, out, headOnly);
+            return;
+        }
+
+        // 3) 视频但本地/缓存都没有：云端边下边播，同时后台存一份
+        if (path.startsWith("/videos/")) {
+            serveRemoteVideo(path, headers, out, headOnly);
             return;
         }
 
@@ -425,6 +483,287 @@ public class MiniServer {
         } finally {
             raf.close();
         }
+    }
+
+    // ---------------------------------------------------------------- 云端回源 + 边看边缓存
+
+    /** 公益镜像在墙内通常比 GitHub 直连稳，启动后测速挑最快的排最前 */
+    private String[] orderedBases() {
+        String best = fastestBase;
+        if (best == null) return REMOTE_BASES;
+        String[] arr = new String[REMOTE_BASES.length];
+        arr[0] = best;
+        int k = 1;
+        for (int i = 0; i < REMOTE_BASES.length; i++) {
+            if (!REMOTE_BASES[i].equals(best)) arr[k++] = REMOTE_BASES[i];
+        }
+        return arr;
+    }
+
+    /** 取每源各 128KB 粗测速，几秒内定出首选源 */
+    public void probeAsync() {
+        if (probed) return;
+        probed = true;
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String probePath = "videos/u01/001.mp4";
+                String best = null;
+                long bestSpeed = 0;
+                for (int i = 0; i < REMOTE_BASES.length; i++) {
+                    HttpURLConnection conn = null;
+                    try {
+                        conn = (HttpURLConnection) new URL(REMOTE_BASES[i] + probePath).openConnection();
+                        conn.setConnectTimeout(4000);
+                        conn.setReadTimeout(4000);
+                        conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
+                        conn.setRequestProperty("Range", "bytes=0-131071");
+                        int code = conn.getResponseCode();
+                        if (code != 206 && code != 200) {
+                            conn.disconnect();
+                            continue;
+                        }
+                        long t0 = System.currentTimeMillis();
+                        InputStream is = conn.getInputStream();
+                        byte[] buf = new byte[16 * 1024];
+                        long got = 0;
+                        int n;
+                        while (got < 131072 && (n = is.read(buf)) > 0) got += n;
+                        long dt = Math.max(1L, System.currentTimeMillis() - t0);
+                        long speed = got * 1000L / dt;
+                        try { is.close(); } catch (IOException ignored) { }
+                        conn.disconnect();
+                        if (speed > bestSpeed) {
+                            bestSpeed = speed;
+                            best = REMOTE_BASES[i];
+                        }
+                    } catch (Exception e) {
+                        if (conn != null) conn.disconnect();
+                    }
+                }
+                if (best != null) fastestBase = best;
+            }
+        }, "cw-probe");
+        t.setDaemon(true);
+        t.start();
+    }
+
+    private File cacheFileOf(String path) {        File dir = cacheDir;
+        if (dir == null) return null;
+        if (path.indexOf("..") >= 0) return null;
+        return new File(dir, path.substring(1));
+    }
+
+    /**
+     * 云端点播：把 WebView 的 Range 请求原样转发给云端，边收边吐，
+     * 同时后台拉一份完整文件进缓存，下次直接本地播（离线可用）。
+     */
+    private void serveRemoteVideo(String path, Map<String, String> headers,
+                                  OutputStream out, boolean headOnly) {
+        File target = cacheFileOf(path);
+        if (target != null && !target.isFile()) {
+            startBackgroundDownload(path, target);
+        }
+
+        String range = headers.get("range");
+        Exception last = null;
+        String[] bases = orderedBases();
+        for (int i = 0; i < bases.length; i++) {
+            HttpURLConnection conn = null;
+            try {
+                conn = (HttpURLConnection) new URL(bases[i] + path.substring(1)).openConnection();
+                conn.setConnectTimeout(8000);
+                conn.setReadTimeout(20000);
+                conn.setInstanceFollowRedirects(true);
+                conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
+                conn.setRequestProperty("Accept-Encoding", "identity");
+                if (range != null) conn.setRequestProperty("Range", range);
+
+                int code = conn.getResponseCode();
+                if (code != 200 && code != 206) {
+                    last = new IOException("HTTP " + code);
+                    conn.disconnect();
+                    continue;
+                }
+                String mime = conn.getContentType();
+                if (mime == null || mime.length() == 0) mime = mimeOf(path);
+                Map<String, String> h = new LinkedHashMap<String, String>();
+                h.put("Content-Type", mime);
+                h.put("Accept-Ranges", "bytes");
+                h.put("Cache-Control", "no-cache");
+                String cl = conn.getHeaderField("Content-Length");
+                if (cl != null) h.put("Content-Length", cl);
+                String cr = conn.getHeaderField("Content-Range");
+                if (cr != null) h.put("Content-Range", cr);
+                writeHead(out, code == 206 ? "206 Partial Content" : "200 OK", h);
+                if (headOnly) {
+                    safeFlush(out);
+                    conn.disconnect();
+                    return;
+                }
+                InputStream is = conn.getInputStream();
+                try {
+                    byte[] buf = new byte[64 * 1024];
+                    int n;
+                    while ((n = is.read(buf)) > 0) out.write(buf, 0, n);
+                } finally {
+                    try { is.close(); } catch (IOException ignored) { }
+                    conn.disconnect();
+                }
+                safeFlush(out);
+                return;
+            } catch (Exception e) {
+                last = e;
+                if (conn != null) conn.disconnect();
+            }
+        }
+        // 所有源都失败：多半是没联网，且这集还没缓存
+        try {
+            sendText(out, 504, "Gateway Timeout", "text/plain; charset=utf-8",
+                    "这一集还没存到本机，需要连接网络才能看" + (last == null ? "" : "（" + last.getMessage() + "）"));
+        } catch (IOException ignored) {
+        }
+    }
+
+    /** 后台整集下载：单线程、先写 .part、完成再改名，避免半截文件被当成缓存 */
+    private void startBackgroundDownload(final String path, final File target) {
+        if (cacheDir == null) return;
+        if (!downloading.add(path)) return;
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                File parent = target.getParentFile();
+                if (parent != null) parent.mkdirs();
+                File part = new File(target.getPath() + ".part");
+                try {
+                    String[] bases = orderedBases();
+                    for (int i = 0; i < bases.length; i++) {
+                        HttpURLConnection conn = null;
+                        OutputStream os = null;
+                        try {
+                            conn = (HttpURLConnection) new URL(bases[i] + path.substring(1)).openConnection();
+                            conn.setConnectTimeout(8000);
+                            conn.setReadTimeout(25000);
+                            conn.setInstanceFollowRedirects(true);
+                            conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
+                            conn.setRequestProperty("Accept-Encoding", "identity");
+                            if (conn.getResponseCode() != 200) {
+                                conn.disconnect();
+                                continue;
+                            }
+                            os = new FileOutputStream(part);
+                            InputStream is = conn.getInputStream();
+                            byte[] buf = new byte[64 * 1024];
+                            int n;
+                            long total = 0;
+                            boolean tooBig = false;
+                            while ((n = is.read(buf)) > 0) {
+                                os.write(buf, 0, n);
+                                total += n;
+                                if (total > SINGLE_FILE_LIMIT) { tooBig = true; break; }
+                            }
+                            try { is.close(); } catch (IOException ignored) { }
+                            try { os.close(); } catch (IOException ignored) { }
+                            os = null;
+                            conn.disconnect();
+                            if (tooBig) { part.delete(); break; }
+                            if (part.length() > 4096) {
+                                if (target.exists()) target.delete();
+                                part.renameTo(target);
+                                evictIfNeeded();
+                            } else {
+                                part.delete();
+                            }
+                            return;
+                        } catch (Exception e) {
+                            try { if (os != null) os.close(); } catch (IOException ignored) { }
+                            if (conn != null) conn.disconnect();
+                            if (part.exists()) part.delete();
+                        }
+                    }
+                } finally {
+                    downloading.remove(path);
+                }
+            }
+        }, "cw-download");
+        t.setDaemon(true);
+        t.start();
+    }
+
+    /** 超上限就按「最久未看」淘汰 */
+    private synchronized void evictIfNeeded() {
+        File dir = cacheDir;
+        if (dir == null) return;
+        List<File> files = new ArrayList<File>();
+        long total = 0;
+        collectCacheFiles(new File(dir, "videos"), files);
+        for (int i = 0; i < files.size(); i++) total += files.get(i).length();
+        if (total <= CACHE_LIMIT) return;
+        // 按最后访问时间升序删
+        java.util.Collections.sort(files, new java.util.Comparator<File>() {
+            @Override
+            public int compare(File a, File b) {
+                return Long.valueOf(a.lastModified()).compareTo(b.lastModified());
+            }
+        });
+        for (int i = 0; i < files.size() && total > CACHE_LIMIT; i++) {
+            long len = files.get(i).length();
+            if (files.get(i).delete()) total -= len;
+        }
+    }
+
+    private void collectCacheFiles(File dir, List<File> out) {
+        if (dir == null || !dir.isDirectory()) return;
+        File[] fs = dir.listFiles();
+        if (fs == null) return;
+        for (int i = 0; i < fs.length; i++) {
+            File f = fs[i];
+            if (f.isDirectory()) collectCacheFiles(f, out);
+            else if (!f.getName().endsWith(".part")) out.add(f);
+        }
+    }
+
+    private String cacheStatsJson() {
+        File dir = cacheDir;
+        List<File> files = new ArrayList<File>();
+        long total = 0;
+        if (dir != null) {
+            collectCacheFiles(new File(dir, "videos"), files);
+            for (int i = 0; i < files.size(); i++) total += files.get(i).length();
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"count\":").append(files.size())
+                .append(",\"bytes\":").append(total)
+                .append(",\"limit\":").append(CACHE_LIMIT)
+                .append(",\"downloading\":").append(downloading.size())
+                .append(",\"items\":[");
+        for (int i = 0; i < files.size() && i < 200; i++) {
+            File f = files.get(i);
+            if (i > 0) sb.append(',');
+            String name = f.getName();
+            String unit = f.getParentFile() == null ? "" : f.getParentFile().getName();
+            sb.append("{\"id\":\"").append(unit).append('/').append(name).append("\",\"mb\":")
+                    .append(f.length() / (1024 * 1024)).append('}');
+        }
+        sb.append("]}");
+        return sb.toString();
+    }
+
+    private void clearCache() {
+        File dir = cacheDir;
+        if (dir == null) return;
+        deleteTree(new File(dir, "videos"));
+    }
+
+    private void deleteTree(File f) {
+        if (f == null) return;
+        if (f.isDirectory()) {
+            File[] fs = f.listFiles();
+            if (fs != null) {
+                for (int i = 0; i < fs.length; i++) deleteTree(fs[i]);
+            }
+        }
+        f.delete();
     }
 
     private void serveAsset(InputStream asset, String path, Map<String, String> headers,

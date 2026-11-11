@@ -1158,6 +1158,37 @@
     $('#setSpeech').checked = s.speechEnabled !== false;
     $('#setSound').checked = s.soundEnabled !== false;
     $('#setQuiz').checked = s.quizEnabled !== false;
+    loadCacheInfo();
+  }
+
+  // ---------------- 缓存（云端点播留下的视频） ----------------
+  function loadCacheInfo() {
+    var el = $('#cacheInfo');
+    if (!el) return;
+    if (!location.origin || location.origin.indexOf('http') !== 0) {
+      el.textContent = '网页版直接读本地文件夹，不涉及缓存。';
+      return;
+    }
+    fetch('api/cache', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || typeof d.count !== 'number') throw new Error('no-data');
+        var mb = Math.round((d.bytes || 0) / 1048576);
+        var lim = Math.round((d.limit || 0) / 1073741824);
+        el.textContent = '已缓存 ' + d.count + ' 集，占用 ' + (mb >= 1024 ? (mb / 1024).toFixed(1) + ' GB' : mb + ' MB')
+          + '（上限 ' + lim + ' GB）' + (d.downloading ? '，正在下载 ' + d.downloading + ' 集' : '');
+      })
+      .catch(function () {
+        el.textContent = '读不到缓存信息（用网页版打开时不支持）。';
+      });
+  }
+
+  function clearCache() {
+    if (!confirm('清空后，看过的课需要重新联网加载，确定要清吗？')) return;
+    fetch('api/cache', { method: 'POST' })
+      .then(function (r) { return r.json(); })
+      .then(function () { toast('缓存已清空'); loadCacheInfo(); })
+      .catch(function () { toast('清理失败，稍后再试'); });
   }
 
   // ---------------- 播放 ----------------
@@ -1187,9 +1218,19 @@
     });
     v.addEventListener('error', function () {
       if (!currentId || currentType !== 'video') return;
-      $('#videoError').innerHTML = '这个视频打不开（可能格式不支持）<br>'
-        + '可以先点「学完了」跳过这一节，<br>让家长重新转换这个文件。';
+      var online = navigator.onLine !== false;
+      $('#videoError').innerHTML = (online
+        ? '这一集还没存到本机，刚才联网加载没成功<br>看看 WiFi 再点「重试」，或者点「学完了」跳过'
+        : '这一集还没存到本机，现在没有网络<br>连上 WiFi 就能看；看过的课以后离线也能看')
+        + '<br><button id="videoRetry" class="btn-ghost" style="margin-top:10px">重试</button>';
       $('#videoError').classList.remove('hidden');
+      var rb = $('#videoRetry');
+      if (rb) {
+        rb.onclick = function () {
+          $('#videoError').classList.add('hidden');
+          try { v.load(); v.play(); } catch (e) {}
+        };
+      }
     });
   }
 
@@ -1651,6 +1692,8 @@
       toast('设置已保存，明天起按新时长排课');
     });
     $('#rebuildToday').addEventListener('click', rebuildToday);
+    var cc = $('#cacheClear');
+    if (cc) cc.addEventListener('click', clearCache);
 
     // 数据
     $('#exportBtn').addEventListener('click', exportProgress);
