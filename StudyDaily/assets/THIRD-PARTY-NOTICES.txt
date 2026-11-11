@@ -1,0 +1,7 @@
+本应用内使用的插画图标来自 Microsoft Fluent Emoji
+仓库：https://github.com/microsoft/fluentui-emoji
+许可证：MIT License (c) Microsoft Corporation
+说明：assets/img/ 与 assets/pics/ 下的 PNG 文件为 Fluent Emoji「3D」风格
+（assets/pics/ 由 tools/fetch_pics.py 从官方仓库下载后缩放到 192px），
+按 MIT 许可随应用分发、可自由修改与商用。
+语音片段由本机 tools/make_voice.py 生成（edge-tts，zh-CN-XiaoyiNeural 音色），仅随本应用本地分发。
