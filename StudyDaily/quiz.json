@@ -1,0 +1,9325 @@
+{
+ "version": 1,
+ "generatedAt": "2026-11-11T14:27:40",
+ "perLesson": 3,
+ "lessons": {
+  "u01-001": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "e",
+      "k": "letter"
+     },
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "a",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "e",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "o",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "o",
+      "k": "letter"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-002": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "e",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "a",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "e",
+      "k": "letter"
+     },
+     {
+      "t": "o",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "o",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "o",
+      "k": "letter"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-003": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "j",
+      "k": "letter"
+     },
+     {
+      "t": "l",
+      "k": "letter"
+     },
+     {
+      "t": "i",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "i",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "u",
+      "k": "letter"
+     },
+     {
+      "t": "ü",
+      "k": "letter"
+     },
+     {
+      "t": "n",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "u",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "i",
+      "k": "letter"
+     },
+     {
+      "t": "l",
+      "k": "letter"
+     },
+     {
+      "t": "i",
+      "k": "letter"
+     },
+     {
+      "t": "i",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-004": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "d",
+      "k": "letter"
+     },
+     {
+      "t": "p",
+      "k": "letter"
+     },
+     {
+      "t": "b",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "b",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个是 泼？",
+    "q": "听一听，选字母",
+    "opts": [
+     {
+      "t": "q",
+      "k": "letter"
+     },
+     {
+      "t": "b",
+      "k": "letter"
+     },
+     {
+      "t": "p",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "b",
+      "k": "letter"
+     },
+     {
+      "t": "d",
+      "k": "letter"
+     },
+     {
+      "t": "b",
+      "k": "letter"
+     },
+     {
+      "t": "b",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-005": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "d",
+      "k": "letter"
+     },
+     {
+      "t": "p",
+      "k": "letter"
+     },
+     {
+      "t": "b",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "d",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个是 特？",
+    "q": "听一听，选字母",
+    "opts": [
+     {
+      "t": "l",
+      "k": "letter"
+     },
+     {
+      "t": "f",
+      "k": "letter"
+     },
+     {
+      "t": "t",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "b",
+      "k": "letter"
+     },
+     {
+      "t": "d",
+      "k": "letter"
+     },
+     {
+      "t": "d",
+      "k": "letter"
+     },
+     {
+      "t": "d",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-006": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "q",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "g",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个是 科？",
+    "q": "听一听，选字母",
+    "opts": [
+     {
+      "t": "h",
+      "k": "letter"
+     },
+     {
+      "t": "k",
+      "k": "letter"
+     },
+     {
+      "t": "x",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "g",
+      "k": "letter"
+     },
+     {
+      "t": "q",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-007": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "j",
+      "k": "letter"
+     },
+     {
+      "t": "i",
+      "k": "letter"
+     },
+     {
+      "t": "q",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "j",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个是 七？",
+    "q": "听一听，选字母",
+    "opts": [
+     {
+      "t": "b",
+      "k": "letter"
+     },
+     {
+      "t": "p",
+      "k": "letter"
+     },
+     {
+      "t": "q",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "j",
+      "k": "letter"
+     },
+     {
+      "t": "i",
+      "k": "letter"
+     },
+     {
+      "t": "j",
+      "k": "letter"
+     },
+     {
+      "t": "j",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-008": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "c",
+      "k": "letter"
+     },
+     {
+      "t": "zh",
+      "k": "letter"
+     },
+     {
+      "t": "z",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "z",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个是 次？",
+    "q": "听一听，选字母",
+    "opts": [
+     {
+      "t": "ch",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     },
+     {
+      "t": "z",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "z",
+      "k": "letter"
+     },
+     {
+      "t": "z",
+      "k": "letter"
+     },
+     {
+      "t": "zh",
+      "k": "letter"
+     },
+     {
+      "t": "z",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-009": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "zh",
+      "k": "letter"
+     },
+     {
+      "t": "ch",
+      "k": "letter"
+     },
+     {
+      "t": "z",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "zh",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个是 吃？",
+    "q": "听一听，选字母",
+    "opts": [
+     {
+      "t": "zh",
+      "k": "letter"
+     },
+     {
+      "t": "ch",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "zh",
+      "k": "letter"
+     },
+     {
+      "t": "zh",
+      "k": "letter"
+     },
+     {
+      "t": "z",
+      "k": "letter"
+     },
+     {
+      "t": "zh",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-010": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "y",
+      "k": "letter"
+     },
+     {
+      "t": "i",
+      "k": "letter"
+     },
+     {
+      "t": "w",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "y",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个是 乌？",
+    "q": "听一听，选字母",
+    "opts": [
+     {
+      "t": "m",
+      "k": "letter"
+     },
+     {
+      "t": "y",
+      "k": "letter"
+     },
+     {
+      "t": "w",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "y",
+      "k": "letter"
+     },
+     {
+      "t": "y",
+      "k": "letter"
+     },
+     {
+      "t": "w",
+      "k": "letter"
+     },
+     {
+      "t": "y",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-011": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "ia",
+      "k": "letter"
+     },
+     {
+      "t": "ai",
+      "k": "letter"
+     },
+     {
+      "t": "ei",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "ai",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "ai",
+      "k": "letter"
+     },
+     {
+      "t": "ie",
+      "k": "letter"
+     },
+     {
+      "t": "ei",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "ei",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "ai",
+      "k": "letter"
+     },
+     {
+      "t": "ia",
+      "k": "letter"
+     },
+     {
+      "t": "ai",
+      "k": "letter"
+     },
+     {
+      "t": "ai",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-012": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "uo",
+      "k": "letter"
+     },
+     {
+      "t": "ao",
+      "k": "letter"
+     },
+     {
+      "t": "ou",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "ou",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "ou",
+      "k": "letter"
+     },
+     {
+      "t": "ui",
+      "k": "letter"
+     },
+     {
+      "t": "iu",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "iu",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "ou",
+      "k": "letter"
+     },
+     {
+      "t": "ou",
+      "k": "letter"
+     },
+     {
+      "t": "uo",
+      "k": "letter"
+     },
+     {
+      "t": "ou",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-013": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "ei",
+      "k": "letter"
+     },
+     {
+      "t": "ie",
+      "k": "letter"
+     },
+     {
+      "t": "ia",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "ie",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "ie",
+      "k": "letter"
+     },
+     {
+      "t": "q",
+      "k": "letter"
+     },
+     {
+      "t": "üe",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "üe",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "ie",
+      "k": "letter"
+     },
+     {
+      "t": "ie",
+      "k": "letter"
+     },
+     {
+      "t": "ie",
+      "k": "letter"
+     },
+     {
+      "t": "ei",
+      "k": "letter"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-014": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "an",
+      "k": "letter"
+     },
+     {
+      "t": "ang",
+      "k": "letter"
+     },
+     {
+      "t": "ai",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "an",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "an",
+      "k": "letter"
+     },
+     {
+      "t": "en",
+      "k": "letter"
+     },
+     {
+      "t": "eng",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "en",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "an",
+      "k": "letter"
+     },
+     {
+      "t": "an",
+      "k": "letter"
+     },
+     {
+      "t": "an",
+      "k": "letter"
+     },
+     {
+      "t": "ang",
+      "k": "letter"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-015": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "un",
+      "k": "letter"
+     },
+     {
+      "t": "ün",
+      "k": "letter"
+     },
+     {
+      "t": "en",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "un",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "un",
+      "k": "letter"
+     },
+     {
+      "t": "u",
+      "k": "letter"
+     },
+     {
+      "t": "ün",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "ün",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "un",
+      "k": "letter"
+     },
+     {
+      "t": "un",
+      "k": "letter"
+     },
+     {
+      "t": "ün",
+      "k": "letter"
+     },
+     {
+      "t": "un",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-016": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "an",
+      "k": "letter"
+     },
+     {
+      "t": "eng",
+      "k": "letter"
+     },
+     {
+      "t": "ang",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "ang",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "eng",
+      "k": "letter"
+     },
+     {
+      "t": "ong",
+      "k": "letter"
+     },
+     {
+      "t": "en",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "eng",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "an",
+      "k": "letter"
+     },
+     {
+      "t": "ang",
+      "k": "letter"
+     },
+     {
+      "t": "ang",
+      "k": "letter"
+     },
+     {
+      "t": "ang",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-017": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "zh",
+      "k": "letter"
+     },
+     {
+      "t": "zi",
+      "k": "letter"
+     },
+     {
+      "t": "zhi",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "zhi",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "ci",
+      "k": "letter"
+     },
+     {
+      "t": "chi",
+      "k": "letter"
+     },
+     {
+      "t": "ch",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "chi",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "zhi",
+      "k": "letter"
+     },
+     {
+      "t": "zhi",
+      "k": "letter"
+     },
+     {
+      "t": "zh",
+      "k": "letter"
+     },
+     {
+      "t": "zhi",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-018": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "zhi",
+      "k": "letter"
+     },
+     {
+      "t": "zi",
+      "k": "letter"
+     },
+     {
+      "t": "ci",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "zi",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "zi",
+      "k": "letter"
+     },
+     {
+      "t": "chi",
+      "k": "letter"
+     },
+     {
+      "t": "ci",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "ci",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "zi",
+      "k": "letter"
+     },
+     {
+      "t": "zhi",
+      "k": "letter"
+     },
+     {
+      "t": "zi",
+      "k": "letter"
+     },
+     {
+      "t": "zi",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-019": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "i",
+      "k": "letter"
+     },
+     {
+      "t": "yu",
+      "k": "letter"
+     },
+     {
+      "t": "yi",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "yi",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "yu",
+      "k": "letter"
+     },
+     {
+      "t": "u",
+      "k": "letter"
+     },
+     {
+      "t": "wu",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "wu",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "yi",
+      "k": "letter"
+     },
+     {
+      "t": "yi",
+      "k": "letter"
+     },
+     {
+      "t": "i",
+      "k": "letter"
+     },
+     {
+      "t": "yi",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-020": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "ye",
+      "k": "letter"
+     },
+     {
+      "t": "yi",
+      "k": "letter"
+     },
+     {
+      "t": "yue",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "ye",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "yu",
+      "k": "letter"
+     },
+     {
+      "t": "ye",
+      "k": "letter"
+     },
+     {
+      "t": "yue",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "yue",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "ye",
+      "k": "letter"
+     },
+     {
+      "t": "ye",
+      "k": "letter"
+     },
+     {
+      "t": "ye",
+      "k": "letter"
+     },
+     {
+      "t": "yi",
+      "k": "letter"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-021": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "yan",
+      "k": "letter"
+     },
+     {
+      "t": "yuan",
+      "k": "letter"
+     },
+     {
+      "t": "yun",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "yuan",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "in",
+      "k": "letter"
+     },
+     {
+      "t": "yin",
+      "k": "letter"
+     },
+     {
+      "t": "ying",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "yin",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "yuan",
+      "k": "letter"
+     },
+     {
+      "t": "yuan",
+      "k": "letter"
+     },
+     {
+      "t": "yun",
+      "k": "letter"
+     },
+     {
+      "t": "yuan",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u01-022": [
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "e",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "o",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "a",
+     "cls": "letter"
+    },
+    "lang": "zh",
+    "kind": "same"
+   },
+   {
+    "say": "哪一个是 波？",
+    "q": "听一听，选字母",
+    "opts": [
+     {
+      "t": "d",
+      "k": "letter"
+     },
+     {
+      "t": "b",
+      "k": "letter"
+     },
+     {
+      "t": "p",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u02-001": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "叉",
+      "k": "char",
+      "e": "🍴"
+     },
+     {
+      "t": "人",
+      "k": "char",
+      "e": "🧍"
+     },
+     {
+      "t": "火",
+      "k": "char",
+      "e": "🔥"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "🧍",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 双？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "子",
+      "k": "char",
+      "e": "👶"
+     },
+     {
+      "t": "人",
+      "k": "char",
+      "e": "🧍"
+     },
+     {
+      "t": "双",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 刀？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "人",
+      "k": "char",
+      "e": "🧍"
+     },
+     {
+      "t": "儿",
+      "k": "char",
+      "e": "🧒"
+     },
+     {
+      "t": "刀",
+      "k": "char",
+      "e": "🔪"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-002": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "竹",
+      "k": "char",
+      "e": "🎋"
+     },
+     {
+      "t": "卜",
+      "k": "char"
+     },
+     {
+      "t": "田",
+      "k": "char",
+      "e": "🌾"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "🎋",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 明？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "明",
+      "k": "char"
+     },
+     {
+      "t": "半",
+      "k": "char"
+     },
+     {
+      "t": "光",
+      "k": "char",
+      "e": "✨"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 出？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "心",
+      "k": "char",
+      "e": "❤️"
+     },
+     {
+      "t": "出",
+      "k": "char"
+     },
+     {
+      "t": "光",
+      "k": "char",
+      "e": "✨"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-003": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "草",
+      "k": "char",
+      "e": "🌱"
+     },
+     {
+      "t": "水",
+      "k": "char",
+      "e": "💧"
+     },
+     {
+      "t": "大",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "💧",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 尖？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "尖",
+      "k": "char"
+     },
+     {
+      "t": "里",
+      "k": "char"
+     },
+     {
+      "t": "雨",
+      "k": "char",
+      "e": "🌧️"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 土？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "林",
+      "k": "char",
+      "e": "🌲"
+     },
+     {
+      "t": "土",
+      "k": "char",
+      "e": "🟫"
+     },
+     {
+      "t": "小",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-004": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "手",
+      "k": "char",
+      "e": "✋"
+     },
+     {
+      "t": "弓",
+      "k": "char",
+      "e": "🏹"
+     },
+     {
+      "t": "苦",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "🏹",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 丑？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "齿",
+      "k": "char"
+     },
+     {
+      "t": "丑",
+      "k": "char"
+     },
+     {
+      "t": "马",
+      "k": "char",
+      "e": "🐴"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 目？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "目",
+      "k": "char",
+      "e": "👁️"
+     },
+     {
+      "t": "手",
+      "k": "char",
+      "e": "✋"
+     },
+     {
+      "t": "耳",
+      "k": "char",
+      "e": "👂"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-005": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "朵",
+      "k": "char",
+      "e": "🌺"
+     },
+     {
+      "t": "狗",
+      "k": "char",
+      "e": "🐕"
+     },
+     {
+      "t": "羊",
+      "k": "char",
+      "e": "🐑"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "🐑",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 狗？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "狗",
+      "k": "char",
+      "e": "🐕"
+     },
+     {
+      "t": "牢",
+      "k": "char"
+     },
+     {
+      "t": "灰",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 苗？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "苗",
+      "k": "char",
+      "e": "🌱"
+     },
+     {
+      "t": "灰",
+      "k": "char"
+     },
+     {
+      "t": "牵",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-006": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "虫",
+      "k": "char",
+      "e": "🐛"
+     },
+     {
+      "t": "俩",
+      "k": "char"
+     },
+     {
+      "t": "内",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "🐛",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 杰？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "三",
+      "k": "char"
+     },
+     {
+      "t": "立",
+      "k": "char"
+     },
+     {
+      "t": "杰",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 九？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "虫",
+      "k": "char",
+      "e": "🐛"
+     },
+     {
+      "t": "九",
+      "k": "char"
+     },
+     {
+      "t": "不",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-007": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "归",
+      "k": "char"
+     },
+     {
+      "t": "鱼",
+      "k": "char",
+      "e": "🐟"
+     },
+     {
+      "t": "当",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "🐟",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 扫？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "扫",
+      "k": "char"
+     },
+     {
+      "t": "止",
+      "k": "char"
+     },
+     {
+      "t": "农",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 去？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "切",
+      "k": "char"
+     },
+     {
+      "t": "羽",
+      "k": "char"
+     },
+     {
+      "t": "去",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-008": [
+   {
+    "say": "哪一个是 失？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "占",
+      "k": "char"
+     },
+     {
+      "t": "丢",
+      "k": "char"
+     },
+     {
+      "t": "失",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 乡？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "乡",
+      "k": "char"
+     },
+     {
+      "t": "穷",
+      "k": "char"
+     },
+     {
+      "t": "抬",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "占",
+      "k": "char"
+     },
+     {
+      "t": "站",
+      "k": "char"
+     },
+     {
+      "t": "乖",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "占",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-009": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "丹",
+      "k": "char"
+     },
+     {
+      "t": "雷",
+      "k": "char",
+      "e": "⛈️"
+     },
+     {
+      "t": "柿",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "⛈️",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 柿？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "挂",
+      "k": "char"
+     },
+     {
+      "t": "片",
+      "k": "char"
+     },
+     {
+      "t": "柿",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 挂？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "笋",
+      "k": "char"
+     },
+     {
+      "t": "挂",
+      "k": "char"
+     },
+     {
+      "t": "无",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-010": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "枣",
+      "k": "char"
+     },
+     {
+      "t": "面",
+      "k": "char",
+      "e": "🍜"
+     },
+     {
+      "t": "河",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "🍜",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 桑？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "桑",
+      "k": "char"
+     },
+     {
+      "t": "汗",
+      "k": "char"
+     },
+     {
+      "t": "本",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 休？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "皿",
+      "k": "char"
+     },
+     {
+      "t": "荷",
+      "k": "char"
+     },
+     {
+      "t": "休",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-011": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "鞋",
+      "k": "char",
+      "e": "👟"
+     },
+     {
+      "t": "爽",
+      "k": "char"
+     },
+     {
+      "t": "甩",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "👟",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 动？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "灾",
+      "k": "char"
+     },
+     {
+      "t": "洗",
+      "k": "char"
+     },
+     {
+      "t": "动",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 危？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "危",
+      "k": "char"
+     },
+     {
+      "t": "舞",
+      "k": "char"
+     },
+     {
+      "t": "爽",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-012": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "孤",
+      "k": "char"
+     },
+     {
+      "t": "针",
+      "k": "char",
+      "e": "🪡"
+     },
+     {
+      "t": "思",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "🪡",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 皂？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "皂",
+      "k": "char"
+     },
+     {
+      "t": "丁",
+      "k": "char"
+     },
+     {
+      "t": "春",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 划？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "夸",
+      "k": "char"
+     },
+     {
+      "t": "忙",
+      "k": "char"
+     },
+     {
+      "t": "划",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-013": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "电",
+      "k": "char",
+      "e": "⚡"
+     },
+     {
+      "t": "昼",
+      "k": "char"
+     },
+     {
+      "t": "了",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "⚡",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 允？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "了",
+      "k": "char"
+     },
+     {
+      "t": "允",
+      "k": "char"
+     },
+     {
+      "t": "户",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 旦？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "旦",
+      "k": "char"
+     },
+     {
+      "t": "劝",
+      "k": "char"
+     },
+     {
+      "t": "总",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-014": [
+   {
+    "say": "哪一个是 叠？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "步",
+      "k": "char"
+     },
+     {
+      "t": "我",
+      "k": "char"
+     },
+     {
+      "t": "叠",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 您？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "窄",
+      "k": "char"
+     },
+     {
+      "t": "您",
+      "k": "char"
+     },
+     {
+      "t": "写",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "我",
+      "k": "char"
+     },
+     {
+      "t": "他",
+      "k": "char"
+     },
+     {
+      "t": "你",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "你",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-015": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "石",
+      "k": "char",
+      "e": "🪨"
+     },
+     {
+      "t": "气",
+      "k": "char"
+     },
+     {
+      "t": "互",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "🪨",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 互？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "今",
+      "k": "char"
+     },
+     {
+      "t": "互",
+      "k": "char"
+     },
+     {
+      "t": "句",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 元？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "元",
+      "k": "char"
+     },
+     {
+      "t": "与",
+      "k": "char"
+     },
+     {
+      "t": "灿",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-016": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "各",
+      "k": "char"
+     },
+     {
+      "t": "蝶",
+      "k": "char",
+      "e": "🦋"
+     },
+     {
+      "t": "万",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "🦋",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 竿？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "千",
+      "k": "char"
+     },
+     {
+      "t": "竿",
+      "k": "char"
+     },
+     {
+      "t": "丰",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 阳？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "千",
+      "k": "char"
+     },
+     {
+      "t": "底",
+      "k": "char"
+     },
+     {
+      "t": "阳",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-017": [
+   {
+    "say": "哪一个是 烟？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "圣",
+      "k": "char"
+     },
+     {
+      "t": "烟",
+      "k": "char"
+     },
+     {
+      "t": "具",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 音？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "音",
+      "k": "char"
+     },
+     {
+      "t": "矛",
+      "k": "char"
+     },
+     {
+      "t": "类",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "开",
+      "k": "char"
+     },
+     {
+      "t": "关",
+      "k": "char"
+     },
+     {
+      "t": "来",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "来",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-018": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "金",
+      "k": "char",
+      "e": "🥇"
+     },
+     {
+      "t": "生",
+      "k": "char"
+     },
+     {
+      "t": "办",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "🥇",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 共？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "金",
+      "k": "char",
+      "e": "🥇"
+     },
+     {
+      "t": "共",
+      "k": "char"
+     },
+     {
+      "t": "永",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 点？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "生",
+      "k": "char"
+     },
+     {
+      "t": "点",
+      "k": "char"
+     },
+     {
+      "t": "永",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-019": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "全",
+      "k": "char"
+     },
+     {
+      "t": "希",
+      "k": "char"
+     },
+     {
+      "t": "玉",
+      "k": "char",
+      "e": "💎"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "💎",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 神？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "枯",
+      "k": "char"
+     },
+     {
+      "t": "图",
+      "k": "char"
+     },
+     {
+      "t": "神",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 围？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "斥",
+      "k": "char"
+     },
+     {
+      "t": "围",
+      "k": "char"
+     },
+     {
+      "t": "图",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-020": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "梦",
+      "k": "char"
+     },
+     {
+      "t": "跑",
+      "k": "char",
+      "e": "🏃"
+     },
+     {
+      "t": "炮",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "🏃",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 对？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "梦",
+      "k": "char"
+     },
+     {
+      "t": "咐",
+      "k": "char"
+     },
+     {
+      "t": "对",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 泡？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "至",
+      "k": "char"
+     },
+     {
+      "t": "炮",
+      "k": "char"
+     },
+     {
+      "t": "泡",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-021": [
+   {
+    "say": "哪一个是 购？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "沟",
+      "k": "char"
+     },
+     {
+      "t": "言",
+      "k": "char"
+     },
+     {
+      "t": "购",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 防？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "房",
+      "k": "char"
+     },
+     {
+      "t": "防",
+      "k": "char"
+     },
+     {
+      "t": "沟",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "齐",
+      "k": "char"
+     },
+     {
+      "t": "凶",
+      "k": "char"
+     },
+     {
+      "t": "是",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "凶",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-022": [
+   {
+    "say": "哪一个是 胖？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "胖",
+      "k": "char"
+     },
+     {
+      "t": "彩",
+      "k": "char"
+     },
+     {
+      "t": "拌",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 拌？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "凡",
+      "k": "char"
+     },
+     {
+      "t": "支",
+      "k": "char"
+     },
+     {
+      "t": "拌",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "冈",
+      "k": "char"
+     },
+     {
+      "t": "纺",
+      "k": "char"
+     },
+     {
+      "t": "妨",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "纺",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-023": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "汤",
+      "k": "char"
+     },
+     {
+      "t": "厌",
+      "k": "char"
+     },
+     {
+      "t": "帽",
+      "k": "char",
+      "e": "🧢"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "🧢",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 汤？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "试",
+      "k": "char"
+     },
+     {
+      "t": "跟",
+      "k": "char"
+     },
+     {
+      "t": "汤",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 扶？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "眉",
+      "k": "char"
+     },
+     {
+      "t": "扶",
+      "k": "char"
+     },
+     {
+      "t": "厌",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-024": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "走",
+      "k": "char",
+      "e": "🚶"
+     },
+     {
+      "t": "驾",
+      "k": "char"
+     },
+     {
+      "t": "抢",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "🚶",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 吉？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "走",
+      "k": "char",
+      "e": "🚶"
+     },
+     {
+      "t": "眼",
+      "k": "char"
+     },
+     {
+      "t": "吉",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 按？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "按",
+      "k": "char"
+     },
+     {
+      "t": "走",
+      "k": "char",
+      "e": "🚶"
+     },
+     {
+      "t": "穿",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-025": [
+   {
+    "say": "哪一个是 炭？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "炭",
+      "k": "char"
+     },
+     {
+      "t": "冰",
+      "k": "char"
+     },
+     {
+      "t": "持",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 持？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "持",
+      "k": "char"
+     },
+     {
+      "t": "招",
+      "k": "char"
+     },
+     {
+      "t": "狠",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "拍",
+      "k": "char"
+     },
+     {
+      "t": "持",
+      "k": "char"
+     },
+     {
+      "t": "扒",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "扒",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-026": [
+   {
+    "say": "哪一个是 幸？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "幸",
+      "k": "char"
+     },
+     {
+      "t": "仍",
+      "k": "char"
+     },
+     {
+      "t": "买",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 兄？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "租",
+      "k": "char"
+     },
+     {
+      "t": "兄",
+      "k": "char"
+     },
+     {
+      "t": "妹",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "仍",
+      "k": "char"
+     },
+     {
+      "t": "租",
+      "k": "char"
+     },
+     {
+      "t": "扔",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "扔",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-027": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "奴",
+      "k": "char"
+     },
+     {
+      "t": "鸟",
+      "k": "char",
+      "e": "🐦"
+     },
+     {
+      "t": "狼",
+      "k": "char",
+      "e": "🐺"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "🐦",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 始？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "猪",
+      "k": "char",
+      "e": "🐷"
+     },
+     {
+      "t": "始",
+      "k": "char"
+     },
+     {
+      "t": "鸟",
+      "k": "char",
+      "e": "🐦"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 乌？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "吗",
+      "k": "char"
+     },
+     {
+      "t": "兔",
+      "k": "char",
+      "e": "🐰"
+     },
+     {
+      "t": "乌",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-028": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "蛇",
+      "k": "char",
+      "e": "🐍"
+     },
+     {
+      "t": "暗",
+      "k": "char"
+     },
+     {
+      "t": "咬",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "🐍",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 喊？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "吐",
+      "k": "char"
+     },
+     {
+      "t": "喊",
+      "k": "char"
+     },
+     {
+      "t": "低",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 坦？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "吼",
+      "k": "char"
+     },
+     {
+      "t": "喊",
+      "k": "char"
+     },
+     {
+      "t": "坦",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-029": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "药",
+      "k": "char",
+      "e": "💊"
+     },
+     {
+      "t": "亡",
+      "k": "char"
+     },
+     {
+      "t": "听",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "💊",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 亭？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "亭",
+      "k": "char"
+     },
+     {
+      "t": "病",
+      "k": "char"
+     },
+     {
+      "t": "聋",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 趴？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "听",
+      "k": "char"
+     },
+     {
+      "t": "趴",
+      "k": "char"
+     },
+     {
+      "t": "亭",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-030": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "急",
+      "k": "char"
+     },
+     {
+      "t": "愁",
+      "k": "char"
+     },
+     {
+      "t": "笑",
+      "k": "char",
+      "e": "😄"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "😄",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 想？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "笨",
+      "k": "char"
+     },
+     {
+      "t": "想",
+      "k": "char"
+     },
+     {
+      "t": "哭",
+      "k": "char",
+      "e": "😭"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 愁？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "笨",
+      "k": "char"
+     },
+     {
+      "t": "蠢",
+      "k": "char"
+     },
+     {
+      "t": "愁",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-031": [
+   {
+    "say": "哪一个是 退？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "虹",
+      "k": "char"
+     },
+     {
+      "t": "远",
+      "k": "char"
+     },
+     {
+      "t": "退",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 远？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "近",
+      "k": "char"
+     },
+     {
+      "t": "饺",
+      "k": "char"
+     },
+     {
+      "t": "远",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "饿",
+      "k": "char"
+     },
+     {
+      "t": "饱",
+      "k": "char"
+     },
+     {
+      "t": "馋",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "饱",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-032": [
+   {
+    "say": "哪一个是 巡？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "常",
+      "k": "char"
+     },
+     {
+      "t": "巡",
+      "k": "char"
+     },
+     {
+      "t": "沉",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 壶？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "家",
+      "k": "char"
+     },
+     {
+      "t": "常",
+      "k": "char"
+     },
+     {
+      "t": "壶",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "帮",
+      "k": "char"
+     },
+     {
+      "t": "帝",
+      "k": "char"
+     },
+     {
+      "t": "递",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "递",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-033": [
+   {
+    "say": "哪一个是 纠？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "纠",
+      "k": "char"
+     },
+     {
+      "t": "浓",
+      "k": "char"
+     },
+     {
+      "t": "机",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 亲？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "亲",
+      "k": "char"
+     },
+     {
+      "t": "机",
+      "k": "char"
+     },
+     {
+      "t": "宽",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "技",
+      "k": "char"
+     },
+     {
+      "t": "盼",
+      "k": "char"
+     },
+     {
+      "t": "记",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "记",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-034": [
+   {
+    "say": "哪一个是 拼？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "拼",
+      "k": "char"
+     },
+     {
+      "t": "梳",
+      "k": "char"
+     },
+     {
+      "t": "诗",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 批？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "盆",
+      "k": "char"
+     },
+     {
+      "t": "批",
+      "k": "char"
+     },
+     {
+      "t": "拒",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "壳",
+      "k": "char"
+     },
+     {
+      "t": "刻",
+      "k": "char"
+     },
+     {
+      "t": "肯",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "壳",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-035": [
+   {
+    "say": "图片上是什么？选出它的字",
+    "q": "看图，选出这个字",
+    "opts": [
+     {
+      "t": "窗",
+      "k": "char",
+      "e": "🪟"
+     },
+     {
+      "t": "泛",
+      "k": "char"
+     },
+     {
+      "t": "答",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "big",
+     "v": "🪟",
+     "cls": "emoji"
+    },
+    "lang": "zh",
+    "kind": "pic"
+   },
+   {
+    "say": "哪一个是 顶？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "饭",
+      "k": "char",
+      "e": "🍚"
+     },
+     {
+      "t": "顶",
+      "k": "char"
+     },
+     {
+      "t": "聪",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 到？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "法",
+      "k": "char"
+     },
+     {
+      "t": "陡",
+      "k": "char"
+     },
+     {
+      "t": "到",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   }
+  ],
+  "u02-036": [
+   {
+    "say": "哪一个是 柜？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "柜",
+      "k": "char"
+     },
+     {
+      "t": "抱",
+      "k": "char"
+     },
+     {
+      "t": "功",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 该？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "国",
+      "k": "char"
+     },
+     {
+      "t": "否",
+      "k": "char"
+     },
+     {
+      "t": "该",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "服",
+      "k": "char"
+     },
+     {
+      "t": "抚",
+      "k": "char"
+     },
+     {
+      "t": "否",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "否",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-037": [
+   {
+    "say": "哪一个是 弱？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "弱",
+      "k": "char"
+     },
+     {
+      "t": "枪",
+      "k": "char"
+     },
+     {
+      "t": "伤",
+      "k": "char"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 灵？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "荣",
+      "k": "char"
+     },
+     {
+      "t": "灵",
+      "k": "char"
+     },
+     {
+      "t": "弃",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "楼",
+      "k": "char"
+     },
+     {
+      "t": "灵",
+      "k": "char"
+     },
+     {
+      "t": "淋",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "big",
+     "v": "淋",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-038": [
+   {
+    "say": "哪一个是 屎？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "纹",
+      "k": "char"
+     },
+     {
+      "t": "屎",
+      "k": "char"
+     },
+     {
+      "t": "偷",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 诉？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "受",
+      "k": "char"
+     },
+     {
+      "t": "诉",
+      "k": "char"
+     },
+     {
+      "t": "托",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "屎",
+      "k": "char"
+     },
+     {
+      "t": "声",
+      "k": "char"
+     },
+     {
+      "t": "识",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "声",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-039": [
+   {
+    "say": "哪一个是 现？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "野",
+      "k": "char"
+     },
+     {
+      "t": "享",
+      "k": "char"
+     },
+     {
+      "t": "现",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 巧？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "显",
+      "k": "char"
+     },
+     {
+      "t": "巧",
+      "k": "char"
+     },
+     {
+      "t": "硬",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "巧",
+      "k": "char"
+     },
+     {
+      "t": "卧",
+      "k": "char"
+     },
+     {
+      "t": "污",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "卧",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u02-040": [
+   {
+    "say": "哪一个是 执？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "迷",
+      "k": "char"
+     },
+     {
+      "t": "执",
+      "k": "char"
+     },
+     {
+      "t": "池",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个是 仗？",
+    "q": "听一听，选出这个字",
+    "opts": [
+     {
+      "t": "帐",
+      "k": "char"
+     },
+     {
+      "t": "孟",
+      "k": "char"
+     },
+     {
+      "t": "仗",
+      "k": "char"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "sound"
+   },
+   {
+    "say": "哪一个和上面的一样？",
+    "q": "找出一样的",
+    "opts": [
+     {
+      "t": "阵",
+      "k": "char"
+     },
+     {
+      "t": "帐",
+      "k": "char"
+     },
+     {
+      "t": "仗",
+      "k": "char"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "big",
+     "v": "帐",
+     "cls": "char"
+    },
+    "lang": "zh",
+    "kind": "same"
+   }
+  ],
+  "u03-001": [
+   {
+    "say": "哪一个是 3？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是 7？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "8",
+      "k": "num"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是 0？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "0",
+      "k": "num"
+     },
+     {
+      "t": "1",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-002": [
+   {
+    "say": "哪一个是 30？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "20",
+      "k": "num"
+     },
+     {
+      "t": "30",
+      "k": "num"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是 70？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "70",
+      "k": "num"
+     },
+     {
+      "t": "20",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是 90？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "20",
+      "k": "num"
+     },
+     {
+      "t": "90",
+      "k": "num"
+     },
+     {
+      "t": "10",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-003": [
+   {
+    "say": "数一数，有几个？",
+    "q": "数一数",
+    "opts": [
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "emojis",
+     "v": "⭐",
+     "n": 3
+    },
+    "lang": "zh",
+    "kind": "count"
+   },
+   {
+    "say": "数一数，有几个？",
+    "q": "数一数",
+    "opts": [
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "emojis",
+     "v": "⭐",
+     "n": 5
+    },
+    "lang": "zh",
+    "kind": "count"
+   },
+   {
+    "say": "数一数，有几个？",
+    "q": "数一数",
+    "opts": [
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "1",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": {
+     "k": "emojis",
+     "v": "⭐",
+     "n": 2
+    },
+    "lang": "zh",
+    "kind": "count"
+   }
+  ],
+  "u03-004": [
+   {
+    "say": "数一数，有几个？",
+    "q": "数一数",
+    "opts": [
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "emojis",
+     "v": "🎈",
+     "n": 4
+    },
+    "lang": "zh",
+    "kind": "count"
+   },
+   {
+    "say": "数一数，有几个？",
+    "q": "数一数",
+    "opts": [
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "8",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "emojis",
+     "v": "🎈",
+     "n": 7
+    },
+    "lang": "zh",
+    "kind": "count"
+   },
+   {
+    "say": "数一数，有几个？",
+    "q": "数一数",
+    "opts": [
+     {
+      "t": "8",
+      "k": "num"
+     },
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "11",
+      "k": "num"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "emojis",
+     "v": "🎈",
+     "n": 9
+    },
+    "lang": "zh",
+    "kind": "count"
+   }
+  ],
+  "u03-005": [
+   {
+    "say": "哪一个是双数？",
+    "q": "找出双数",
+    "opts": [
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是双数？",
+    "q": "找出双数",
+    "opts": [
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "8",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "3 的旁边是几？",
+    "q": "找相邻数",
+    "opts": [
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-006": [
+   {
+    "say": "从左边数，第 3 个是谁？",
+    "q": "数一数第几个",
+    "opts": [
+     {
+      "t": "🐻",
+      "k": "emoji"
+     },
+     {
+      "t": "🐼",
+      "k": "emoji"
+     },
+     {
+      "t": "🐰",
+      "k": "emoji"
+     },
+     {
+      "t": "🦊",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "seq",
+     "v": [
+      "🐰",
+      "🐻",
+      "🐼",
+      "🦊",
+      "🐯"
+     ]
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "从左边数，第 5 个是谁？",
+    "q": "数一数第几个",
+    "opts": [
+     {
+      "t": "🦊",
+      "k": "emoji"
+     },
+     {
+      "t": "🐯",
+      "k": "emoji"
+     },
+     {
+      "t": "🐰",
+      "k": "emoji"
+     },
+     {
+      "t": "🐻",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "seq",
+     "v": [
+      "🐰",
+      "🐻",
+      "🐼",
+      "🦊",
+      "🐯"
+     ]
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "从左边数，第 1 个是谁？",
+    "q": "数一数第几个",
+    "opts": [
+     {
+      "t": "🦊",
+      "k": "emoji"
+     },
+     {
+      "t": "🐻",
+      "k": "emoji"
+     },
+     {
+      "t": "🐰",
+      "k": "emoji"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "seq",
+     "v": [
+      "🐰",
+      "🐻",
+      "🐼",
+      "🦊",
+      "🐯"
+     ]
+    },
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-007": [
+   {
+    "say": "5 后面是几？",
+    "q": "往后数",
+    "opts": [
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "5 前面是几？",
+    "q": "往前数",
+    "opts": [
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "倒着数，4、3、2，再往下是几？",
+    "q": "倒着数",
+    "opts": [
+     {
+      "t": "2",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-008": [
+   {
+    "say": "哪一个是 37？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "36",
+      "k": "num"
+     },
+     {
+      "t": "47",
+      "k": "num"
+     },
+     {
+      "t": "38",
+      "k": "num"
+     },
+     {
+      "t": "37",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是 64？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "63",
+      "k": "num"
+     },
+     {
+      "t": "74",
+      "k": "num"
+     },
+     {
+      "t": "65",
+      "k": "num"
+     },
+     {
+      "t": "64",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "10 个十是多少？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "100",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "1",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-009": [
+   {
+    "say": "哪一个是 37？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "37",
+      "k": "num"
+     },
+     {
+      "t": "47",
+      "k": "num"
+     },
+     {
+      "t": "36",
+      "k": "num"
+     },
+     {
+      "t": "38",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是 64？",
+    "q": "找出这个数字",
+    "opts": [
+     {
+      "t": "64",
+      "k": "num"
+     },
+     {
+      "t": "74",
+      "k": "num"
+     },
+     {
+      "t": "65",
+      "k": "num"
+     },
+     {
+      "t": "63",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "10 个十是多少？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "1",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "100",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-010": [
+   {
+    "say": "5 可以分成 2 和几？",
+    "q": "分一分",
+    "opts": [
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "8 可以分成 3 和几？",
+    "q": "分一分",
+    "opts": [
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "9 可以分成 4 和几？",
+    "q": "分一分",
+    "opts": [
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-011": [
+   {
+    "say": "2 加 3 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   },
+   {
+    "say": "4 加 5 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "11",
+      "k": "num"
+     },
+     {
+      "t": "8",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   },
+   {
+    "say": "3 加 6 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "11",
+      "k": "num"
+     },
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "8",
+      "k": "num"
+     },
+     {
+      "t": "9",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   }
+  ],
+  "u03-012": [
+   {
+    "say": "5 减 2 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   },
+   {
+    "say": "8 减 3 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   },
+   {
+    "say": "9 减 6 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   }
+  ],
+  "u03-013": [
+   {
+    "say": "8 加 5 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "12",
+      "k": "num"
+     },
+     {
+      "t": "14",
+      "k": "num"
+     },
+     {
+      "t": "15",
+      "k": "num"
+     },
+     {
+      "t": "13",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   },
+   {
+    "say": "9 加 7 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "18",
+      "k": "num"
+     },
+     {
+      "t": "16",
+      "k": "num"
+     },
+     {
+      "t": "15",
+      "k": "num"
+     },
+     {
+      "t": "17",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   },
+   {
+    "say": "13 加 6 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "17",
+      "k": "num"
+     },
+     {
+      "t": "20",
+      "k": "num"
+     },
+     {
+      "t": "19",
+      "k": "num"
+     },
+     {
+      "t": "18",
+      "k": "num"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   }
+  ],
+  "u03-014": [
+   {
+    "say": "15 减 7 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "8",
+      "k": "num"
+     },
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   },
+   {
+    "say": "13 减 5 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "8",
+      "k": "num"
+     },
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "9",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   },
+   {
+    "say": "18 减 9 等于几？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "8",
+      "k": "num"
+     },
+     {
+      "t": "11",
+      "k": "num"
+     },
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "9",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "math"
+   }
+  ],
+  "u03-015": [
+   {
+    "say": "2 个 2 个数，2 后面是几？",
+    "q": "按群数",
+    "opts": [
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "2 个 2 个数，8 后面是几？",
+    "q": "按群数",
+    "opts": [
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "12",
+      "k": "num"
+     },
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "11",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "5 个 5 个数，5 后面是几？",
+    "q": "按群数",
+    "opts": [
+     {
+      "t": "12",
+      "k": "num"
+     },
+     {
+      "t": "11",
+      "k": "num"
+     },
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "10",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-016": [
+   {
+    "say": "3 点是哪一个钟？",
+    "q": "看钟表",
+    "opts": [
+     {
+      "t": "12:00",
+      "k": "clock",
+      "h": 12,
+      "m": 0
+     },
+     {
+      "t": "03:30",
+      "k": "clock",
+      "h": 3,
+      "m": 30
+     },
+     {
+      "t": "03:00",
+      "k": "clock",
+      "h": 3,
+      "m": 0
+     },
+     {
+      "t": "07:00",
+      "k": "clock",
+      "h": 7,
+      "m": 0
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "8 点半是哪一个钟？",
+    "q": "看钟表",
+    "opts": [
+     {
+      "t": "07:00",
+      "k": "clock",
+      "h": 7,
+      "m": 0
+     },
+     {
+      "t": "12:00",
+      "k": "clock",
+      "h": 12,
+      "m": 0
+     },
+     {
+      "t": "08:30",
+      "k": "clock",
+      "h": 8,
+      "m": 30
+     },
+     {
+      "t": "03:30",
+      "k": "clock",
+      "h": 3,
+      "m": 30
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "12 点是哪一个钟？",
+    "q": "看钟表",
+    "opts": [
+     {
+      "t": "07:00",
+      "k": "clock",
+      "h": 7,
+      "m": 0
+     },
+     {
+      "t": "12:00",
+      "k": "clock",
+      "h": 12,
+      "m": 0
+     },
+     {
+      "t": "03:30",
+      "k": "clock",
+      "h": 3,
+      "m": 30
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-017": [
+   {
+    "say": "一个星期有几天？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "8",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "两个星期一共几天？",
+    "q": "算一算",
+    "opts": [
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "14",
+      "k": "num"
+     },
+     {
+      "t": "12",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "一个月大约有几天？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "30",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     },
+     {
+      "t": "14",
+      "k": "num"
+     },
+     {
+      "t": "100",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-018": [
+   {
+    "say": "苹果在小熊的哪一边？",
+    "q": "看方位",
+    "opts": [
+     {
+      "t": "⬅️",
+      "k": "emoji"
+     },
+     {
+      "t": "➡️",
+      "k": "emoji"
+     },
+     {
+      "t": "⬆️",
+      "k": "emoji"
+     },
+     {
+      "t": "⬇️",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "grid",
+     "cells": [
+      "",
+      "",
+      "",
+      "",
+      "🐻",
+      "🍎",
+      "",
+      "",
+      ""
+     ]
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "苹果在小熊的哪一边？",
+    "q": "看方位",
+    "opts": [
+     {
+      "t": "➡️",
+      "k": "emoji"
+     },
+     {
+      "t": "⬅️",
+      "k": "emoji"
+     },
+     {
+      "t": "⬇️",
+      "k": "emoji"
+     },
+     {
+      "t": "⬆️",
+      "k": "emoji"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "grid",
+     "cells": [
+      "",
+      "🍎",
+      "",
+      "",
+      "🐻",
+      "",
+      "",
+      "",
+      ""
+     ]
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "苹果在小熊的哪一边？",
+    "q": "看方位",
+    "opts": [
+     {
+      "t": "➡️",
+      "k": "emoji"
+     },
+     {
+      "t": "⬆️",
+      "k": "emoji"
+     },
+     {
+      "t": "⬇️",
+      "k": "emoji"
+     },
+     {
+      "t": "⬅️",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "grid",
+     "cells": [
+      "",
+      "",
+      "",
+      "",
+      "🐻",
+      "",
+      "",
+      "🍎",
+      ""
+     ]
+    },
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-019": [
+   {
+    "say": "哪一个是三角形？",
+    "q": "认图形",
+    "opts": [
+     {
+      "t": "triangle",
+      "k": "shape"
+     },
+     {
+      "t": "square",
+      "k": "shape"
+     },
+     {
+      "t": "circle",
+      "k": "shape"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是正方形？",
+    "q": "认图形",
+    "opts": [
+     {
+      "t": "circle",
+      "k": "shape"
+     },
+     {
+      "t": "square",
+      "k": "shape"
+     },
+     {
+      "t": "triangle",
+      "k": "shape"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是圆形？",
+    "q": "认图形",
+    "opts": [
+     {
+      "t": "triangle",
+      "k": "shape"
+     },
+     {
+      "t": "circle",
+      "k": "shape"
+     },
+     {
+      "t": "square",
+      "k": "shape"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-020": [
+   {
+    "say": "正方形有几条边？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "两个一样的三角形拼起来，像哪个图形？",
+    "q": "拼一拼",
+    "opts": [
+     {
+      "t": "circle",
+      "k": "shape"
+     },
+     {
+      "t": "square",
+      "k": "shape"
+     },
+     {
+      "t": "triangle",
+      "k": "shape"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "两个一样的正方形拼起来，像哪个图形？",
+    "q": "拼一拼",
+    "opts": [
+     {
+      "t": "rect",
+      "k": "shape"
+     },
+     {
+      "t": "circle",
+      "k": "shape"
+     },
+     {
+      "t": "oval",
+      "k": "shape"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-021": [
+   {
+    "say": "哪一个是长方形？",
+    "q": "认图形",
+    "opts": [
+     {
+      "t": "circle",
+      "k": "shape"
+     },
+     {
+      "t": "triangle",
+      "k": "shape"
+     },
+     {
+      "t": "rect",
+      "k": "shape"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是椭圆形？",
+    "q": "认图形",
+    "opts": [
+     {
+      "t": "rect",
+      "k": "shape"
+     },
+     {
+      "t": "triangle",
+      "k": "shape"
+     },
+     {
+      "t": "oval",
+      "k": "shape"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "两个一样的三角形拼起来，像哪个图形？",
+    "q": "拼一拼",
+    "opts": [
+     {
+      "t": "triangle",
+      "k": "shape"
+     },
+     {
+      "t": "circle",
+      "k": "shape"
+     },
+     {
+      "t": "square",
+      "k": "shape"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-022": [
+   {
+    "say": "哪一个是长方形？",
+    "q": "认图形",
+    "opts": [
+     {
+      "t": "circle",
+      "k": "shape"
+     },
+     {
+      "t": "triangle",
+      "k": "shape"
+     },
+     {
+      "t": "rect",
+      "k": "shape"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是椭圆形？",
+    "q": "认图形",
+    "opts": [
+     {
+      "t": "oval",
+      "k": "shape"
+     },
+     {
+      "t": "rect",
+      "k": "shape"
+     },
+     {
+      "t": "triangle",
+      "k": "shape"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "两个一样的三角形拼起来，像哪个图形？",
+    "q": "拼一拼",
+    "opts": [
+     {
+      "t": "square",
+      "k": "shape"
+     },
+     {
+      "t": "triangle",
+      "k": "shape"
+     },
+     {
+      "t": "circle",
+      "k": "shape"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-023": [
+   {
+    "say": "哪一个是球？",
+    "q": "认形状",
+    "opts": [
+     {
+      "t": "⚽",
+      "k": "emoji"
+     },
+     {
+      "t": "📦",
+      "k": "emoji"
+     },
+     {
+      "t": "🎲",
+      "k": "emoji"
+     },
+     {
+      "t": "🥫",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是正方体？",
+    "q": "认形状",
+    "opts": [
+     {
+      "t": "🥫",
+      "k": "emoji"
+     },
+     {
+      "t": "🎲",
+      "k": "emoji"
+     },
+     {
+      "t": "📦",
+      "k": "emoji"
+     },
+     {
+      "t": "⚽",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是圆柱？",
+    "q": "认形状",
+    "opts": [
+     {
+      "t": "📦",
+      "k": "emoji"
+     },
+     {
+      "t": "🥫",
+      "k": "emoji"
+     },
+     {
+      "t": "🎲",
+      "k": "emoji"
+     },
+     {
+      "t": "⚽",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-024": [
+   {
+    "say": "4 个🎈平均分给 2 个人，每人几个？",
+    "q": "平均分",
+    "opts": [
+     {
+      "t": "2",
+      "k": "num"
+     },
+     {
+      "t": "1",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "emojis",
+     "v": "🎈",
+     "n": 4
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "6 个🎈平均分给 3 个人，每人几个？",
+    "q": "平均分",
+    "opts": [
+     {
+      "t": "1",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": {
+     "k": "emojis",
+     "v": "🎈",
+     "n": 6
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "8 个🎈平均分给 4 个人，每人几个？",
+    "q": "平均分",
+    "opts": [
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "1",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": {
+     "k": "emojis",
+     "v": "🎈",
+     "n": 8
+    },
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-025": [
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "🍌",
+      "k": "emoji"
+     },
+     {
+      "t": "🍎",
+      "k": "emoji"
+     },
+     {
+      "t": "🍎",
+      "k": "emoji"
+     },
+     {
+      "t": "🍎",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "🦋",
+      "k": "emoji"
+     },
+     {
+      "t": "🐟",
+      "k": "emoji"
+     },
+     {
+      "t": "🐟",
+      "k": "emoji"
+     },
+     {
+      "t": "🐟",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   },
+   {
+    "say": "哪一个和别的不一样？",
+    "q": "找出不一样的",
+    "opts": [
+     {
+      "t": "🌷",
+      "k": "emoji"
+     },
+     {
+      "t": "🌻",
+      "k": "emoji"
+     },
+     {
+      "t": "🌻",
+      "k": "emoji"
+     },
+     {
+      "t": "🌻",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "odd"
+   }
+  ],
+  "u03-026": [
+   {
+    "say": "1、2、3、4 里最小的是几？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "1",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "1、2、3、4 里最大的是几？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "2",
+      "k": "num"
+     },
+     {
+      "t": "1",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "2、5、7、9 里第二小的是几？",
+    "q": "排一排",
+    "opts": [
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "9",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     },
+     {
+      "t": "7",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-027": [
+   {
+    "say": "哪一个是蔬菜？",
+    "q": "分一分",
+    "opts": [
+     {
+      "t": "🥕",
+      "k": "emoji"
+     },
+     {
+      "t": "🍇",
+      "k": "emoji"
+     },
+     {
+      "t": "🍎",
+      "k": "emoji"
+     },
+     {
+      "t": "🍌",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是交通工具？",
+    "q": "分一分",
+    "opts": [
+     {
+      "t": "🚗",
+      "k": "emoji"
+     },
+     {
+      "t": "🌻",
+      "k": "emoji"
+     },
+     {
+      "t": "🐟",
+      "k": "emoji"
+     },
+     {
+      "t": "🍎",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个是水果？",
+    "q": "分一分",
+    "opts": [
+     {
+      "t": "🍇",
+      "k": "emoji"
+     },
+     {
+      "t": "🥕",
+      "k": "emoji"
+     },
+     {
+      "t": "🥦",
+      "k": "emoji"
+     },
+     {
+      "t": "🌽",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-028": [
+   {
+    "say": "下一个应该是什么？",
+    "q": "找规律",
+    "opts": [
+     {
+      "t": "🔴",
+      "k": "emoji"
+     },
+     {
+      "t": "🔵",
+      "k": "emoji"
+     },
+     {
+      "t": "🟡",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "seq",
+     "v": [
+      "🔴",
+      "🔵",
+      "🔴",
+      "🔵",
+      "❓"
+     ]
+    },
+    "lang": "zh",
+    "kind": "pattern"
+   },
+   {
+    "say": "下一个应该是什么？",
+    "q": "找规律",
+    "opts": [
+     {
+      "t": "🐰",
+      "k": "emoji"
+     },
+     {
+      "t": "🐻",
+      "k": "emoji"
+     },
+     {
+      "t": "🐼",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "seq",
+     "v": [
+      "🐻",
+      "🐼",
+      "🐻",
+      "🐼",
+      "❓"
+     ]
+    },
+    "lang": "zh",
+    "kind": "pattern"
+   },
+   {
+    "say": "下一个应该是什么？",
+    "q": "找规律",
+    "opts": [
+     {
+      "t": "⭐",
+      "k": "emoji"
+     },
+     {
+      "t": "🌙",
+      "k": "emoji"
+     },
+     {
+      "t": "☀️",
+      "k": "emoji"
+     }
+    ],
+    "ans": 2,
+    "stage": {
+     "k": "seq",
+     "v": [
+      "⭐",
+      "🌙",
+      "☀️",
+      "⭐",
+      "🌙",
+      "❓"
+     ]
+    },
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-029": [
+   {
+    "say": "哪一个更大？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "🐘",
+      "k": "emoji"
+     },
+     {
+      "t": "🐜",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "pair",
+     "a": "🐘",
+     "b": "🐜"
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个更长？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "🐍",
+      "k": "emoji"
+     },
+     {
+      "t": "🐛",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "pair",
+     "a": "🐍",
+     "b": "🐛"
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个更小？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "🐜",
+      "k": "emoji"
+     },
+     {
+      "t": "🐘",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "pair",
+     "a": "🐘",
+     "b": "🐜"
+    },
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-030": [
+   {
+    "say": "哪一个更重？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "🪶",
+      "k": "emoji"
+     },
+     {
+      "t": "🪨",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "pair",
+     "a": "🪨",
+     "b": "🪶"
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个更高？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "🐜",
+      "k": "emoji"
+     },
+     {
+      "t": "🦒",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": {
+     "k": "pair",
+     "a": "🦒",
+     "b": "🐜"
+    },
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪一个更厚？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "🪵",
+      "k": "emoji"
+     },
+     {
+      "t": "📄",
+      "k": "emoji"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "pair",
+     "a": "🪵",
+     "b": "📄"
+    },
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-031": [
+   {
+    "say": "哪边多？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "🍎",
+      "k": "emojis",
+      "n": 5
+     },
+     {
+      "t": "🍎",
+      "k": "emojis",
+      "n": 2
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "哪边少？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "🐟",
+      "k": "emojis",
+      "n": 3
+     },
+     {
+      "t": "🐟",
+      "k": "emojis",
+      "n": 6
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "3 和 5，哪个多？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "8",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-032": [
+   {
+    "say": "尺子从 0 量到 5，是几厘米？",
+    "q": "量一量",
+    "opts": [
+     {
+      "t": "6",
+      "k": "num"
+     },
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "3 厘米和 5 厘米，哪个短？",
+    "q": "比一比",
+    "opts": [
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "2",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "尺子从 0 量到 10，是几厘米？",
+    "q": "量一量",
+    "opts": [
+     {
+      "t": "10",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "12",
+      "k": "num"
+     },
+     {
+      "t": "8",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-033": [
+   {
+    "say": "长颈鹿比小狗高，小狗比蚂蚁高，谁最高？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "🐜",
+      "k": "emoji"
+     },
+     {
+      "t": "🦒",
+      "k": "emoji"
+     },
+     {
+      "t": "🐕",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "长颈鹿比小狗高，小狗比蚂蚁高，谁最矮？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "🦒",
+      "k": "emoji"
+     },
+     {
+      "t": "🐜",
+      "k": "emoji"
+     },
+     {
+      "t": "🐕",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "长颈鹿比小狗高，小狗比蚂蚁高，谁在中间？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "🐜",
+      "k": "emoji"
+     },
+     {
+      "t": "🐕",
+      "k": "emoji"
+     },
+     {
+      "t": "🦒",
+      "k": "emoji"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   }
+  ],
+  "u03-034": [
+   {
+    "say": "同样多的水倒进细杯子里，水一样多吗？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "变多了",
+      "k": "text"
+     },
+     {
+      "t": "变少了",
+      "k": "text"
+     },
+     {
+      "t": "一样多",
+      "k": "text"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "同样多的果汁倒进又高又细的杯子，会变多吗？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "变少了",
+      "k": "text"
+     },
+     {
+      "t": "变多了",
+      "k": "text"
+     },
+     {
+      "t": "一样多",
+      "k": "text"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "数一数，有几个？",
+    "q": "数一数",
+    "opts": [
+     {
+      "t": "4",
+      "k": "num"
+     },
+     {
+      "t": "3",
+      "k": "num"
+     },
+     {
+      "t": "5",
+      "k": "num"
+     },
+     {
+      "t": "6",
+      "k": "num"
+     }
+    ],
+    "ans": 0,
+    "stage": {
+     "k": "emojis",
+     "v": "🎈",
+     "n": 4
+    },
+    "lang": "zh",
+    "kind": "count"
+   }
+  ],
+  "u04-001": [
+   {
+    "say": "一共有几个英文字母？",
+    "q": "想一想",
+    "opts": [
+     {
+      "t": "28",
+      "k": "num"
+     },
+     {
+      "t": "24",
+      "k": "num"
+     },
+     {
+      "t": "20",
+      "k": "num"
+     },
+     {
+      "t": "26",
+      "k": "num"
+     }
+    ],
+    "ans": 3,
+    "stage": null,
+    "lang": "zh",
+    "kind": "choice"
+   },
+   {
+    "say": "Find big A.",
+    "q": "找出大写 A",
+    "opts": [
+     {
+      "t": "H",
+      "k": "letter"
+     },
+     {
+      "t": "R",
+      "k": "letter"
+     },
+     {
+      "t": "A",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small a.",
+    "q": "找出小写 a",
+    "opts": [
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "e",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-002": [
+   {
+    "say": "Find big A.",
+    "q": "找出大写 A",
+    "opts": [
+     {
+      "t": "H",
+      "k": "letter"
+     },
+     {
+      "t": "E",
+      "k": "letter"
+     },
+     {
+      "t": "A",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small a.",
+    "q": "找出小写 a",
+    "opts": [
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "h",
+      "k": "letter"
+     },
+     {
+      "t": "e",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big B.",
+    "q": "找出大写 B",
+    "opts": [
+     {
+      "t": "B",
+      "k": "letter"
+     },
+     {
+      "t": "P",
+      "k": "letter"
+     },
+     {
+      "t": "D",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-003": [
+   {
+    "say": "Find big A.",
+    "q": "找出大写 A",
+    "opts": [
+     {
+      "t": "H",
+      "k": "letter"
+     },
+     {
+      "t": "E",
+      "k": "letter"
+     },
+     {
+      "t": "A",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small a.",
+    "q": "找出小写 a",
+    "opts": [
+     {
+      "t": "a",
+      "k": "letter"
+     },
+     {
+      "t": "h",
+      "k": "letter"
+     },
+     {
+      "t": "e",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big B.",
+    "q": "找出大写 B",
+    "opts": [
+     {
+      "t": "D",
+      "k": "letter"
+     },
+     {
+      "t": "B",
+      "k": "letter"
+     },
+     {
+      "t": "P",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-004": [
+   {
+    "say": "Find big C.",
+    "q": "找出大写 C",
+    "opts": [
+     {
+      "t": "G",
+      "k": "letter"
+     },
+     {
+      "t": "C",
+      "k": "letter"
+     },
+     {
+      "t": "O",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small c.",
+    "q": "找出小写 c",
+    "opts": [
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big D.",
+    "q": "找出大写 D",
+    "opts": [
+     {
+      "t": "D",
+      "k": "letter"
+     },
+     {
+      "t": "O",
+      "k": "letter"
+     },
+     {
+      "t": "B",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-005": [
+   {
+    "say": "Find big C.",
+    "q": "找出大写 C",
+    "opts": [
+     {
+      "t": "C",
+      "k": "letter"
+     },
+     {
+      "t": "O",
+      "k": "letter"
+     },
+     {
+      "t": "G",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small c.",
+    "q": "找出小写 c",
+    "opts": [
+     {
+      "t": "c",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     },
+     {
+      "t": "o",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big D.",
+    "q": "找出大写 D",
+    "opts": [
+     {
+      "t": "D",
+      "k": "letter"
+     },
+     {
+      "t": "O",
+      "k": "letter"
+     },
+     {
+      "t": "B",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-006": [
+   {
+    "say": "Find big E.",
+    "q": "找出大写 E",
+    "opts": [
+     {
+      "t": "E",
+      "k": "letter"
+     },
+     {
+      "t": "B",
+      "k": "letter"
+     },
+     {
+      "t": "F",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small e.",
+    "q": "找出小写 e",
+    "opts": [
+     {
+      "t": "e",
+      "k": "letter"
+     },
+     {
+      "t": "f",
+      "k": "letter"
+     },
+     {
+      "t": "b",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big F.",
+    "q": "找出大写 F",
+    "opts": [
+     {
+      "t": "P",
+      "k": "letter"
+     },
+     {
+      "t": "F",
+      "k": "letter"
+     },
+     {
+      "t": "E",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-007": [
+   {
+    "say": "Find big E.",
+    "q": "找出大写 E",
+    "opts": [
+     {
+      "t": "B",
+      "k": "letter"
+     },
+     {
+      "t": "F",
+      "k": "letter"
+     },
+     {
+      "t": "E",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small e.",
+    "q": "找出小写 e",
+    "opts": [
+     {
+      "t": "f",
+      "k": "letter"
+     },
+     {
+      "t": "b",
+      "k": "letter"
+     },
+     {
+      "t": "e",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big F.",
+    "q": "找出大写 F",
+    "opts": [
+     {
+      "t": "P",
+      "k": "letter"
+     },
+     {
+      "t": "E",
+      "k": "letter"
+     },
+     {
+      "t": "F",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-008": [
+   {
+    "say": "Find big G.",
+    "q": "找出大写 G",
+    "opts": [
+     {
+      "t": "G",
+      "k": "letter"
+     },
+     {
+      "t": "Q",
+      "k": "letter"
+     },
+     {
+      "t": "C",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small g.",
+    "q": "找出小写 g",
+    "opts": [
+     {
+      "t": "q",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big H.",
+    "q": "找出大写 H",
+    "opts": [
+     {
+      "t": "N",
+      "k": "letter"
+     },
+     {
+      "t": "A",
+      "k": "letter"
+     },
+     {
+      "t": "H",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-009": [
+   {
+    "say": "Find big G.",
+    "q": "找出大写 G",
+    "opts": [
+     {
+      "t": "Q",
+      "k": "letter"
+     },
+     {
+      "t": "C",
+      "k": "letter"
+     },
+     {
+      "t": "G",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small g.",
+    "q": "找出小写 g",
+    "opts": [
+     {
+      "t": "q",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big H.",
+    "q": "找出大写 H",
+    "opts": [
+     {
+      "t": "H",
+      "k": "letter"
+     },
+     {
+      "t": "N",
+      "k": "letter"
+     },
+     {
+      "t": "A",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-010": [
+   {
+    "say": "Find big I.",
+    "q": "找出大写 I",
+    "opts": [
+     {
+      "t": "I",
+      "k": "letter"
+     },
+     {
+      "t": "L",
+      "k": "letter"
+     },
+     {
+      "t": "J",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small i.",
+    "q": "找出小写 i",
+    "opts": [
+     {
+      "t": "j",
+      "k": "letter"
+     },
+     {
+      "t": "i",
+      "k": "letter"
+     },
+     {
+      "t": "l",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big J.",
+    "q": "找出大写 J",
+    "opts": [
+     {
+      "t": "G",
+      "k": "letter"
+     },
+     {
+      "t": "I",
+      "k": "letter"
+     },
+     {
+      "t": "J",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-011": [
+   {
+    "say": "Find big I.",
+    "q": "找出大写 I",
+    "opts": [
+     {
+      "t": "J",
+      "k": "letter"
+     },
+     {
+      "t": "I",
+      "k": "letter"
+     },
+     {
+      "t": "L",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small i.",
+    "q": "找出小写 i",
+    "opts": [
+     {
+      "t": "i",
+      "k": "letter"
+     },
+     {
+      "t": "l",
+      "k": "letter"
+     },
+     {
+      "t": "j",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big J.",
+    "q": "找出大写 J",
+    "opts": [
+     {
+      "t": "J",
+      "k": "letter"
+     },
+     {
+      "t": "G",
+      "k": "letter"
+     },
+     {
+      "t": "I",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-012": [
+   {
+    "say": "Find big K.",
+    "q": "找出大写 K",
+    "opts": [
+     {
+      "t": "K",
+      "k": "letter"
+     },
+     {
+      "t": "R",
+      "k": "letter"
+     },
+     {
+      "t": "X",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small k.",
+    "q": "找出小写 k",
+    "opts": [
+     {
+      "t": "r",
+      "k": "letter"
+     },
+     {
+      "t": "k",
+      "k": "letter"
+     },
+     {
+      "t": "x",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big L.",
+    "q": "找出大写 L",
+    "opts": [
+     {
+      "t": "I",
+      "k": "letter"
+     },
+     {
+      "t": "J",
+      "k": "letter"
+     },
+     {
+      "t": "L",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-013": [
+   {
+    "say": "Find big K.",
+    "q": "找出大写 K",
+    "opts": [
+     {
+      "t": "X",
+      "k": "letter"
+     },
+     {
+      "t": "R",
+      "k": "letter"
+     },
+     {
+      "t": "K",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small k.",
+    "q": "找出小写 k",
+    "opts": [
+     {
+      "t": "r",
+      "k": "letter"
+     },
+     {
+      "t": "x",
+      "k": "letter"
+     },
+     {
+      "t": "k",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big L.",
+    "q": "找出大写 L",
+    "opts": [
+     {
+      "t": "I",
+      "k": "letter"
+     },
+     {
+      "t": "J",
+      "k": "letter"
+     },
+     {
+      "t": "L",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-014": [
+   {
+    "say": "Find big M.",
+    "q": "找出大写 M",
+    "opts": [
+     {
+      "t": "N",
+      "k": "letter"
+     },
+     {
+      "t": "W",
+      "k": "letter"
+     },
+     {
+      "t": "M",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small m.",
+    "q": "找出小写 m",
+    "opts": [
+     {
+      "t": "m",
+      "k": "letter"
+     },
+     {
+      "t": "n",
+      "k": "letter"
+     },
+     {
+      "t": "w",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big N.",
+    "q": "找出大写 N",
+    "opts": [
+     {
+      "t": "H",
+      "k": "letter"
+     },
+     {
+      "t": "M",
+      "k": "letter"
+     },
+     {
+      "t": "N",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-015": [
+   {
+    "say": "Find big M.",
+    "q": "找出大写 M",
+    "opts": [
+     {
+      "t": "W",
+      "k": "letter"
+     },
+     {
+      "t": "N",
+      "k": "letter"
+     },
+     {
+      "t": "M",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small m.",
+    "q": "找出小写 m",
+    "opts": [
+     {
+      "t": "m",
+      "k": "letter"
+     },
+     {
+      "t": "n",
+      "k": "letter"
+     },
+     {
+      "t": "w",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big N.",
+    "q": "找出大写 N",
+    "opts": [
+     {
+      "t": "H",
+      "k": "letter"
+     },
+     {
+      "t": "M",
+      "k": "letter"
+     },
+     {
+      "t": "N",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-016": [
+   {
+    "say": "Find big O.",
+    "q": "找出大写 O",
+    "opts": [
+     {
+      "t": "O",
+      "k": "letter"
+     },
+     {
+      "t": "C",
+      "k": "letter"
+     },
+     {
+      "t": "Q",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small o.",
+    "q": "找出小写 o",
+    "opts": [
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     },
+     {
+      "t": "q",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big P.",
+    "q": "找出大写 P",
+    "opts": [
+     {
+      "t": "B",
+      "k": "letter"
+     },
+     {
+      "t": "P",
+      "k": "letter"
+     },
+     {
+      "t": "R",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-017": [
+   {
+    "say": "Find big O.",
+    "q": "找出大写 O",
+    "opts": [
+     {
+      "t": "Q",
+      "k": "letter"
+     },
+     {
+      "t": "O",
+      "k": "letter"
+     },
+     {
+      "t": "C",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small o.",
+    "q": "找出小写 o",
+    "opts": [
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     },
+     {
+      "t": "q",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big P.",
+    "q": "找出大写 P",
+    "opts": [
+     {
+      "t": "R",
+      "k": "letter"
+     },
+     {
+      "t": "P",
+      "k": "letter"
+     },
+     {
+      "t": "B",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-018": [
+   {
+    "say": "Find big Q.",
+    "q": "找出大写 Q",
+    "opts": [
+     {
+      "t": "Q",
+      "k": "letter"
+     },
+     {
+      "t": "O",
+      "k": "letter"
+     },
+     {
+      "t": "G",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small q.",
+    "q": "找出小写 q",
+    "opts": [
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "q",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big R.",
+    "q": "找出大写 R",
+    "opts": [
+     {
+      "t": "B",
+      "k": "letter"
+     },
+     {
+      "t": "P",
+      "k": "letter"
+     },
+     {
+      "t": "R",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-019": [
+   {
+    "say": "Find big Q.",
+    "q": "找出大写 Q",
+    "opts": [
+     {
+      "t": "Q",
+      "k": "letter"
+     },
+     {
+      "t": "O",
+      "k": "letter"
+     },
+     {
+      "t": "G",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small q.",
+    "q": "找出小写 q",
+    "opts": [
+     {
+      "t": "q",
+      "k": "letter"
+     },
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big R.",
+    "q": "找出大写 R",
+    "opts": [
+     {
+      "t": "P",
+      "k": "letter"
+     },
+     {
+      "t": "R",
+      "k": "letter"
+     },
+     {
+      "t": "B",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-020": [
+   {
+    "say": "Find big S.",
+    "q": "找出大写 S",
+    "opts": [
+     {
+      "t": "C",
+      "k": "letter"
+     },
+     {
+      "t": "Z",
+      "k": "letter"
+     },
+     {
+      "t": "S",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small s.",
+    "q": "找出小写 s",
+    "opts": [
+     {
+      "t": "s",
+      "k": "letter"
+     },
+     {
+      "t": "z",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big T.",
+    "q": "找出大写 T",
+    "opts": [
+     {
+      "t": "T",
+      "k": "letter"
+     },
+     {
+      "t": "I",
+      "k": "letter"
+     },
+     {
+      "t": "F",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-021": [
+   {
+    "say": "Find big S.",
+    "q": "找出大写 S",
+    "opts": [
+     {
+      "t": "Z",
+      "k": "letter"
+     },
+     {
+      "t": "S",
+      "k": "letter"
+     },
+     {
+      "t": "C",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small s.",
+    "q": "找出小写 s",
+    "opts": [
+     {
+      "t": "s",
+      "k": "letter"
+     },
+     {
+      "t": "c",
+      "k": "letter"
+     },
+     {
+      "t": "z",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big T.",
+    "q": "找出大写 T",
+    "opts": [
+     {
+      "t": "F",
+      "k": "letter"
+     },
+     {
+      "t": "T",
+      "k": "letter"
+     },
+     {
+      "t": "I",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-022": [
+   {
+    "say": "Find big U.",
+    "q": "找出大写 U",
+    "opts": [
+     {
+      "t": "V",
+      "k": "letter"
+     },
+     {
+      "t": "U",
+      "k": "letter"
+     },
+     {
+      "t": "O",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small u.",
+    "q": "找出小写 u",
+    "opts": [
+     {
+      "t": "u",
+      "k": "letter"
+     },
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "v",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big V.",
+    "q": "找出大写 V",
+    "opts": [
+     {
+      "t": "W",
+      "k": "letter"
+     },
+     {
+      "t": "V",
+      "k": "letter"
+     },
+     {
+      "t": "U",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-023": [
+   {
+    "say": "Find big U.",
+    "q": "找出大写 U",
+    "opts": [
+     {
+      "t": "V",
+      "k": "letter"
+     },
+     {
+      "t": "U",
+      "k": "letter"
+     },
+     {
+      "t": "O",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small u.",
+    "q": "找出小写 u",
+    "opts": [
+     {
+      "t": "o",
+      "k": "letter"
+     },
+     {
+      "t": "v",
+      "k": "letter"
+     },
+     {
+      "t": "u",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big V.",
+    "q": "找出大写 V",
+    "opts": [
+     {
+      "t": "V",
+      "k": "letter"
+     },
+     {
+      "t": "W",
+      "k": "letter"
+     },
+     {
+      "t": "U",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-024": [
+   {
+    "say": "Find big W.",
+    "q": "找出大写 W",
+    "opts": [
+     {
+      "t": "M",
+      "k": "letter"
+     },
+     {
+      "t": "V",
+      "k": "letter"
+     },
+     {
+      "t": "W",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small w.",
+    "q": "找出小写 w",
+    "opts": [
+     {
+      "t": "m",
+      "k": "letter"
+     },
+     {
+      "t": "v",
+      "k": "letter"
+     },
+     {
+      "t": "w",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big X.",
+    "q": "找出大写 X",
+    "opts": [
+     {
+      "t": "X",
+      "k": "letter"
+     },
+     {
+      "t": "Y",
+      "k": "letter"
+     },
+     {
+      "t": "K",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-025": [
+   {
+    "say": "Find big W.",
+    "q": "找出大写 W",
+    "opts": [
+     {
+      "t": "W",
+      "k": "letter"
+     },
+     {
+      "t": "V",
+      "k": "letter"
+     },
+     {
+      "t": "M",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small w.",
+    "q": "找出小写 w",
+    "opts": [
+     {
+      "t": "v",
+      "k": "letter"
+     },
+     {
+      "t": "m",
+      "k": "letter"
+     },
+     {
+      "t": "w",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big X.",
+    "q": "找出大写 X",
+    "opts": [
+     {
+      "t": "K",
+      "k": "letter"
+     },
+     {
+      "t": "Y",
+      "k": "letter"
+     },
+     {
+      "t": "X",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-026": [
+   {
+    "say": "Find big Y.",
+    "q": "找出大写 Y",
+    "opts": [
+     {
+      "t": "X",
+      "k": "letter"
+     },
+     {
+      "t": "Y",
+      "k": "letter"
+     },
+     {
+      "t": "V",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small y.",
+    "q": "找出小写 y",
+    "opts": [
+     {
+      "t": "x",
+      "k": "letter"
+     },
+     {
+      "t": "y",
+      "k": "letter"
+     },
+     {
+      "t": "v",
+      "k": "letter"
+     }
+    ],
+    "ans": 1,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big Z.",
+    "q": "找出大写 Z",
+    "opts": [
+     {
+      "t": "Z",
+      "k": "letter"
+     },
+     {
+      "t": "S",
+      "k": "letter"
+     },
+     {
+      "t": "N",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-027": [
+   {
+    "say": "Find big Y.",
+    "q": "找出大写 Y",
+    "opts": [
+     {
+      "t": "V",
+      "k": "letter"
+     },
+     {
+      "t": "X",
+      "k": "letter"
+     },
+     {
+      "t": "Y",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small y.",
+    "q": "找出小写 y",
+    "opts": [
+     {
+      "t": "x",
+      "k": "letter"
+     },
+     {
+      "t": "v",
+      "k": "letter"
+     },
+     {
+      "t": "y",
+      "k": "letter"
+     }
+    ],
+    "ans": 2,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big Z.",
+    "q": "找出大写 Z",
+    "opts": [
+     {
+      "t": "Z",
+      "k": "letter"
+     },
+     {
+      "t": "N",
+      "k": "letter"
+     },
+     {
+      "t": "S",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ],
+  "u04-028": [
+   {
+    "say": "Find big Z.",
+    "q": "找出大写 Z",
+    "opts": [
+     {
+      "t": "Z",
+      "k": "letter"
+     },
+     {
+      "t": "N",
+      "k": "letter"
+     },
+     {
+      "t": "S",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find small q.",
+    "q": "找出小写 q",
+    "opts": [
+     {
+      "t": "q",
+      "k": "letter"
+     },
+     {
+      "t": "p",
+      "k": "letter"
+     },
+     {
+      "t": "g",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   },
+   {
+    "say": "Find big M.",
+    "q": "找出大写 M",
+    "opts": [
+     {
+      "t": "M",
+      "k": "letter"
+     },
+     {
+      "t": "W",
+      "k": "letter"
+     },
+     {
+      "t": "N",
+      "k": "letter"
+     }
+    ],
+    "ans": 0,
+    "stage": null,
+    "lang": "en",
+    "kind": "sound"
+   }
+  ]
+ }
+}

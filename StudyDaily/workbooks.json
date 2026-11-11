@@ -1,0 +1,126 @@
+{
+ "version": 1,
+ "books": [
+  {
+   "id": "pinyin-t1",
+   "title": "拼音上册",
+   "say": "拼音上册",
+   "subject": "pinyin",
+   "icon": "🗣",
+   "pages": 66,
+   "folder": "workbooks/pinyin-t1",
+   "cover": "workbooks/pinyin-t1/p001.jpg"
+  },
+  {
+   "id": "pinyin-t2",
+   "title": "拼音下册",
+   "say": "拼音下册",
+   "subject": "pinyin",
+   "icon": "🗣",
+   "pages": 30,
+   "folder": "workbooks/pinyin-t2",
+   "cover": "workbooks/pinyin-t2/p001.jpg"
+  },
+  {
+   "id": "pinyin-p1",
+   "title": "每日一练 拼音①",
+   "say": "每日一练 拼音①",
+   "subject": "pinyin",
+   "icon": "🗣",
+   "pages": 40,
+   "folder": "workbooks/pinyin-p1",
+   "cover": "workbooks/pinyin-p1/p001.jpg"
+  },
+  {
+   "id": "pinyin-p2",
+   "title": "每日一练 拼音②",
+   "say": "每日一练 拼音②",
+   "subject": "pinyin",
+   "icon": "🗣",
+   "pages": 40,
+   "folder": "workbooks/pinyin-p2",
+   "cover": "workbooks/pinyin-p2/p001.jpg"
+  },
+  {
+   "id": "hanzi-p1",
+   "title": "每日一练 识字①",
+   "say": "每日一练 识字①",
+   "subject": "hanzi",
+   "icon": "📖",
+   "pages": 40,
+   "folder": "workbooks/hanzi-p1",
+   "cover": "workbooks/hanzi-p1/p001.jpg"
+  },
+  {
+   "id": "hanzi-p2",
+   "title": "每日一练 识字②",
+   "say": "每日一练 识字②",
+   "subject": "hanzi",
+   "icon": "📖",
+   "pages": 40,
+   "folder": "workbooks/hanzi-p2",
+   "cover": "workbooks/hanzi-p2/p001.jpg"
+  },
+  {
+   "id": "hanzi-t1",
+   "title": "识字上册",
+   "say": "识字上册",
+   "subject": "hanzi",
+   "icon": "📖",
+   "pages": 66,
+   "folder": "workbooks/hanzi-t1",
+   "cover": "workbooks/hanzi-t1/p001.jpg"
+  },
+  {
+   "id": "hanzi-t2",
+   "title": "识字下册",
+   "say": "识字下册",
+   "subject": "hanzi",
+   "icon": "📖",
+   "pages": 66,
+   "folder": "workbooks/hanzi-t2",
+   "cover": "workbooks/hanzi-t2/p001.jpg"
+  },
+  {
+   "id": "math-t1",
+   "title": "数学上册",
+   "say": "数学上册",
+   "subject": "math",
+   "icon": "🔢",
+   "pages": 65,
+   "folder": "workbooks/math-t1",
+   "cover": "workbooks/math-t1/p001.jpg"
+  },
+  {
+   "id": "math-t2",
+   "title": "数学下册",
+   "say": "数学下册",
+   "subject": "math",
+   "icon": "🔢",
+   "pages": 66,
+   "folder": "workbooks/math-t2",
+   "cover": "workbooks/math-t2/p001.jpg"
+  },
+  {
+   "id": "english-t1",
+   "title": "英语上册",
+   "say": "英语上册",
+   "subject": "english",
+   "icon": "🌍",
+   "pages": 50,
+   "folder": "workbooks/english-t1",
+   "cover": "workbooks/english-t1/p001.jpg"
+  },
+  {
+   "id": "english-t2",
+   "title": "英语下册",
+   "say": "英语下册",
+   "subject": "english",
+   "icon": "🌍",
+   "pages": 50,
+   "folder": "workbooks/english-t2",
+   "cover": "workbooks/english-t2/p001.jpg"
+  }
+ ],
+ "totalPages": 619
+}

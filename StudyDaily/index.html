@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#3D7DFF">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>每日学习</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"><img src="assets/img/rainbow.png" alt=""></div>
+      <div class="brand-text">
+        <div class="brand-title" id="courseTitle">今天学什么</div>
+        <div class="brand-sub" id="dateLabel">加载中…</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span id="demoTag" class="demo-tag hidden">演示</span>
+      <button id="soundBtn" class="icon-btn" aria-label="声音开关" title="声音">🔊</button>
+      <button id="parentBtn" class="parent-dot" aria-label="家长端">⚙</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner hidden"></div>
+
+  <!-- ============ 孩子界面：不识字也能用 ============ -->
+  <main id="kidView" class="view kg">
+
+    <!-- 小熊 + 今天几节 -->
+    <div class="kg-hero">
+      <div class="kg-mascot" id="mascot" aria-hidden="true">
+        <img src="assets/img/bear.png" alt="" width="88" height="88">
+      </div>
+      <div class="kg-hero-text">
+        <h1 class="kg-title" id="greeting">今天有 0 节课</h1>
+        <div class="kg-stars" id="starRow" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <!-- 唯一的主按钮 -->
+    <button id="startBtn" class="kg-start">
+      <span class="kg-start-icon" id="startIcon"><img src="assets/img/play_button.png" alt=""></span>
+      <span class="kg-start-label" id="startLabel">开始学习</span>
+    </button>
+
+    <!-- 今日卡片 -->
+    <div id="todayList" class="kg-cards"></div>
+
+    <!-- 练习册入口（有练习册才显示） -->
+    <button id="wbEntry" class="wb-entry hidden">
+      <img src="assets/img/books.png" alt="">
+      <span class="wb-entry-label">练习册</span>
+    </button>
+
+    <!-- 全部完成 -->
+    <div id="donePanel" class="kg-done hidden">
+      <div class="kg-done-badge"><img src="assets/img/trophy.png" alt=""></div>
+      <h2 class="kg-done-title">今天全部完成！</h2>
+      <div class="kg-stars big" id="doneStars"></div>
+      <p class="kg-done-sub">小熊为你鼓掌<img class="inline-icon" src="assets/img/party_popper.png" alt=""></p>
+      <button id="seeStatsBtn" class="kg-mini-btn">看看学了多久</button>
+    </div>
+
+    <!-- 没有课 -->
+    <div id="emptyPanel" class="kg-empty hidden">
+      <div class="kg-empty-icon"><img src="assets/img/sun_cloud.png" alt=""></div>
+      <h2 id="emptyTitle">今天没有新课</h2>
+      <p id="emptyTip">休息一下吧</p>
+    </div>
+
+    <!-- 首次引导 -->
+    <div id="guideLayer" class="guide-layer hidden">
+      <div class="guide-card">
+        <div class="guide-face"><img src="assets/img/bear.png" alt=""></div>
+        <div class="guide-text">我是小熊<br>点下面的大按钮<br>我们一起学习吧</div>
+        <div class="guide-finger"><span class="arrow-down">↓</span></div>
+        <button id="guideOk" class="guide-ok">好啦</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ 播放页 ============ -->
+  <section id="playerView" class="view player hidden">
+    <div class="player-head">
+      <button id="backBtn" class="round-back" aria-label="返回">←</button>
+      <div class="player-title" id="playerTitle"></div>
+    </div>
+
+    <div id="videoWrap" class="video-wrap">
+      <video id="video" playsinline preload="metadata" webkit-playsinline></video>
+      <button id="videoTapLayer" class="video-tap" aria-label="播放或暂停">
+        <span class="video-big-play">▶</span>
+      </button>
+      <div class="video-bar">
+        <div class="vprogress"><div id="vProgressFill" class="vprogress-fill"></div></div>
+        <button id="muteBtn" class="vbtn" aria-label="静音">🔊</button>
+      </div>
+      <div id="videoError" class="video-error hidden"></div>
+    </div>
+
+    <div id="pdfViewer" class="pdf-viewer hidden">
+      <div id="pdfPageWrap" class="pdf-page-wrap">
+        <img id="pdfPageImg" alt="课件页">
+      </div>
+      <div id="pdfNative" class="pdf-native hidden">
+        <div class="pdf-native-icon"><img src="assets/img/pencil.png" alt=""></div>
+        <p>这份 PDF 还没有转成图片，可以用系统阅读器打开。</p>
+        <a id="pdfExternal" href="#" target="_blank" rel="noopener" class="btn-primary">用系统阅读器打开</a>
+        <p class="tiny">想直接在应用里翻页，请在电脑上执行 <code>pip install pypdfium2</code> 后重跑转码脚本。</p>
+      </div>
+      <div class="pdf-nav">
+        <button id="pdfPrev" class="pdf-arrow" aria-label="上一页">‹</button>
+        <span id="pdfPageLabel">1 / 1</span>
+        <button id="pdfNext" class="pdf-arrow" aria-label="下一页">›</button>
+      </div>
+    </div>
+
+    <div class="player-foot">
+      <button id="markAgainBtn" class="btn-kid-again">
+        <span class="bi">↻</span><span class="bl">再看一遍</span>
+      </button>
+      <button id="markDoneBtn" class="btn-kid-done">
+        <span class="bi">✓</span><span class="bl">学完了</span>
+      </button>
+    </div>
+    <p id="playerHint" class="player-hint"></p>
+  </section>
+
+  <!-- ============ 学完闯关（小游戏） ============ -->
+  <section id="quizView" class="qz hidden">
+    <div class="qz-sky" aria-hidden="true">
+      <span class="qz-cloud a"></span><span class="qz-cloud b"></span><span class="qz-cloud c"></span>
+      <span class="qz-hill h1"></span><span class="qz-hill h2"></span>
+    </div>
+
+    <header class="qz-head">
+      <button id="qzClose" class="qz-x" aria-label="先不做">✕</button>
+      <div class="qz-steps" id="qzSteps"></div>
+      <div class="qz-combo hidden" id="qzCombo"></div>
+    </header>
+
+    <div class="qz-main">
+      <div class="qz-ask">
+        <img class="qz-bear" src="assets/img/bear.png" alt="">
+        <div class="qz-say">
+          <span id="qzSayText">找出一样的</span>
+          <button id="qzReplay" class="qz-replay" aria-label="再听一次">🔊</button>
+        </div>
+      </div>
+      <div class="qz-stage" id="qzStage"></div>
+      <div class="qz-opts" id="qzOpts"></div>
+    </div>
+
+    <div class="qz-feedback hidden" id="qzFeedback">
+      <div class="qz-fb-card">
+        <div class="qz-fb-pic" id="qzFbPic"></div>
+        <div class="qz-fb-title" id="qzFbTitle">答对啦！</div>
+        <div class="qz-fb-sub" id="qzFbSub"></div>
+      </div>
+    </div>
+
+    <div class="qz-finish hidden" id="qzFinish">
+      <div class="qz-finish-card">
+        <div class="qz-finish-badge"><img src="assets/img/trophy.png" alt=""></div>
+        <h2 id="qzFinishTitle">闯关成功！</h2>
+        <div class="qz-finish-stars" id="qzFinishStars"></div>
+        <p class="qz-finish-sub" id="qzFinishSub"></p>
+        <button id="qzGo" class="qz-go">继续 ▶</button>
+        <button id="qzAgain" class="qz-again">再玩一次</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 练习册书架 ============ -->
+  <section id="wbView" class="view wb hidden">
+    <div class="wb-head">
+      <button id="wbBack" class="round-back" aria-label="返回">←</button>
+      <div class="wb-title"><img src="assets/img/books.png" alt="">练习册</div>
+    </div>
+    <div id="wbGrid" class="wb-grid"></div>
+    <p class="wb-tip">点一本书，照着屏幕上的题在纸上做</p>
+  </section>
+
+  <!-- ============ 练习册翻页 ============ -->
+  <section id="wbReader" class="view wb-reader hidden">
+    <div class="wb-head">
+      <button id="wbShelfBack" class="round-back" aria-label="返回书架">←</button>
+      <div class="wb-title" id="wbBookTitle">练习册</div>
+    </div>
+    <div class="wb-page-wrap"><img id="wbPageImg" alt="练习页"></div>
+    <div class="pdf-nav">
+      <button id="wbPrev" class="pdf-arrow" aria-label="上一页">‹</button>
+      <span id="wbPageLabel">1 / 1</span>
+      <button id="wbNext" class="pdf-arrow" aria-label="下一页">›</button>
+    </div>
+  </section>
+
+  <!-- ============ 家长端 ============ -->
+  <section id="parentView" class="view hidden">
+    <div class="parent-head">
+      <h2>家长端</h2>
+      <button id="exitParent" class="btn-ghost">← 返回孩子界面</button>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button data-tab="today" class="active">今日</button>
+      <button data-tab="courses">课程</button>
+      <button data-tab="stats">统计</button>
+      <button data-tab="settings">设置</button>
+      <button data-tab="help">帮助</button>
+    </nav>
+
+    <div id="tab-today" class="tabpane active"></div>
+    <div id="tab-courses" class="tabpane"></div>
+    <div id="tab-stats" class="tabpane"></div>
+
+    <div id="tab-settings" class="tabpane">
+      <div class="panel">
+        <h3>每日安排</h3>
+        <label class="field"><span>平时每天（分钟）</span><input id="setWeekday" type="number" min="5" max="480" step="5"></label>
+        <label class="field"><span>周末每天（分钟）</span><input id="setWeekend" type="number" min="5" max="480" step="5"></label>
+        <label class="field"><span>完成判定（看到百分之多少算学完）</span><input id="setRatio" type="number" min="50" max="100" step="5"></label>
+        <label class="field checkbox"><input id="setReview" type="checkbox"><span>开启复习（1 / 3 / 7 / 15 天回看）</span></label>
+        <label class="field"><span>每天最多复习几节</span><input id="setMaxReview" type="number" min="0" max="6" step="1"></label>
+        <label class="field"><span>周五搭配（默认数学 / 拼音隔周轮换）</span>
+          <select id="setFriday">
+            <option value="auto">自动隔周轮换</option>
+            <option value="math">固定数学</option>
+            <option value="pinyin">固定拼音</option>
+          </select>
+        </label>
+        <p class="tiny">每周安排：周一 / 周三 识字阅读＋数学；周二 识字阅读＋拼音；周四 识字阅读＋英语；周五 识字阅读＋数学或拼音；周六 自由拓展（各科都排）；周日 休息复盘，只复习不排新课。拼音和英语错开，避免发音混淆。</p>
+        <label class="field"><span>家长 PIN（4 位数字）</span><input id="setPin" type="text" inputmode="numeric" maxlength="4"></label>
+        <button id="saveSettings" class="btn-primary">保存设置</button>
+        <p class="tiny">修改"每日分钟数"后，从明天开始生效；点下方按钮可立即按新设置重排今天。</p>
+        <button id="rebuildToday" class="btn-ghost">按新设置重排今天</button>
+      </div>
+
+      <div class="panel">
+        <h3>孩子界面</h3>
+        <label class="field checkbox"><input id="setSpeech" type="checkbox"><span>开启语音引导（App 内用系统语音朗读）</span></label>
+        <label class="field checkbox"><input id="setSound" type="checkbox"><span>开启音效（完成时"叮咚"）</span></label>
+        <label class="field checkbox"><input id="setQuiz" type="checkbox"><span>学完出三道小题（闯关小游戏）</span></label>
+        <p class="tiny">孩子还不识字，语音会念出「今天有几节课」「这一节是什么」，完成时给出鼓励。如果平板在公共场合，可以把语音关掉只留音效。</p>
+        <p class="tiny">「闯关」是学完一节课后的 3 道小题，题目按这一节的内容自动出（拼音找一样的字母、识字听音选字、数学数一数、英语找大小写），每题都有语音和图卡。答错不打叉、不扣分，只是把错的那张变暗，让孩子再选一次；错两次会把正确答案点亮。做完了会记录答对几题，家长端「统计」里能看。</p>
+      </div>
+
+      <div class="panel">
+        <h3>学习数据</h3>
+        <p class="tiny" id="storageMode"></p>
+        <div class="btn-row">
+          <button id="exportBtn" class="btn-primary">导出进度备份</button>
+          <button id="importBtn" class="btn-ghost">导入备份</button>
+          <input id="importFile" type="file" accept=".json,application/json" hidden>
+        </div>
+        <button id="resetBtn" class="btn-danger">清空所有学习记录</button>
+        <p class="tiny">建议每周导出一次备份。清理浏览器数据会丢失本机记录，导入备份即可恢复。</p>
+      </div>
+    </div>
+
+    <div id="tab-help" class="tabpane">
+      <div class="panel help">
+        <h3>孩子不识字，怎么用？</h3>
+        <p>孩子界面刻意做到「<b>不用读字也能操作</b>」：</p>
+        <ul>
+          <li><b>一个巨大的绿色按钮</b>「▶ 开始学习」——点它直接进入今天第一节，不需要选择、不需要读课程名。</li>
+          <li><b>每节课一张大卡片</b>，上面是课程画面的缩略图、左侧一个大大的序号、一个单元图标（🗣 拼音 / 📖 识字 / 🔢 数学 / 🌍 英语）。孩子靠图和数字就能认出「这是第几节」。</li>
+        <li><b>家长可以在「课程」页点「看题目」</b>，提前试玩这节课的 3 道小题（试玩不计入孩子的成绩）。</li>
+          <li><b>语音引导</b>：打开应用会说「今天有 N 节课」，点进一节会说「这一节是拼音，第 1 集」，学完说「太棒了」。语音已内置在应用里（温柔女声、语速放慢），<b>不需要平板装任何语音引擎，也不联网</b>。</li>
+          <li><b>学完进入「闯关小游戏」</b>：小熊带路走三级台阶，每节 3 道小题（按本节课内容出题：拼音找字母、识字听音选字、数学数一数、英语找大小写），全部有语音和插画，答错不打叉、不扣分，错两次会点亮正确答案。走完三级拿到奖杯才算学完，然后自动进入下一节。</li>
+          <li><b>首页有黄色「练习册」按钮</b>：12 本春雨幼教练习册（拼音/识字/数学/英语，共 619 页）像书架一样摆着，点开一页一页翻，照着屏幕上的题在纸上做。每本记住看到第几页，不占用每天的学习时间。</li>
+          <li><b>播完自动进入下一节</b>，不需要孩子自己找下一节在哪。</li>
+          <li><b>顶部一排小星星</b>表示今天的进度，学完一节亮一颗，比「1/5」这种数字直观。</li>
+          <li><b>首次打开有小熊引导</b>：一只手指着大按钮，只出现一次。</li>
+        </ul>
+        <p class="tiny">语音和音效可以在「设置 → 孩子界面」里分别关掉（闯关小游戏也可以单独关）。语音片段已离线打包进应用（约 9 MB，387 句），公共场合可只关语音留音效。</p>
+
+        <h3>开始之前：课程是自动规划还是手动？</h3>
+        <p><b>全自动，不用写课表，也不用编辑任何 JSON。</b>你唯一要动手的是把原始课件按单元放进文件夹、用文件名前缀决定顺序（例如 <code>01 a o e.mp4</code>、<code>02 拼音描红.pdf</code>）。</p>
+        <p><code>courses.json</code> 是跑脚本时自动生成的「有哪些课、按什么顺序」清单；而<b>「今天学哪几节」是每天首次打开时按当前进度实时算出来的</b>，包含昨日顺延、到期复习和新课，不会提前排好一整年的课表。所以落下一天，第二天自动顺延，不需要你重排。</p>
+        <p>想改顺序：改原始文件名前缀 → 重跑脚本 → 应用当天自动重排今天。家长端只能做微调（改每日分钟数、跳课、临时加一节、改今日顺序），不是规划课表。</p>
+        <p><a href="使用教程.html" target="_blank" rel="noopener" class="btn-primary" style="display:inline-block;text-decoration:none;padding:9px 16px;min-height:auto">打开完整图文教程</a></p>
+
+        <h3>快速上手六步</h3>
+        <ol>
+          <li>电脑装好 Python + FFmpeg（有 PDF 再 <code>pip install pypdfium2</code>）</li>
+          <li>把课件按 <code>01 拼音 / 02 识字 / …</code> 分单元放好，文件名加数字前缀</li>
+          <li>先跑 <code>--dry-run</code> 看报告，再跑正式命令导入，自动生成 <code>courses.json</code></li>
+          <li>把整个 StudyDaily 文件夹拷到平板根目录（<code>/内部存储/StudyDaily</code>）</li>
+          <li>安装 <code>StudyDaily.apk</code>，首次打开允许「访问所有文件」</li>
+          <li>孩子每天点桌面「每日学习」图标即可，今天学什么由系统自动算好</li>
+        </ol>
+
+        <h3>一、电脑上做一次（不需要常开电脑）</h3>
+        <p>把按单元分好文件夹的原始课件放到一个目录，例如 <code>D:/幼小衔接课程</code>，然后在本项目目录执行：</p>
+        <pre>python tools/prepare_courses.py --src "D:/幼小衔接课程" --dry-run
+python tools/prepare_courses.py --src "D:/幼小衔接课程"</pre>
+        <p>先看 <code>--dry-run</code> 的报告，确认分类和数量。正式跑会把 <code>.ts / .mkv / H.265</code> 统一转成 <b>H.264 + AAC 的 MP4（720p）</b>，输出到 <code>videos/u01/001.mp4</code> 这样的纯英文路径，并生成 <code>courses.json</code>。原始文件请留着做备份。</p>
+        <p class="tiny">需要先安装 FFmpeg 并加入 PATH。几百个视频一般要跑几十分钟到几小时，中途可以停，重跑会自动跳过已完成的文件。</p>
+
+        <h3>视频格式 & PDF 课件</h3>
+        <p><b>视频不是必须 720p。</b>必须的是 <b>H.264 视频 + AAC 音频 + MP4 容器</b>（yuv420p、faststart），安卓 Chrome 才能稳定播放和拖动进度条；H.265 / 10bit / MKV / TS / DTS 音轨会黑屏或没声音。720p 只是"最高分辨率"的默认值，防止 4K 课件占满平板空间；原本 480p / 540p 的课件会原样保留，不会被放大。</p>
+        <pre>python tools/prepare_courses.py --src "..." --scale 1080   # 允许到 1080p
+python tools/prepare_courses.py --src "..." --scale 0       # 完全保留原始分辨率</pre>
+        <p><b>PDF 可以直接用。</b>练习纸、讲义、字帖等 <code>.pdf</code> 会和视频按文件名自然排序混排，例如 <code>01 a o e.mp4 → 02 拼音练习.pdf → 03 i u ü.mp4</code>。转码时每页渲染成图片，孩子在应用里左右滑动翻页，看完最后一页点「学完了」；PDF 与视频一样参与每日排课和 1/3/7/15 天复习。</p>
+        <pre>pip install pypdfium2                 # 首次使用需要，用于 PDF 转图片
+python tools/prepare_courses.py --src "..." --pdf-minutes 5</pre>
+
+        <h3>二、拷到平板</h3>
+        <p>把整个 <b>StudyDaily 文件夹</b>（含 <code>index.html</code>、<code>courses.json</code>、<code>videos/</code>、<code>posters/</code>）拷到平板<b>根目录</b>，路径是 <code>/内部存储/StudyDaily</code>。</p>
+
+        <h3>三、装 App（推荐）</h3>
+        <p>1. 把 <code>StudyDaily.apk</code> 拷到平板并安装；系统提示「未知来源应用」时允许一次。</p>
+        <p>2. 首次打开点「去授权」，在系统设置里打开「访问所有文件」开关，返回后自动加载课程。</p>
+        <p>3. 之后孩子点桌面 <b>每日学习</b> 图标，直接全屏进入，不需要浏览器、也不需要额外的服务器 App。</p>
+        <p class="tiny">进度保存在 App 内部 <code>progress.json</code>，清浏览器数据也不会丢；换平板时把整个 StudyDaily 文件夹拷过去就能接着学。</p>
+        <p class="tiny"><b>备选（不装 App）：</b>装 Simple HTTP Server 之类，共享目录指向 StudyDaily 并开机自启，Chrome 打开 <code>http://127.0.0.1:8080/</code> → 菜单「添加到主屏幕」。视频必须走 HTTP，直接双击 index.html（file://）会黑屏。</p>
+
+        <h3>四、每天怎么用</h3>
+        <p>孩子看到的只有"今天这几节课"，播完自动下一节，全部完成后界面锁住，看不到后面的课，也不会因为落下了就第二天加量。家长连点右上角 ⚙ 五次（或长按）输入 PIN（默认 <code>1234</code>）进入家长端，可以改每日时长、跳过某节、标记"没学会"、看热力图。</p>
+
+        <h3>五、备份与常见问题</h3>
+        <p><b>备份：</b>家长端 → 设置 → 导出进度备份，会下载一个 JSON；换设备或清了浏览器数据后，用"导入备份"恢复。</p>
+        <p><b>黑屏 / 播不动：</b>视频不是 H.264+AAC，重新跑一次转码脚本并加 <code>--force</code>。</p>
+        <p><b>没有语音：</b>确认 <code>voice/</code> 文件夹和 <code>voice/index.json</code> 已拷进平板（整个文件夹一起拷就不会缺）；声音开关在右上角，家长端设置里也能分别控制语音和音效。</p>
+        <p><b>课程没更新：</b>确认 <code>courses.json</code> 已替换，刷新页面；还不行就清一下本应用的网站数据（先导出备份）。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 弹窗 ============ -->
+  <div id="pinModal" class="modal hidden">
+    <div class="modal-card">
+      <h2>家长验证</h2>
+      <p>输入 4 位 PIN</p>
+      <input id="pinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+      <p id="pinError" class="error-text"></p>
+      <div class="btn-row">
+        <button id="pinCancel" class="btn-ghost">取消</button>
+        <button id="pinOk" class="btn-primary">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 一节学完 -->
+  <div id="nextOverlay" class="modal hidden">
+    <div class="next-kid">
+      <div class="next-face"><img src="assets/img/hugging_face.png" alt=""></div>
+      <h2 id="nextTitle">太棒了！</h2>
+      <div class="next-thumb" id="nextThumb"></div>
+      <button id="nextNow" class="btn-kid-next">继续 ▶</button>
+      <p class="next-count" id="nextCountdown"></p>
+      <p class="rest-tip hidden" id="restTip">站起来动一动，看看窗外 👀</p>
+      <button id="nextLater" class="btn-kid-later">先休息</button>
+    </div>
+  </div>
+
+  <div id="confetti" class="confetti"></div>
+  <div id="toast" class="toast hidden"></div>
+</div>
+
+<script src="planner.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

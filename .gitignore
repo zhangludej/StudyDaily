@@ -1,0 +1,15 @@
+# 大体积视频课件不上传（GitHub 限制），请自行放入 StudyDaily/videos/
+StudyDaily/videos/
+StudyDaily/progress.json
+
+# 安卓构建产物（prepare_assets.sh 会生成）
+StudyDailyAndroid/build/
+StudyDailyAndroid/assets/
+
+# 签名证书不上传公开仓库，build.sh 缺失时会自动生成新证书
+StudyDailyAndroid/keystore/
+
+# 临时文件
+*.log
+.DS_Store
+Thumbs.db

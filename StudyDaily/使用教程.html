@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudyDaily 从零到用 · 操作教程</title>
+<style>
+  :root {
+    --blue: #2E6BFF; --ink: #1B2440; --muted: #5F6B86;
+    --line: #E1E7F2; --soft: #F5F8FF; --code: #16203A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0 20px 80px; background: #EEF2FA; color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+                 "Noto Sans CJK SC", "Segoe UI", sans-serif;
+    font-size: 16px; line-height: 1.8;
+  }
+  .page { max-width: 860px; margin: 0 auto; background: #fff; padding: 40px 48px 60px;
+          box-shadow: 0 8px 40px rgba(30, 55, 110, .10); }
+  h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: -.5px; }
+  .lead { color: var(--muted); margin: 0 0 26px; }
+  h2 { font-size: 21px; margin: 38px 0 12px; padding-bottom: 8px;
+       border-bottom: 2px solid var(--blue); color: var(--blue); }
+  h3 { font-size: 17px; margin: 24px 0 8px; }
+  p { margin: 10px 0; }
+  ul, ol { padding-left: 24px; margin: 10px 0; }
+  li { margin: 6px 0; }
+  code { background: var(--soft); padding: 2px 6px; border-radius: 5px;
+         font-size: 14px; color: #2447A8; }
+  pre { background: var(--code); color: #DDE7FF; padding: 16px 18px; border-radius: 12px;
+        overflow-x: auto; font-size: 13.5px; line-height: 1.75; white-space: pre-wrap; }
+  pre code { background: none; color: inherit; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 14.5px; }
+  th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--soft); font-weight: 700; }
+  .callout { background: var(--soft); border-left: 4px solid var(--blue);
+             padding: 12px 16px; border-radius: 0 10px 10px 0; margin: 16px 0; }
+  .warn { background: #FFF7EA; border-left-color: #E6982B; }
+  .step { display: flex; gap: 14px; align-items: flex-start; margin: 22px 0 10px; }
+  .step .n { flex: 0 0 34px; width: 34px; height: 34px; border-radius: 50%;
+             background: var(--blue); color: #fff; font-weight: 800;
+             display: grid; place-items: center; }
+  .step h3 { margin: 3px 0 0; }
+  .tree { background: #F8FAFE; border: 1px solid var(--line); border-radius: 10px;
+          padding: 14px 18px; font-family: Consolas, "Courier New", monospace;
+          font-size: 13.5px; line-height: 1.75; white-space: pre; overflow-x: auto; }
+  .print { position: fixed; right: 24px; top: 24px; background: var(--blue); color: #fff;
+           border: none; border-radius: 10px; padding: 10px 18px; font-size: 14px;
+           font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(46,107,255,.3); }
+  .foot { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--line);
+          color: var(--muted); font-size: 13px; }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .page { box-shadow: none; padding: 0; max-width: none; }
+    .print { display: none; }
+    h2 { page-break-after: avoid; }
+    pre, .tree, table { page-break-inside: avoid; }
+  }
+  @media (max-width: 620px) { .page { padding: 24px 18px 40px; } }
+</style>
+</head>
+<body>
+<button class="print" onclick="window.print()">打印 / 存为 PDF</button>
+<div class="page">
+
+<h1>StudyDaily 从零到用</h1>
+<p class="lead">幼小衔接课件自动排课 · 具体操作教程　|　全程约 10 分钟操作 + 一次后台转码</p>
+
+<h2>一、到底自动还是手动？</h2>
+
+<p><strong>结论：全自动，不用写课表，也不用编辑任何 JSON 文件。</strong>你只需要把原始课件按单元放进文件夹、用文件名前缀排好顺序；剩下的全部由程序完成。</p>
+
+<table>
+  <tr><th>环节</th><th>谁做</th><th>说明</th></tr>
+  <tr><td>把课件分单元、按顺序命名</td><td><strong>你手动</strong></td><td>唯一需要动手的「规划」，本质只是整理文件夹</td></tr>
+  <tr><td>转码、生成 <code>courses.json</code> 课程清单</td><td>自动</td><td>跑一条命令，几百个文件一次处理完</td></tr>
+  <tr><td>决定今天学哪几节</td><td>自动</td><td>每天首次打开时按当前进度<strong>实时计算</strong>，不是提前排好一整年的课表</td></tr>
+  <tr><td>没学完顺延、到期复习</td><td>自动</td><td>昨日未完成原序置顶，学完进入 1/3/7/15 天复习</td></tr>
+  <tr><td>播放进度、完成记录、热力图</td><td>自动</td><td>自动写入，不用打卡登记</td></tr>
+  <tr><td>改每日时长 / 跳课 / 临时加一节</td><td>家长可选微调</td><td>在家长端点几下即可，不影响整体自动规划</td></tr>
+</table>
+
+<div class="callout">
+<strong>两层的区别很重要：</strong><code>courses.json</code> 是「有哪些课、按什么顺序」的静态清单，导入一次就固定；「今天学哪几节」是每天打开时根据完成了多少、欠了多少、哪些该复习<strong>临时算出来的</strong>。所以孩子落下一天，第二天会自动顺延，不需要你重新排课表。
+</div>
+
+<div class="callout">
+<strong>六步速查（照着做即可）：</strong>
+<ol style="margin:8px 0 0">
+  <li>课件按 <code>01 拼音 / 02 识字 / …</code> 分文件夹，文件名加数字前缀</li>
+  <li><code>python tools/prepare_courses.py --src "D:/幼小衔接课程" --dry-run</code> 先看报告</li>
+  <li>去掉 <code>--dry-run</code> 正式导入，自动生成 <code>courses.json</code></li>
+  <li>把整个 StudyDaily 文件夹拷进平板</li>
+  <li>平板装本地 HTTP 服务器 App 指向该文件夹 → Chrome 打开 → 添加到主屏幕</li>
+  <li>孩子每天点桌面图标，今天学什么由系统自动算好</li>
+</ol>
+</div>
+
+<h2>二、电脑上的准备（只做一次）</h2>
+
+<p>本项目文件夹里已经带有全部脚本，只要电脑上有 Python 3.9+ 和 FFmpeg。有 PDF 课件时再装一个渲染库：</p>
+
+<pre>python --version
+ffmpeg -version
+pip install pypdfium2        # 只有用到 PDF 时才需要</pre>
+
+<p>缺 FFmpeg：Windows 到 <code>gyan.dev/ffmpeg/builds</code> 下载 essentials 版，解压后把 <code>bin</code> 目录加入系统 PATH，重开终端。</p>
+
+<div class="step"><div class="n">1</div><h3>整理原始课件（唯一需要你动手的「规划」）</h3></div>
+
+<p>把课件按单元放进子文件夹，文件名前面加序号。视频和 PDF 可以混在一起，按文件名自然排序：</p>
+
+<div class="tree">D:/幼小衔接课程/
+├── 01 拼音/
+│   ├── 01 a o e.mp4
+│   ├── 02 拼音描红练习.pdf
+│   ├── 03 i u ü.ts
+│   └── 04 b p m f.mkv
+├── 02 识字/
+│   ├── 01 一二三.mp4
+│   ├── 02 田字格练习.pdf
+│   └── 03 人口手.mp4
+└── 03 数学思维/
+    ├── 01 10 以内数数.mp4      （H.265 也可以，会自动转）
+    └── 02 比多少.mp4
+</div>
+
+<p><strong>命名规则（决定学习顺序）：</strong></p>
+<ul>
+  <li>文件夹名前缀数字 = 单元顺序，<code>01 拼音</code> 排在 <code>02 识字</code> 前面</li>
+  <li>文件名前缀数字 = 课顺序，用自然排序：<code>1、2、3 … 10</code>，不会排成 <code>1、10、2</code></li>
+  <li>PDF 和视频一视同仁，例如 <code>02 拼音描红练习.pdf</code> 就是第 2 节</li>
+  <li>文件名可以带中文和空格，脚本会自动输出成纯英文路径，不用改名字</li>
+  <li>单元名带上科目关键词（如 <code>01 拼音</code>、<code>02 识字</code>、<code>03 数学</code>、<code>04 英语</code>），系统会据此识别科目并按星期排课；不用写「第几天学什么」的课表</li>
+</ul>
+
+<div class="step"><div class="n">2</div><h3>先跑一次预演（不写任何文件）</h3></div>
+
+<pre>cd StudyDaily
+python tools/prepare_courses.py --src "D:/幼小衔接课程" --dry-run</pre>
+
+<p>会看到类似输出：</p>
+<pre>扫描完成：286 个视频 + 18 个 PDF，3 个单元
+[1/304] OK  copy     01 a o e
+[2/304] OK  pdf      02 拼音描红练习
+[3/304] OK  remux    03 i u ü
+[4/304] OK  full     01 10 以内数数
+分类统计：copy=180，remux=42，audio=6，full=58，pdf=18</pre>
+
+<p>这一步只出报告，不写文件。报告在 <code>transcode-report.json</code>，可以核对数量、分类和有没有失败项。</p>
+
+<p>常用可选参数：</p>
+<table>
+  <tr><th>参数</th><th>作用</th></tr>
+  <tr><td><code>--scale 0</code></td><td>完全保留原始分辨率（默认上限 720p，480p/540p 本来就不会被放大）</td></tr>
+  <tr><td><code>--scale 1080</code></td><td>允许到 1080p</td></tr>
+  <tr><td><code>--pdf-minutes 5</code></td><td>PDF 课默认时长（分钟），页数多时按每页 1 分钟自动上调</td></tr>
+  <tr><td><code>--jobs 4</code></td><td>并发数，电脑性能好可以调大</td></tr>
+  <tr><td><code>--force</code></td><td>改动过原始文件后强制重新处理</td></tr>
+</table>
+
+<div class="step"><div class="n">3</div><h3>正式导入</h3></div>
+
+<pre>python tools/prepare_courses.py --src "D:/幼小衔接课程"</pre>
+
+<p>几百个文件通常几十分钟到几小时，放着跑就行。中途可以关掉，重跑会自动跳过已完成的。完成后项目目录变成：</p>
+
+<div class="tree">StudyDaily/
+├── index.html            应用本体
+├── courses.json          ← 自动生成的课程清单
+├── videos/u01/001.mp4    ← 统一 H.264+AAC MP4
+├── files/u01/002.pdf     ← 保留的 PDF 原件
+├── pages/u01/002/p001.jpg ← PDF 每页转出的图片
+├── transcode-report.json 处理报告
+└── tools/                脚本，平板用不到但可一起拷</div>
+
+<p><code>courses.json</code> 里每一节大致长这样，<strong>不需要你手写或修改</strong>：</p>
+<pre>{
+  "id": "u01-002",
+  "title": "拼音描红练习",
+  "type": "pdf",
+  "file": "files/u01/002.pdf",
+  "pages": ["pages/u01/002/p001.jpg", "pages/u01/002/p002.jpg"],
+  "pageCount": 2,
+  "durationSec": 300,
+  "order": 2
+}</pre>
+
+<div class="callout warn">
+<strong>想调整顺序怎么办？</strong>回去改原始文件名前缀（例如把 <code>05</code> 改成 <code>02</code>），删掉旧的 <code>courses.json</code> 再跑一次脚本（或加 <code>--force</code>）。应用检测到清单变化后，<strong>当天就会自动重排今天的任务</strong>，不用等到明天。
+</div>
+
+<h2>三、上平板（只做一次）</h2>
+
+<div class="step"><div class="n">4</div><h3>拷贝整个文件夹</h3></div>
+<p>把 <strong>StudyDaily 整个文件夹</strong>（含 <code>index.html</code>、<code>courses.json</code>、<code>videos/</code>、<code>files/</code>、<code>pages/</code>）拷到平板<strong>根目录</strong>，即「内部存储」下，路径应为 <code>/内部存储/StudyDaily</code>。300 节 720p 大约 5–12 GB，先确认空间。</p>
+
+<div class="step"><div class="n">5</div><h3>安装 App（StudyDaily.apk）</h3></div>
+<p>把 <code>StudyDaily.apk</code> 拷到平板，点一下安装。系统可能提示「未知来源应用」，允许一次即可。装好后桌面会出现 <strong>「每日学习」</strong> 图标——<strong>点开就是全屏儿童界面，不用再装任何服务器 App，也不用开浏览器</strong>。</p>
+
+<div class="step"><div class="n">6</div><h3>首次打开：允许读取课件</h3></div>
+<p>第一次打开会弹窗要求「访问所有文件」，点「去授权」→ 在系统设置里打开开关 → 返回 App，课程会自动加载。学习进度存在 App 内部（<code>progress.json</code>），清浏览器数据、换浏览器都不会丢。</p>
+<div class="callout warn">如果提示「没找到课程文件夹」，说明第 4 步的文件夹没放到根目录，或者名字不是 <code>StudyDaily</code>。放好后点「重新检查」即可，不用重装 App。</div>
+<p>首次打开时，系统会<strong>自动算出今天学哪几节</strong>并显示在首页，不需要你做任何设置。以后每次打开，都会按当天日期和当前进度重新算。</p>
+
+<h3 style="margin-top:30px">备选：不装 App，用浏览器</h3>
+<p>如果平板装不了 APK，也可以：装 <strong>Simple HTTP Server</strong> 之类 App，共享目录指向 StudyDaily 文件夹并开启「开机自启」；Chrome 打开它显示的地址（通常 <code>http://127.0.0.1:8080/</code>）→ 菜单「添加到主屏幕」。</p>
+<div class="callout warn">视频必须走 HTTP 才能播放，<strong>直接双击 index.html 会黑屏</strong>（<code>file://</code> 被 Chrome 禁止加载本地视频）。这条路线每次要先启动服务器 App，而且进度存在浏览器里，记得定期「导出进度备份」。</div>
+
+<h2>四、每天怎么用</h2>
+
+<div class="step"><div class="n">7</div><h3>孩子端：点图标就用</h3></div>
+<ul>
+  <li>首页只有「今天这几节」大按钮，看不到后面的课程，不会乱点</li>
+  <li>点一节 → 播放（或 PDF 翻页）→ 看到 90% 自动进入「闯关小游戏」→ 做完 3 道小题才记完成 → 自动进入下一节</li>
+  <li>全部完成显示「今天的任务完成啦」并锁住</li>
+  <li>连续学 2 节后会提示起来动一动、看看远处</li>
+</ul>
+
+<div class="callout">
+<strong>为不识字的孩子做的设计：</strong>界面不用读字——小熊形象引导、每节课一张「缩略图 + 大序号 + 学科图标」的卡片、一排小星星表示今天进度。<strong>语音引导已内置在应用里</strong>（温柔女声、语速放慢，共 403 句、约 9.6 MB，完全离线）：打开会说「今天有 N 节课」，点进一节会念出「这一节是拼音，第 1 集」，学完表扬「太棒了」。不需要平板装任何语音引擎。在公共场合可在家长端 → 设置里单独关语音、只留音效；图标插画来自微软开源 Fluent Emoji（MIT 许可），随应用打包，也不联网。
+</div>
+
+<p><strong>顺延示例：</strong>今天排了 4 节共 30 分钟，孩子只学完 2 节。明天打开时，剩下 2 节会原顺序置顶，再加当天该复习的课，然后再补新课，<strong>总时长仍然是 30 分钟，不会因为欠账而加量</strong>。周末额度自动变成 15 分钟。</p>
+
+<div class="callout">
+<strong>每周课程安排（自动按星期排课）：</strong>不再是「一门一门从头学到尾」，而是识字每天都学，第二科按星期搭配——
+<table>
+  <tr><th>星期</th><th>搭配</th><th>说明</th></tr>
+  <tr><td>周一 / 周三</td><td>识字阅读 ＋ 数学</td><td>语文指读搭配数感游戏</td></tr>
+  <tr><td>周二</td><td>识字阅读 ＋ 拼音</td><td>拼音以听音、认形为主</td></tr>
+  <tr><td>周四</td><td>识字阅读 ＋ 英语</td><td>英语避开拼音日，防止发音混淆</td></tr>
+  <tr><td>周五</td><td>识字阅读 ＋ 数学 / 拼音</td><td>默认隔周自动轮换；家长端「设置」可固定为数学或拼音</td></tr>
+  <tr><td>周六</td><td>自由拓展</td><td>各科都可排，按课程自然顺序出</td></tr>
+  <tr><td>周日</td><td>休息 / 复盘</td><td>不排新课，只出到期复习；没学完的顺延到周一</td></tr>
+</table>
+每个科目内部仍然严格按集数顺序学，绝不跳课；系统<b>保证当天搭配的两个科目都会出现</b>（第二科单节较长时，允许比预算多出 10 分钟以内，例如识字 13 分钟＋数学 23 分钟＝36 分钟）。没学完的复习<b>不会一天天顺延堆积</b>，每天最多补 2 节，其余顺延到后面几天。首页日期旁会显示「今天学：识字阅读 ＋ 数学」这样的当日主题。
+</div>
+
+<h2 style="margin-top:34px">四点五、学完后的「闯关小游戏」</h2>
+<p>看完一节课，不再直接跳下一节，而是先进入一个 1 分钟左右的小游戏：小熊带着孩子走三级台阶，<b>每答对一题升一级，走完三级拿到奖杯才能算「学完」</b>。目的是把刚看的内容马上用一遍，加深记忆。</p>
+<table>
+  <tr><th>科目</th><th>出的题（每节 3 题，自动按本节内容生成）</th></tr>
+  <tr><td>拼音</td><td>找出一样的字母（b 和 d 这类形近字母专门练）、听「呼读音」选声母、形近字母找不同</td></tr>
+  <tr><td>识字</td><td>听读音选汉字、看图选字（图是真实插画，不是抽象符号）、字形匹配</td></tr>
+  <tr><td>数学</td><td>数一数、加减法、比较大小多少、认钟表（整点/半点）、认图形、找规律</td></tr>
+  <tr><td>英语</td><td>听英文童声「Find big B / Find small b」找字母、形近字母辨析</td></tr>
+</table>
+<ul>
+  <li><b>每道题都有语音</b>，孩子不需要识字也能做题；英语题用英文童声朗读，中文题用和小熊一样的女声</li>
+  <li><b>答错不打叉、不扣分</b>：那张卡片只是变暗，语音说「再试一次，仔细听」并重播题干；同一题错两次，正确答案会轻轻发亮，保证孩子最后一定能过关</li>
+  <li>答对有星星爆炸、连对显示「连对 2 题！」，全对有奖杯和撒花</li>
+  <li>右上角 ✕ 可以先不做题（比如孩子在公共场合不方便出声），不影响正常排课</li>
+  <li>家长端「课程」里每节课有<b>「看题目」</b>按钮，可以先替孩子试玩一遍；「统计」里新增了做题数、答对率和「这几节可以再看一遍」</li>
+  <li>不想要可以在家长端 → 设置里关掉「学完出三道小题」，恢复原来的直接进入下一节</li>
+</ul>
+
+<div class="callout">
+<strong>题目从哪来？</strong>全部按每一节课的实际内容自动生成（拼音课出这节课的字母、识字课出这节课的字、数学课按课题出数数或加减），共 372 题、约 211 句语音，已离线打包，不联网、不含广告。想改题就在电脑上编辑 <code>tools/build_quiz.py</code> 后重跑 <code>python tools/build_quiz.py</code>，再执行 <code>python tools/make_voice.py</code> 补语音。
+</div>
+
+<h2 style="margin-top:34px">四点六、练习册书架（纸质练习册的电子版）</h2>
+<p>导入的《春雨幼教·幼小衔接整合教材》12 本（拼音/识字/数学/英语，教材上下册 + 每日一练，共 619 页）已经放进应用。孩子首页有一个<b>黄色「练习册」大按钮</b>，点开是书架：每本书显示真实封面，点开像翻纸质练习册一样一页一页看，<b>照着屏幕上的题在纸上做</b>。</p>
+<ul>
+  <li>每本书都会<b>记住看到第几页</b>，下次翻开接着做；书架封面下方会显示「看到第 X 页」</li>
+  <li>翻开时小熊会念书名并提示「点下面的箭头翻页」，孩子不识字也能自己操作</li>
+  <li>练习册<b>不占用每天的 30 分钟</b>，也不影响排课，随时想看就看；翻到最后一页会提示「这是最后一页啦」</li>
+  <li>这些扫描页占用约 59 MB，放在平板 <code>/内部存储/StudyDaily/workbooks/</code> 文件夹里，<b>不占 APK 空间</b>。把整个 StudyDaily 文件夹拷到平板时练习册就一起带过去了</li>
+  <li>想加新书：把 PDF 放进一个文件夹，在电脑上运行 <code>python tools/build_workbooks.py --src "PDF所在文件夹"</code>，再运行 <code>python tools/make_voice.py</code> 补语音，最后重新打包安装</li>
+</ul>
+
+<div class="step"><div class="n">8</div><h3>家长端：连点右上角齿轮 5 次（或长按）</h3></div>
+<p>输入 PIN（默认 <code>1234</code>，可在设置里改）进入，这里是唯一可以「手动干预」的地方：</p>
+<table>
+  <tr><th>标签页</th><th>能做什么</th></tr>
+  <tr><td>今日</td><td>上移/下移只改今天的顺序、跳过某节、手动标完成、标「没学会」（次日重看）</td></tr>
+  <tr><td>课程</td><td>看全部课程状态、把某节临时加到今天、恢复已跳过的课、点「看题目」预览这节课的小题</td></tr>
+  <tr><td>统计</td><td>总进度、连续天数、最近 12 周热力图、累计学习时长、做题数与答对率</td></tr>
+  <tr><td>设置</td><td>改平时/周末分钟数、复习开关、完成判定比例、PIN，导出/导入进度备份</td></tr>
+  <tr><td>帮助</td><td>本教程的精简版，随时在平板上查</td></tr>
+</table>
+
+<div class="callout">
+<strong>关于备份：</strong>用平板现成 HTTP 服务器 App 时，进度存在浏览器里，建议每周在「设置 → 导出进度备份」下载一个 JSON 存到网盘。清理浏览器数据后用「导入备份」即可恢复。如果改用自己的 <code>tools/serve.py</code>，进度会自动写进 <code>progress.json</code>，不用手动导。
+</div>
+
+<h2>五、出了问题查这里</h2>
+<table>
+  <tr><th>现象</th><th>处理</th></tr>
+  <tr><td>视频黑屏 / 播不动</td><td>编码不是 H.264+AAC，重跑脚本并加 <code>--force</code></td></tr>
+  <tr><td>能播但不能拖进度条</td><td>换支持 Range / 断点续传的 HTTP 服务器 App</td></tr>
+  <tr><td>课程顺序不对</td><td>检查原始文件名前缀数字，改完重跑脚本</td></tr>
+  <tr><td>换了课件但首页没变</td><td>确认 <code>courses.json</code> 已替换后刷新；应用会自动重排今天</td></tr>
+  <tr><td>PDF 显示「用系统阅读器打开」</td><td>电脑执行 <code>pip install pypdfium2</code> 后加 <code>--force</code> 重跑</td></tr>
+  <tr><td>平板打不开页面</td><td>确认两台在同一 WiFi、服务器 App 正在运行、电池优化已关闭、端口和 App 显示一致</td></tr>
+</table>
+
+<p class="foot">StudyDaily · 本教程文件可单独打开或打印，随项目一起拷到平板也可以。应用内「家长端 → 帮助」有同样内容的精简版。</p>
+
+</div>
+</body>
+</html>
