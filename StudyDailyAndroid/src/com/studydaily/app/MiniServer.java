@@ -568,12 +568,13 @@ public class MiniServer {
         String range = headers.get("range");
         Exception last = null;
         String[] bases = orderedBases();
+        boolean started = false;   // 已经开始往客户端吐数据后，就不再换源（换了也会错乱）
         for (int i = 0; i < bases.length; i++) {
             HttpURLConnection conn = null;
             try {
                 conn = (HttpURLConnection) new URL(bases[i] + path.substring(1)).openConnection();
                 conn.setConnectTimeout(8000);
-                conn.setReadTimeout(20000);
+                conn.setReadTimeout(45000);
                 conn.setInstanceFollowRedirects(true);
                 conn.setRequestProperty("User-Agent", "StudyDaily/1.0");
                 conn.setRequestProperty("Accept-Encoding", "identity");
@@ -596,6 +597,7 @@ public class MiniServer {
                 String cr = conn.getHeaderField("Content-Range");
                 if (cr != null) h.put("Content-Range", cr);
                 writeHead(out, code == 206 ? "206 Partial Content" : "200 OK", h);
+                started = true;
                 if (headOnly) {
                     safeFlush(out);
                     conn.disconnect();
@@ -615,6 +617,10 @@ public class MiniServer {
             } catch (Exception e) {
                 last = e;
                 if (conn != null) conn.disconnect();
+                if (started) {
+                    // 已经在播了，只是这一路断了，别再换源重来
+                    return;
+                }
             }
         }
         // 所有源都失败：多半是没联网，且这集还没缓存
