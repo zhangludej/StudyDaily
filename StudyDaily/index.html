@@ -104,7 +104,19 @@
       <div class="video-bar">
         <div class="vprogress"><div id="vProgressFill" class="vprogress-fill"></div></div>
         <button id="muteBtn" class="vbtn" aria-label="静音">🔊</button>
+        <button id="fsBtn" class="vbtn" aria-label="全屏">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+               stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"/>
+          </svg>
+        </button>
       </div>
+      <button id="fsExit" class="video-fs-exit" aria-label="退出全屏">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+             stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 9h5V4M20 9h-5V4M4 15h5v5M20 15h-5v5"/>
+        </svg>
+      </button>
       <div id="videoError" class="video-error hidden"></div>
     </div>
 
@@ -250,6 +262,13 @@
         <p class="tiny" id="cacheInfo">正在读取…</p>
         <p class="tiny">视频不占安装包：第一次看某集时从云端边看边存，之后这集就能离线看。占用超过 2 GB 会自动删掉最久没看的。</p>
         <button id="cacheClear" class="btn-ghost">清空缓存（释放空间）</button>
+      </div>
+
+      <div class="panel">
+        <h3>本地课件（完全离线用）</h3>
+        <p class="tiny" id="localInfo">正在检查…</p>
+        <p class="tiny">如果平板「内部存储」里已经有 StudyDaily 文件夹，可以在这里启用：启用后优先读本地文件，<b>完全断网也能看全部课程和练习册</b>；没有这个文件夹就不用管，App 会自动用云端点播。</p>
+        <button id="localEnable" class="btn-ghost">使用本地课件（需授权一次）</button>
       </div>
 
       <div class="panel">

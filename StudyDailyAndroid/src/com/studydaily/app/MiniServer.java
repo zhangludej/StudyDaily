@@ -59,6 +59,8 @@ public class MiniServer {
     /** 实测最快的源，联网正常时会在启动后几秒内确定 */
     private volatile String fastestBase = null;
     private volatile boolean probed = false;
+    /** 家长要求启用本地课件时的回调（Activity 弹授权） */
+    private volatile Runnable onRequestLocalAccess = null;
     private ServerSocket serverSocket;
     private ExecutorService pool;
     private int port = 0;
@@ -71,6 +73,17 @@ public class MiniServer {
 
     public void setRoot(File dir) {
         this.root = dir;
+    }
+
+    /** 本机课件文件夹是否可用（有 courses.json 才算完整） */
+    public boolean localReady() {
+        File r = root;
+        return r != null && new File(r, "courses.json").isFile();
+    }
+
+    /** 家长点「使用本地课件」时回调，由 Activity 弹出系统授权页 */
+    public void setLocalAccessHandler(Runnable r) {
+        this.onRequestLocalAccess = r;
     }
 
     /** 视频缓存目录：放在应用私有外部目录，不需要任何存储权限 */
@@ -302,6 +315,23 @@ public class MiniServer {
                 return;
             }
         }
+        // 本地课件状态：ready=true 表示本机有完整课件文件夹，可完全离线使用
+        if (path.equals("/api/local")) {
+            boolean ready = localReady();
+            if ("POST".equals(method) && !ready) {
+                Runnable h = onRequestLocalAccess;
+                if (h != null) h.run();
+            }
+            String dir = "";
+            File r = root;
+            if (r != null) {
+                dir = r.getAbsolutePath().replace("\\", "\\\\").replace("\"", "\\\"");
+            }
+            sendText(out, 200, "OK", "application/json; charset=utf-8",
+                    "{\"ok\":true,\"ready\":" + ready + ",\"dir\":\"" + dir + "\"}");
+            return;
+        }
+
         if (path.equals("/api/cache")) {
             if ("GET".equals(method)) {
                 sendText(out, 200, "OK", "application/json; charset=utf-8", cacheStatsJson());

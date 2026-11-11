@@ -1159,6 +1159,43 @@
     $('#setSound').checked = s.soundEnabled !== false;
     $('#setQuiz').checked = s.quizEnabled !== false;
     loadCacheInfo();
+    loadLocalInfo();
+  }
+
+  // ---------------- 本地课件（有文件夹时可完全离线） ----------------
+  function loadLocalInfo() {
+    var el = $('#localInfo');
+    if (!el) return;
+    if (!location.origin || location.origin.indexOf('http') !== 0) {
+      el.textContent = '网页版直接读本地文件夹，不需要设置。';
+      return;
+    }
+    fetch('api/local', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var btn = $('#localEnable');
+        if (d && d.ready) {
+          el.textContent = '已启用：' + (d.dir || '本地文件夹')
+            + '　视频和练习册都从本机读取，完全断网也能用。';
+          if (btn) btn.classList.add('hidden');
+        } else {
+          el.textContent = '未启用（当前走云端点播，第一次看新的一集需要联网）。';
+          if (btn) btn.classList.remove('hidden');
+          if (d && d.dir) el.textContent += ' 检测到的文件夹：' + d.dir + '（缺少 courses.json）';
+        }
+      })
+      .catch(function () {
+        el.textContent = '读不到本地课件状态（用网页版打开时不支持）。';
+      });
+  }
+
+  function enableLocal() {
+    fetch('api/local', { method: 'POST' })
+      .then(function (r) { return r.json(); })
+      .then(function () {
+        toast('请在系统设置里打开「允许访问所有文件」，返回后自动生效');
+      })
+      .catch(function () { toast('操作失败，稍后再试'); });
   }
 
   // ---------------- 缓存（云端点播留下的视频） ----------------
@@ -1238,6 +1275,20 @@
     var layer = $('#videoTapLayer');
     if (!layer) return;
     layer.classList.toggle('playing', !!playing);
+  }
+
+  // 全屏播放：纯 CSS 铺满整屏（不调 requestFullscreen，避免与 WebView 原生全屏冲突）
+  function setFullscreen(on) {
+    var wrap = $('#videoWrap');
+    if (!wrap) return;
+    var yes = typeof on === 'boolean' ? on : !wrap.classList.contains('fs');
+    wrap.classList.toggle('fs', yes);
+    document.body.classList.toggle('fs-lock', yes);
+  }
+
+  function isFullscreen() {
+    var wrap = $('#videoWrap');
+    return !!wrap && wrap.classList.contains('fs');
   }
 
   function togglePlay() {
@@ -1341,6 +1392,7 @@
   function closePlayer() {
     var v = $('#video');
     try { v.pause(); } catch (e) {}
+    setFullscreen(false);
     currentId = null;
     completedGuard = true;
     $('#playerView').classList.add('hidden');
@@ -1557,6 +1609,16 @@
       cancelNext(); Speech.stop(); closePlayer(); renderAll();
     });
     $('#videoTapLayer').addEventListener('click', function () { togglePlay(); });
+    $('#fsBtn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      Sfx.tap();
+      setFullscreen(true);
+    });
+    $('#fsExit').addEventListener('click', function (e) {
+      e.stopPropagation();
+      Sfx.tap();
+      setFullscreen(false);
+    });
     $('#muteBtn').addEventListener('click', function (e) {
       e.stopPropagation();
       var v = $('#video');
@@ -1694,6 +1756,8 @@
     $('#rebuildToday').addEventListener('click', rebuildToday);
     var cc = $('#cacheClear');
     if (cc) cc.addEventListener('click', clearCache);
+    var le = $('#localEnable');
+    if (le) le.addEventListener('click', enableLocal);
 
     // 数据
     $('#exportBtn').addEventListener('click', exportProgress);

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -73,6 +74,18 @@ public class MainActivity extends Activity {
             server.setCacheDir(new File(cacheBase, "cw"));
         } catch (Throwable ignored) {
         }
+        // 家长在设置页点「使用本地课件」时，弹系统授权页（可选功能，不影响默认的云端点播）
+        server.setLocalAccessHandler(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        requestStorageAccess();
+                    }
+                });
+            }
+        });
         startAndLoad();
     }
 
@@ -327,6 +340,28 @@ public class MainActivity extends Activity {
     }
 
     // ------------------------------------------------------------ 生命周期
+
+    /** 返回键：视频全屏时先退出全屏，其余情况保持原来的退出行为 */
+    @Override
+    public void onBackPressed() {
+        if (webView == null) {
+            super.onBackPressed();
+            return;
+        }
+        webView.evaluateJavascript(
+                "(function(){var w=document.getElementById('videoWrap');"
+                        + "if(w&&w.className.indexOf('fs')>=0){"
+                        + "var b=document.getElementById('fsExit');if(b)b.click();return '1';}"
+                        + "return '0';})()",
+                new ValueCallback<String>() {
+                    @Override
+                    public void onValueChange(String value) {
+                        if (value == null || value.indexOf('1') < 0) {
+                            MainActivity.super.onBackPressed();
+                        }
+                    }
+                });
+    }
 
     @Override
     protected void onResume() {

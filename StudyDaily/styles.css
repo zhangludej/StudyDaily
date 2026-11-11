@@ -312,14 +312,41 @@ input { font-family: inherit; }
 .vprogress-fill { height: 100%; width: 0%; border-radius: 999px; background: #7FE3AC; transition: width .25s linear; }
 .vbtn {
   width: 42px; height: 42px; flex: 0 0 42px; border-radius: 50%;
-  background: rgba(255,255,255,.22); font-size: 19px;
+  background: rgba(255,255,255,.22); font-size: 19px; color: #fff;
   display: grid; place-items: center;
 }
+.vbtn svg { display: block; }
 .video-error {
   position: absolute; inset: 0; display: grid; place-content: center;
   text-align: center; padding: 24px; color: #fff; font-size: 15px; line-height: 1.8;
   background: rgba(10, 16, 32, .95);
 }
+
+/* ---- 全屏播放：覆盖整个页面，保留自制的大按钮 ---- */
+.video-wrap.fs {
+  position: fixed; inset: 0; z-index: 9999;
+  width: 100%; height: 100%; max-height: none;
+  aspect-ratio: auto; border-radius: 0; box-shadow: none;
+}
+.video-wrap.fs video { width: 100%; height: 100%; }
+.video-wrap.fs .video-bar {
+  padding: 16px 20px calc(20px + env(safe-area-inset-bottom));
+  gap: 16px;
+  background: linear-gradient(180deg, rgba(10,16,32,0), rgba(10,16,32,.78));
+}
+.video-wrap.fs .vprogress { height: 12px; }
+.video-wrap.fs .vbtn { width: 58px; height: 58px; flex-basis: 58px; }
+.video-wrap.fs .vbtn svg { width: 30px; height: 30px; }
+.video-wrap.fs .video-big-play { width: 140px; height: 140px; font-size: 58px; }
+.video-fs-exit {
+  position: absolute; display: none; place-items: center;
+  top: calc(14px + env(safe-area-inset-top)); right: 16px;
+  width: 58px; height: 58px; border-radius: 50%;
+  background: rgba(255,255,255,.2); color: #fff; z-index: 12;
+}
+.video-wrap.fs .video-fs-exit { display: grid; }
+body.fs-lock { overflow: hidden; }
+body.fs-lock .view.player .player-head { visibility: hidden; }
 
 .player-foot { display: flex; gap: 14px; margin-top: 18px; }
 .btn-kid-done, .btn-kid-again {
