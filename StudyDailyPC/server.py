@@ -786,10 +786,6 @@ def main() -> None:
         alert("启动失败：%s\n\n详细信息见 %s\\log.txt" % (e, DATA_DIR))
 
 
-if __name__ == "__main__":
-    main()
-
-
 def find_edge() -> str | None:
     for p in (r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
               r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
@@ -838,3 +834,5 @@ def ping_existing() -> int | None:
     return None
 
 
+if __name__ == "__main__":
+    main()
