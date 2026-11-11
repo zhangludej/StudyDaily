@@ -12,6 +12,7 @@
 
 import json
 import os
+import socket
 import sys
 import threading
 import time
@@ -26,6 +27,22 @@ import urllib.request
 import urllib.error
 
 APP_NAME = "StudyDaily"
+T0 = time.time()
+_LOG_FH = None
+_EARLY_LOG = []
+
+
+def _log(msg: str) -> None:
+    """分阶段耗时打印，用来定位启动慢在哪（日志文件就绪前的先缓存）"""
+    line = "[%.2fs] %s" % (time.time() - T0, msg)
+    if _LOG_FH is None:
+        _EARLY_LOG.append(line)
+        return
+    try:
+        _LOG_FH.write(line + "\n")
+        _LOG_FH.flush()
+    except Exception:
+        pass
 
 REMOTE_BASES = [
     "https://gh-proxy.com/https://raw.githubusercontent.com/zhangludej/StudyDaily-courseware/main/",
@@ -99,6 +116,7 @@ def find_local_course() -> Path | None:
 
 
 LOCAL_COURSE = find_local_course()
+_log("模块初始化完成 web=%s local=%s" % (WEB_DIR, LOCAL_COURSE))
 
 
 # ---------------------------------------------------------------- 运行状态
@@ -676,16 +694,50 @@ class Handler(BaseHTTPRequestHandler):
 
 # ---------------------------------------------------------------- 启动
 
+class QuietServer(ThreadingHTTPServer):
+    """浏览器切页、关窗时会主动断开连接，这是常态，不要往日志里刷堆栈"""
+
+    # Windows 下 SO_REUSEADDR 会让第二个进程也能绑上同一端口（抢请求），
+    # 必须用独占绑定，这样「端口被占」能立刻检测出来
+    allow_reuse_address = False
+
+    def server_bind(self):
+        try:
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+        except Exception:
+            pass
+        super().server_bind()
+
+    def handle_error(self, request, client_address):
+        exc = sys.exc_info()[1]
+        if isinstance(exc, (ConnectionAbortedError, ConnectionResetError,
+                            BrokenPipeError, TimeoutError)):
+            return
+        super().handle_error(request, client_address)
+
+
+class AlreadyRunning(Exception):
+    """端口已被我们自己的另一个实例占着"""
+
+    def __init__(self, port: int):
+        self.port = port
+        super().__init__("already running on %d" % port)
+
+
 def start_server() -> int:
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     server = None
     port = 0
     for p in range(8720, 8761):
         try:
-            server = ThreadingHTTPServer(("127.0.0.1", p), Handler)
+            server = QuietServer(("127.0.0.1", p), Handler)
             port = p
             break
         except OSError:
+            # 端口被占：绑定失败是瞬时的，比挨个去 connect 探测快几百倍
+            # （本机连不通的端口会被防火墙/代理丢包，每个要等满超时）
+            if quick_ping(p, 0.6):
+                raise AlreadyRunning(p)
             continue
     if server is None:
         raise RuntimeError("没有可用端口")
@@ -703,25 +755,26 @@ def wait_ready(port: int, seconds: float = 6.0) -> bool:
     """确认服务真的能应答，再开窗口——否则 Edge 只会显示拒绝连接"""
     deadline = time.time() + seconds
     while time.time() < deadline:
-        try:
-            with urllib.request.urlopen("http://127.0.0.1:%d/api/ping" % port,
-                                        timeout=1) as r:
-                if json.loads(r.read().decode("utf-8")).get("server") == "StudyDaily-PC":
-                    return True
-        except Exception:
-            time.sleep(0.1)
+        if quick_ping(port):
+            return True
+        time.sleep(0.05)
     return False
 
 
 def setup_log() -> None:
     """打包成 windowed exe 后 stdout/stderr 都看不见了，落一份日志到数据目录"""
+    global _LOG_FH
     try:
         f = open(DATA_DIR / "log.txt", "a", encoding="utf-8", buffering=1)
         sys.stdout = f
         sys.stderr = f
-        print("\n==== %s 启动 pid=%d ====" % (datetime.now().strftime("%m-%d %H:%M:%S"), os.getpid()))
-        print("exe:", sys.executable)
-        print("data:", DATA_DIR, " local_course:", LOCAL_COURSE)
+        _LOG_FH = f
+        f.write("\n==== %s 启动 pid=%d ====\n" % (datetime.now().strftime("%m-%d %H:%M:%S"), os.getpid()))
+        f.write("exe: %s\n" % sys.executable)
+        f.write("data: %s  local_course: %s\n" % (DATA_DIR, LOCAL_COURSE))
+        for line in _EARLY_LOG:
+            f.write(line + "\n")
+        _EARLY_LOG.clear()
     except Exception:
         pass
 
@@ -735,72 +788,67 @@ def alert(msg: str) -> None:
         pass
 
 
-PROFILE_TOKEN = str(DATA_DIR / "profile")
+APP_TITLE = "每日学习"
 
-
-def browser_pids() -> list[int]:
-    """占用我们专用配置目录的 Edge 进程列表（不含用户日常用的浏览器）"""
-    ps = ("Get-CimInstance Win32_Process -Filter \"Name='msedge.exe'\" | "
-          "Where-Object { $_.CommandLine -like '*%s*' } | "
-          "Select-Object -ExpandProperty ProcessId" % PROFILE_TOKEN)
+# 窗口是否还开着，直接问系统（毫秒级），不再去查进程列表
+def app_window_alive() -> bool:
     try:
-        flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
-        r = subprocess.run(["powershell", "-NoProfile", "-Command", ps],
-                           capture_output=True, text=True, timeout=25,
-                           creationflags=flags)
-        return [int(x) for x in r.stdout.split() if x.strip().isdigit()]
-    except Exception as e:
-        print("browser_pids 失败:", e)
-        return []
+        import ctypes
+        from ctypes import wintypes
+        user32 = ctypes.windll.user32
+        hits = []
 
+        @ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+        def cb(hwnd, _):
+            n = user32.GetWindowTextLengthW(hwnd)
+            if n > 0:
+                buf = ctypes.create_unicode_buffer(n + 1)
+                user32.GetWindowTextW(hwnd, buf, n + 1)
+                if APP_TITLE in buf.value:
+                    hits.append(hwnd)
+            return True
 
-def kill_stale_browser() -> None:
-    """清掉上次异常退出残留的专用配置 Edge。
-    不清的话，新开的 msedge 会把开窗命令转交给旧进程后立刻退出，
-    主程序误以为窗口已关就退出、服务被杀，窗口只会显示拒绝连接。"""
-    pids = browser_pids()
-    if not pids:
-        return
-    print("清理残留浏览器进程:", pids)
-    for pid in pids:
-        try:
-            subprocess.run(["taskkill", "/F", "/PID", str(pid)],
-                           capture_output=True, timeout=15,
-                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-        except Exception:
-            pass
+        user32.EnumWindows(cb, 0)
+        return bool(hits)
+    except Exception:
+        return True   # 查不了就当窗口还在，宁可多留服务也不误杀
 
 
 def run_window_mode() -> None:
-    existing = ping_existing()
-    if existing is not None:
-        if wait_ready(existing, 3):
-            open_window("http://127.0.0.1:%d/" % existing)
-            return
-        # 旧实例已经名存实亡（比如被安全软件关了），继续自己起一份
-    kill_stale_browser()
-    port = start_server()
-    print("server on port", port)
+    _log("进入窗口模式")
+    try:
+        port = start_server()
+    except AlreadyRunning as e:
+        # 已经有实例在服务，直接再开一个窗口给它
+        open_window("http://127.0.0.1:%d/" % e.port)
+        _log("复用已在运行的实例 %d，开窗后退出" % e.port)
+        return
+    _log("服务已监听 %d" % port)
     if not wait_ready(port):
+        _log("wait_ready 失败")
         alert("内部服务启动失败。\n\n日志位置：%s\\log.txt" % DATA_DIR)
         return
-    url = "http://127.0.0.1:%d/" % port
-    proc = open_window(url)
-    if proc is None:
-        try:
-            while True:
-                time.sleep(3600)
-        except KeyboardInterrupt:
-            pass
-        return
-    proc.wait()
-    # 启动器把命令转交给已在运行的浏览器后会立刻退出；只要专用配置的
-    # 浏览器还活着（用户还看着窗口），就继续守着服务，别提前退出
-    while True:
-        pids = browser_pids()
-        if not pids:
+    _log("wait_ready 通过，准备开窗")
+    open_window("http://127.0.0.1:%d/" % port)
+    _log("open_window 已返回，等待窗口出现")
+    # 等窗口真正出现（最多 30 秒），这期间不判定「已关闭」
+    deadline = time.time() + 30
+    while time.time() < deadline:
+        if app_window_alive():
             break
+        time.sleep(0.3)
+    _log("窗口已出现，开始守候")
+    # 之后只做一件事：窗口还在就继续供着服务；连续 6 秒没有窗口就退出
+    miss = 0
+    while True:
         time.sleep(2)
+        if app_window_alive():
+            miss = 0
+        else:
+            miss += 1
+            if miss >= 3:
+                _log("窗口已关闭，退出")
+                return
 
 
 def main() -> None:
@@ -808,7 +856,11 @@ def main() -> None:
     # 维护用：只跑服务、不开窗口，方便自检
     if "--server-only" in sys.argv or "--no-window" in sys.argv:
         try:
-            port = start_server()
+            try:
+                port = start_server()
+            except AlreadyRunning as e:
+                print("已有实例在 %d，无需再起" % e.port)
+                return
             (DATA_DIR / "last_port.txt").write_text(str(port), encoding="utf-8")
             print("server-only on port", port)
             while True:
@@ -863,18 +915,25 @@ def open_window(url: str):
     return subprocess.Popen(args, creationflags=flags)
 
 
-def ping_existing() -> int | None:
-    """已经有一个实例在跑就直接复用，避免双击两次开出两个服务"""
-    for p in range(8720, 8761):
-        try:
-            with urllib.request.urlopen("http://127.0.0.1:%d/api/ping" % p,
-                                        timeout=1) as r:
-                data = json.loads(r.read().decode("utf-8"))
-                if data.get("server") == "StudyDaily-PC":
-                    return p
-        except Exception:
-            continue
-    return None
+def quick_ping(port: int, timeout: float = 0.25) -> bool:
+    """直连本机端口问一句。
+    不能用 urllib：系统代理会把 127.0.0.1 也转给代理，每个端口卡满 1 秒超时
+    （实测 41 个端口要 41 秒，正是「启动要等十几秒」的元凶）"""
+    try:
+        with socket.create_connection(("127.0.0.1", port), timeout) as s:
+            s.settimeout(timeout)
+            s.sendall(b"GET /api/ping HTTP/1.1\r\nHost: 127.0.0.1\r\n"
+                      b"Connection: close\r\n\r\n")
+            data = b""
+            while len(data) < 4096:
+                chunk = s.recv(2048)
+                if not chunk:
+                    break
+                data += chunk
+            return b"StudyDaily-PC" in data
+    except Exception:
+        return False
+
 
 
 if __name__ == "__main__":
