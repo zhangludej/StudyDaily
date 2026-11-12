@@ -3,7 +3,7 @@
  * 只缓存应用外壳；视频文件（可能几百 GB 量级）绝不进缓存。
  * 网络优先，离线时回退到缓存；本地 HTTP 服务仍在时一切照常。
  */
-var CACHE = 'studydaily-shell-v5';
+var CACHE = 'studydaily-shell-v6';
 var SHELL = [
   './', './index.html', './styles.css', './planner.js', './app.js',
   './manifest.webmanifest', './quiz.json', './workbooks.json',

@@ -62,6 +62,12 @@
       <span class="wb-entry-label">练习册</span>
     </button>
 
+    <!-- 兴趣课堂入口（有兴趣课才显示）：自由点播，不算每日任务 -->
+    <button id="itEntry" class="wb-entry it-entry hidden">
+      <img src="assets/img/artist_palette.png" alt="">
+      <span class="wb-entry-label">兴趣课堂</span>
+    </button>
+
     <!-- 全部完成 -->
     <div id="donePanel" class="kg-done hidden">
       <div class="kg-done-badge"><img src="assets/img/trophy.png" alt=""></div>
@@ -217,6 +223,25 @@
     </div>
   </section>
 
+  <!-- ============ 兴趣课堂：自由点播，不算任务 ============ -->
+  <section id="itView" class="view wb hidden">
+    <div class="wb-head">
+      <button id="itBack" class="round-back" aria-label="返回">←</button>
+      <div class="wb-title it-title"><img src="assets/img/artist_palette.png" alt="">兴趣课堂</div>
+    </div>
+    <div id="itGrid" class="wb-grid it-grid"></div>
+    <p class="wb-tip">想看哪个点哪个，随便看多少都行</p>
+  </section>
+
+  <!-- ============ 兴趣课堂：某门课的列表 ============ -->
+  <section id="itListView" class="view wb hidden">
+    <div class="wb-head">
+      <button id="itListBack" class="round-back" aria-label="返回">←</button>
+      <div class="wb-title it-title" id="itListTitle">兴趣课堂</div>
+    </div>
+    <div id="itLessonGrid" class="kg-cards it-cards"></div>
+  </section>
+
   <!-- ============ 家长端 ============ -->
   <section id="parentView" class="view hidden">
     <div class="parent-head">
@@ -304,6 +329,7 @@
           <li><b>语音引导</b>：打开应用会说「今天有 N 节课」，点进一节会说「这一节是拼音，第 1 集」，学完说「太棒了」。语音已内置在应用里（温柔女声、语速放慢），<b>不需要平板装任何语音引擎，也不联网</b>。</li>
           <li><b>学完进入「闯关小游戏」</b>：小熊带路走三级台阶，每节 3 道小题（按本节课内容出题：拼音找字母、识字听音选字、数学数一数、英语找大小写），全部有语音和插画，答错不打叉、不扣分，错两次会点亮正确答案。走完三级拿到奖杯才算学完，然后自动进入下一节。</li>
           <li><b>首页有黄色「练习册」按钮</b>：12 本春雨幼教练习册（拼音/识字/数学/英语，共 619 页）像书架一样摆着，点开一页一页翻，照着屏幕上的题在纸上做。每本记住看到第几页，不占用每天的学习时间。</li>
+          <li><b>粉色「兴趣课堂」按钮</b>：简笔画、好习惯、舞蹈、奥数启蒙等兴趣课都在这里，孩子想看哪个点哪个，随便看多少都不算任务、不进每天的安排，看完只记一个小勾。</li>
           <li><b>播完自动进入下一节</b>，不需要孩子自己找下一节在哪。</li>
           <li><b>顶部一排小星星</b>表示今天的进度，学完一节亮一颗，比「1/5」这种数字直观。</li>
           <li><b>首次打开有小熊引导</b>：一只手指着大按钮，只出现一次。</li>

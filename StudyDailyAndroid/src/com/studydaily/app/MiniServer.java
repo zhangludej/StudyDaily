@@ -570,6 +570,15 @@ public class MiniServer {
             return;
         }
 
+        // 兴趣课堂（/videos/iXX/）是纯离线设计：本机没有就明确报缺，
+        // 不去云端回源（否则要等几十秒超时，最后只得到一个 504）
+        if (path.startsWith("/videos/i") && path.matches("/videos/i\\d\\d/.*")) {
+            sendText(out, 404, "Not Found", "text/plain; charset=utf-8",
+                    "兴趣课堂这一集不在本机。把离线包里的 videos 文件夹拷到手机，"
+                            + "再到「家长端 → 设置 → 本地课件 → 选择离线课件文件夹」选中它。");
+            return;
+        }
+
         // 3) 视频 / 练习册页：本地和缓存都没有就走云端，边用边缓存
         if (path.startsWith("/videos/") || path.startsWith("/workbooks/")) {
             serveRemoteVideo(path, headers, out, headOnly);

@@ -151,11 +151,16 @@
     return Math.max(1, Math.ceil(sec / 60));
   }
 
-  /** 把 catalog.units 展开成有序 lesson 数组，并补上 unitName / order */
-  function flatLessons(catalog) {
+  /**
+   * 把 catalog.units 展开成有序 lesson 数组，并补上 unitName / order。
+   * 带 interest:true 的单元不进排课（孩子自由点播，不算每日任务）。
+   */
+  function flatten(catalog, wantInterest) {
     var out = [];
     var units = (catalog && catalog.units) || [];
     units.forEach(function (unit, ui) {
+      var isInterest = !!(unit && unit.interest);
+      if (isInterest !== !!wantInterest) return;
       var lessons = (unit && unit.lessons) || [];
       lessons.slice()
         .sort(function (a, b) {
@@ -180,6 +185,15 @@
         });
     });
     return out;
+  }
+
+  function flatLessons(catalog) {
+    return flatten(catalog, false);
+  }
+
+  /** 兴趣课清单（不参与排课，只给「兴趣课堂」自由点播用） */
+  function flatInterest(catalog) {
+    return flatten(catalog, true);
   }
 
   function lessonMap(catalog) {
@@ -657,6 +671,7 @@
     defaults: defaults,
     normalize: normalize,
     flatLessons: flatLessons,
+    flatInterest: flatInterest,
     lessonMap: lessonMap,
     naturalCompare: naturalCompare,
     todayStr: todayStr,

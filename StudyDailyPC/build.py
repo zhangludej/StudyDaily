@@ -34,15 +34,13 @@ def stage_web() -> Path:
     """
     src = HERE / "web"
     dst = HERE / "build-pyi" / "web"
-    if dst.exists():
-        shutil.rmtree(dst)
-    skip = {"workbooks"}   # 海报只在本地有，1.5MB，留着内置
+    skip = {"workbooks"}   # 海报（含兴趣课堂 i01~i16）留在本地，一并内置
     dst.mkdir(parents=True, exist_ok=True)
     for item in src.iterdir():
         if item.name in skip:
             continue
         if item.is_dir():
-            shutil.copytree(item, dst / item.name)
+            shutil.copytree(item, dst / item.name, dirs_exist_ok=True)
         else:
             shutil.copy2(item, dst / item.name)
     total = sum(p.stat().st_size for p in dst.rglob("*") if p.is_file())

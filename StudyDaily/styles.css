@@ -1004,6 +1004,34 @@ body.fs-lock .view.player .player-head { visibility: hidden; }
 }
 .wb-reader .pdf-nav { width: 100%; max-width: 860px; padding: 0 24px 12px; }
 
+/* ==================================================================
+   兴趣课堂：自由点播，不算每日任务
+   ================================================================== */
+.it-entry {
+  background: linear-gradient(160deg, #FBD3E9, #F9A8D4);
+  box-shadow: 0 8px 20px rgba(219,90,150,.20), inset 0 -4px 0 rgba(170,60,110,.10);
+}
+.it-entry-label { color: #8E2F5D; }
+.it-title { color: #B03A77; }
+.it-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 14px; padding: 10px 16px 8px; width: 100%; max-width: 860px; margin: 0 auto;
+}
+.it-card {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 14px 8px 10px; background: #fff; border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(46,74,138,.14), inset 0 -4px 0 rgba(46,74,138,.06);
+}
+.it-card:active { transform: scale(.97); }
+.it-card-icon {
+  display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%;
+}
+.it-card-icon .unit-icon, .it-card-icon span[class] { font-size: 34px; }
+.it-card-icon img { width: 44px; height: 44px; object-fit: contain; }
+.it-card-icon .emoji-fb { font-size: 34px; line-height: 1; }
+.it-card-name { font-size: 16px; font-weight: 900; text-align: center; }
+.it-cards { max-width: 860px; }
+
 /* 横屏低矮平板 */
 @media (max-height: 620px) {
   .wb-entry { min-height: 58px; }

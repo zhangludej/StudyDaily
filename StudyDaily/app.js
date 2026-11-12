@@ -16,6 +16,7 @@
   var serverProgress = false;
   var appMode = false; // 运行在安卓 App 壳里（内置服务），文案与浏览器模式区分开
   var currentId = null, currentType = 'video', completedGuard = false;
+  var interestMode = false; // 正在播放兴趣课堂的课（自由点播，不算每日任务）
   var pdfPages = [], pdfIndex = 0;
   var pendingPosition = 0, lastPosSave = 0;
   var saveTimer = null, nextTimer = null, nextId = null, confettiTimer = null;
@@ -774,6 +775,125 @@
              has: has };
   })();
 
+  // ---------------- 兴趣课堂（自由点播，不算每日任务） ----------------
+  // 数据在 interest.json：units 带 interest:true，排课引擎会自动忽略它们。
+  // 进度记在 state.interest[id] = { done, positionSec }，不进复习、不进统计。
+  var IT = (function () {
+    var cur = null; // 当前选中的单元
+
+    function all() { return P.flatInterest(catalog); }
+
+    function map() {
+      var m = {};
+      all().forEach(function (l) { m[l.id] = l; });
+      return m;
+    }
+
+    function rec(id) { return ((state && state.interest) || {})[id] || null; }
+
+    function markRec(id, patch) {
+      if (!state.interest) state.interest = {};
+      var r = state.interest[id] || (state.interest[id] = {});
+      for (var k in patch) { if (patch.hasOwnProperty(k)) r[k] = patch[k]; }
+      return r;
+    }
+
+    function renderShelf() {
+      var grid = $('#itGrid');
+      var units = (catalog && catalog.units || []).filter(function (u) { return u && u.interest; });
+      if (!units.length) { grid.innerHTML = ''; return; }
+      grid.innerHTML = units.map(function (u) {
+        var look = lookOf(u.name);
+        var lessons = (u.lessons || []).length;
+        var seen = 0;
+        (u.lessons || []).forEach(function (l) {
+          var r = rec(l.id);
+          if (r && r.done) seen++;
+        });
+        var badge = seen
+          ? '<span class="wb-pos">已看 ' + seen + ' / ' + lessons + '</span>'
+          : '<span class="wb-pos">' + lessons + ' 集</span>';
+        return '<button class="it-card" data-it-unit="' + esc(u.id) + '">'
+          + '<span class="it-card-icon" style="background:' + look.color + '1f">' + unitIcon(look, '') + '</span>'
+          + '<span class="it-card-name" style="color:' + look.color + '">' + esc(String(u.name).replace(/^\d+\s*/, '')) + '</span>'
+          + badge + '</button>';
+      }).join('');
+    }
+
+    function renderList() {
+      var grid = $('#itLessonGrid');
+      if (!cur) { grid.innerHTML = ''; return; }
+      var lessons = (cur.lessons || []).slice()
+        .sort(function (a, b) { return (Number(a.order) || 0) - (Number(b.order) || 0); });
+      grid.innerHTML = lessons.map(function (l, i) {
+        var r = rec(l.id);
+        var done = !!(r && r.done);
+        var poster = l.poster ? encodePath(l.poster) : '';
+        var look = lookOf(cur.name);
+        return '<button class="kcard' + (done ? ' done' : '') + '" data-it="' + esc(l.id) + '">'
+          + '<div class="kcard-thumb' + (poster ? '' : ' noimg') + '" style="background:' + look.color + '1f">'
+          + (poster ? '<img src="' + poster + '" alt="" loading="lazy" decoding="async">' : '')
+          + '<span class="kcard-num">' + (done ? '✓' : (i + 1)) + '</span>'
+          + unitIcon(look, 'kcard-emoji')
+          + '</div>'
+          + '<div class="kcard-info">'
+          + '<div class="kcard-title">' + esc(shortTitle(l.title)) + '</div>'
+          + '</div>'
+          + '<div class="kcard-play">' + (done ? '✓' : '▶') + '</div>'
+          + '</button>';
+      }).join('');
+    }
+
+    function showShelf() {
+      cur = null;
+      $('#itListView').classList.add('hidden');
+      $('#kidView').classList.add('hidden');
+      $('#parentView').classList.add('hidden');
+      $('#itView').classList.remove('hidden');
+      renderShelf();
+      Speech.say('这里是兴趣课堂，想看哪个点哪个', true);
+    }
+
+    function openUnit(uid) {
+      var u = null;
+      (catalog && catalog.units || []).forEach(function (x) {
+        if (x && x.interest && x.id === uid) u = x;
+      });
+      if (!u || !(u.lessons || []).length) return;
+      cur = u;
+      $('#itView').classList.add('hidden');
+      $('#itListView').classList.remove('hidden');
+      $('#itListTitle').textContent = String(u.name).replace(/^\d+\s*/, '');
+      renderList();
+      window.scrollTo(0, 0);
+    }
+
+    function backToShelf() {
+      cur = null;
+      $('#itListView').classList.add('hidden');
+      showShelf();
+    }
+
+    /** 看完（或看完再回来）刷新当前列表的勾 */
+    function refresh() {
+      if (cur && !$('#itListView').classList.contains('hidden')) renderList();
+    }
+
+    function close() {
+      cur = null;
+      $('#itView').classList.add('hidden');
+      $('#kidView').classList.remove('hidden');
+    }
+
+    function has() { return all().length > 0; }
+
+    return {
+      markRec: markRec, rec: rec, refresh: refresh,
+      showShelf: showShelf, openUnit: openUnit, backToShelf: backToShelf,
+      close: close, has: has
+    };
+  })();
+
   // ---------------- 存储 ----------------
   function loadLocal() {
     try {
@@ -818,14 +938,35 @@
       if (mWb) WB.openBook(mWb[1]);
       else if (/[?&]wbshelf/.test(location.search) && WB.has()) WB.showShelf();
     });
-    fetch('courses.json', { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('missing'); return r.json(); })
-      .then(function (c) { init(c); })
-      .catch(function () {
-        init({ version: 1, title: '尚未导入课程', demo: false, units: [] });
-        showBanner('没有找到 courses.json。请先在电脑上运行 tools/prepare_courses.py 导入课件；'
-          + '想先看效果可运行 python tools/make_demo.py 生成演示课程。', 'warn');
-      });
+    // 兴趣课清单独立于主课：拿不到就当没有（不影响排课）
+    var loadInterest = fetch('interest.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return (j && j.units) || []; })
+      .catch(function () { return []; });
+
+    loadInterest.then(function (iUnits) {
+      return fetch('courses.json', { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error('missing'); return r.json(); })
+        .then(function (c) {
+          iUnits.forEach(function (u) {
+            if (!u.interest) u.interest = true;
+            (c.units = c.units || []).push(u);
+          });
+          init(c);
+        })
+        .catch(function () {
+          var c = { version: 1, title: '尚未导入课程', demo: false, units: [] };
+          iUnits.forEach(function (u) {
+            if (!u.interest) u.interest = true;
+            c.units.push(u);
+          });
+          init(c);
+          if (!iUnits.length) {
+            showBanner('没有找到 courses.json。请先在电脑上运行 tools/prepare_courses.py 导入课件；'
+              + '想先看效果可运行 python tools/make_demo.py 生成演示课程。', 'warn');
+          }
+        });
+    });
   }
 
   function init(c) {
@@ -868,6 +1009,8 @@
     }
     state.catalogStamp = stamp;
     state = P.buildPlan(state, catalog, P.todayStr()).state;
+    // 兴趣课堂入口：有兴趣课才显示
+    $('#itEntry').classList.toggle('hidden', !IT.has());
     syncAudioSettings();
     save(true);
     renderAll();
@@ -1312,6 +1455,15 @@
       $('#vProgressFill').style.width = Math.min(100, (v.currentTime / v.duration) * 100) + '%';
       if (!currentId || completedGuard) return;
       var now = Date.now();
+      if (interestMode) {
+        // 兴趣课：只记看到哪了 + 看完打勾，不进排课、不复习
+        if (now - lastPosSave > 4000) {
+          IT.markRec(currentId, { positionSec: Math.round(v.currentTime) });
+          save(); lastPosSave = now;
+        }
+        if (v.currentTime / v.duration >= 0.92) completeInterest();
+        return;
+      }
       if (now - lastPosSave > 4000) {
         state = P.setPosition(state, catalog, currentId, v.currentTime);
         save(); lastPosSave = now;
@@ -1319,14 +1471,22 @@
       if (v.currentTime / v.duration >= state.settings.completionRatio) completeCurrent('good');
     });
     v.addEventListener('ended', function () {
+      if (interestMode) { completeInterest(); return; }
       if (currentType === 'video') completeCurrent('good');
     });
     v.addEventListener('error', function () {
       if (!currentId || currentType !== 'video') return;
-      var online = navigator.onLine !== false;
-      $('#videoError').innerHTML = (online
-        ? '这一集还没存到本机，刚才联网加载没成功<br>看看 WiFi 再点「重试」，或者点「学完了」跳过'
-        : '这一集还没存到本机，现在没有网络<br>连上 WiFi 就能看；看过的课以后离线也能看')
+      var html;
+      if (interestMode) {
+        html = '这一集还没放到本机<br>把离线包里的 videos 文件夹放到程序旁边，'
+          + '手机上到「设置 → 本地课件」选中它，再回来点这一集';
+      } else {
+        var online = navigator.onLine !== false;
+        html = (online
+          ? '这一集还没存到本机，刚才联网加载没成功<br>看看 WiFi 再点「重试」，或者点「学完了」跳过'
+          : '这一集还没存到本机，现在没有网络<br>连上 WiFi 就能看；看过的课以后离线也能看');
+      }
+      $('#videoError').innerHTML = html
         + '<br><button id="videoRetry" class="btn-ghost" style="margin-top:10px">重试</button>';
       $('#videoError').classList.remove('hidden');
       var rb = $('#videoRetry');
@@ -1499,10 +1659,57 @@
     currentId = null;
     completedGuard = true;
     $('#playerView').classList.add('hidden');
-    $('#kidView').classList.remove('hidden');
+    var wasInterest = interestMode;
+    interestMode = false;
+    if (wasInterest) {
+      $('#itListView').classList.remove('hidden');
+      IT.refresh(); // 先亮出列表再刷新，才能重画「已看」勾
+    } else {
+      $('#kidView').classList.remove('hidden');
+    }
     $('#pdfPageImg').removeAttribute('src');
     setPlayingUI(false);
     setDoneLabel('学完了', false);
+  }
+
+  /** 兴趣课堂：看完（或点「学完了」）只打勾，不进排课、不复习、不算任务 */
+  function completeInterest() {
+    if (!currentId || completedGuard) return;
+    completedGuard = true;
+    var id = currentId;
+    try { $('#video').pause(); } catch (e) {}
+    IT.markRec(id, { done: true, positionSec: 0 });
+    save(true);
+    Sfx.ding();
+    Speech.say('看完啦，真棒！', true);
+    closePlayer();
+    renderAll();
+  }
+
+  /** 兴趣课堂播放：和排课播放共用播放器，但不写 P.setPosition/completeItem */
+  function openInterestPlayer(l) {
+    cancelNext();
+    Sfx.unlock();
+    interestMode = true;
+    currentId = l.id;
+    currentType = 'video';
+    completedGuard = false;
+    var r = IT.rec(l.id);
+    pendingPosition = (r && r.positionSec) || 0;
+    if (r && r.done) pendingPosition = 0;
+    lastPosSave = 0;
+    $('#kidView').classList.add('hidden');
+    $('#itView').classList.add('hidden');
+    $('#itListView').classList.add('hidden');
+    $('#parentView').classList.add('hidden');
+    $('#playerView').classList.remove('hidden');
+    $('#playerTitle').textContent = String(l.unitName || '').replace(/^\d+\s*/, '') + ' · ' + l.title;
+    $('#videoError').classList.add('hidden');
+    $('#vProgressFill').style.width = '0%';
+    setDoneLabel('看完了', false);
+    window.scrollTo(0, 0);
+    Speech.sayLesson(l.id, lessonSpeech(l));
+    openVideo(l);
   }
 
   function completeCurrent(rating) {
@@ -1660,10 +1867,24 @@
     $('#wbPrev').addEventListener('click', function () { WB.turn(-1); });
     $('#wbNext').addEventListener('click', function () { WB.turn(1); });
     $('#wbGrid').addEventListener('click', function (e) {
-      var b = e.target.closest('[data-wb]');
+      var b = e.target.closest ? e.target.closest('[data-wb]') : null;
+      if (b) { Sfx.tap(); WB.openBook(b.getAttribute('data-wb')); }
+    });
+
+    // 兴趣课堂：入口 / 返回 / 选栏目 / 点播
+    $('#itEntry').addEventListener('click', function () { Sfx.tap(); IT.showShelf(); });
+    $('#itBack').addEventListener('click', function () { Sfx.tap(); IT.close(); });
+    $('#itListBack').addEventListener('click', function () { Sfx.tap(); IT.backToShelf(); });
+    $('#itGrid').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-it-unit]') : null;
+      if (b) { Sfx.tap(); IT.openUnit(b.getAttribute('data-it-unit')); }
+    });
+    $('#itLessonGrid').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-it]') : null;
       if (!b) return;
       Sfx.tap();
-      WB.openBook(b.getAttribute('data-wb'));
+      var m = P.flatInterest(catalog).filter(function (l) { return l.id === b.getAttribute('data-it'); });
+      if (m.length) openInterestPlayer(m[0]);
     });
 
     // ---- 闯关小游戏 ----
@@ -1747,7 +1968,10 @@
         sub: '点「学完啦」才会记下来哦',
         ok: '学完啦 ✓',
         cancel: '还想再看看',
-        onOk: function () { completeCurrent('good'); }
+        onOk: function () {
+          if (interestMode) completeInterest();
+          else completeCurrent('good');
+        }
       });
     });
     $('#askOk').addEventListener('click', function () {

@@ -515,11 +515,20 @@ class Handler(BaseHTTPRequestHandler):
                 pass
             return self.serve_file(cached, head_only)
 
-        # 4) 视频 / 练习册页本地没有，就走云端，边看边缓存
+        # 4) 兴趣课堂（videos/iXX/）是纯离线设计：本机没有就明确报缺，
+        #    不去云端回源（否则要等几十秒超时，最后还只得到一个 504）
+        if rel.startswith("videos/i") and len(rel) >= 10 and rel[8:10].isdigit():
+            return self.send_bytes(
+                404,
+                ("兴趣课堂这一集不在本机。把离线包里的 videos 文件夹放在 "
+                 "StudyDaily.exe 旁边（和 exe 同一层），再回来点这一集。").encode("utf-8"),
+                "text/plain; charset=utf-8")
+
+        # 5) 主课视频 / 练习册页本地没有，就走云端，边看边缓存
         if rel.startswith("videos/") or rel.startswith("workbooks/"):
             return self.serve_remote(rel, head_only)
 
-        # 5) 单页应用兜底
+        # 6) 单页应用兜底
         if "." not in rel:
             idx = WEB_DIR / "index.html"
             if idx.is_file():

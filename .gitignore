@@ -9,10 +9,13 @@ StudyDailyAndroid/assets/
 # 签名证书不上传公开仓库，build.sh 缺失时会自动生成新证书
 StudyDailyAndroid/keystore/
 
-# 临时文件
+# 临时文件、工作区记忆与临时克隆（不进公开仓库）
 *.log
+*.tmp
 .DS_Store
 Thumbs.db
+.workbuddy/
+StudyDaily-courseware/
 
 # 本地打包产物（体积大，仅本地留存）
 StudyDaily-*.zip
