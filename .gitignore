@@ -15,6 +15,7 @@ StudyDailyAndroid/keystore/
 *.tmp
 .DS_Store
 Thumbs.db
+__pycache__/
 .workbuddy/
 StudyDaily-courseware/
 
