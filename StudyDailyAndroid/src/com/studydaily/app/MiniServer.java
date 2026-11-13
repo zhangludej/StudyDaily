@@ -554,7 +554,9 @@ public class MiniServer {
         }
 
         // 1.5) 家长选定的离线课件文件夹（SAF，手机存任意位置都行，不需要存储权限）
-        if (treeUri != null && (path.startsWith("/videos/") || path.startsWith("/workbooks/"))) {
+        //      /pdfs/ 是 PDF 课件的逐页图片与增量书架清单，也要能从 SAF 读
+        if (treeUri != null && (path.startsWith("/videos/") || path.startsWith("/workbooks/")
+                || path.startsWith("/pdfs/"))) {
             TreeFile tf = statInTree(path.substring(1));
             if (tf != null) {
                 serveTreeFile(tf, path, headers, out, headOnly);

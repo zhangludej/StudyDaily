@@ -940,10 +940,26 @@
       else if (/[?&]wbshelf/.test(location.search) && WB.has()) WB.showShelf();
     });
     // 兴趣课清单独立于主课：拿不到就当没有（不影响排课）
-    var loadInterest = fetch('interest.json', { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) { return (j && j.units) || []; })
-      .catch(function () { return []; });
+    // pdfs/catalog.json 是外部课件文件夹里的「增量书架」：往离线包丢新 PDF
+    // 并更新这份清单，重启 App 就能看到，不用重装、不用重新打包。
+    var loadInterest = Promise.all([
+      fetch('interest.json', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; }),
+      fetch('pdfs/catalog.json', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; })
+    ]).then(function (arr) {
+      var byId = {}, order = [];
+      [((arr[0] || {}).units || []), ((arr[1] || {}).units || [])].forEach(function (list) {
+        list.forEach(function (u) {
+          if (!u || !u.id) return;
+          if (!byId[u.id]) order.push(u.id);
+          byId[u.id] = u;   // 同 id 时外部清单优先，方便以后覆盖
+        });
+      });
+      return order.map(function (id) { return byId[id]; });
+    }).catch(function () { return []; });
 
     loadInterest.then(function (iUnits) {
       return fetch('courses.json', { cache: 'no-store' })

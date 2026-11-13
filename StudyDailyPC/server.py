@@ -494,6 +494,13 @@ class Handler(BaseHTTPRequestHandler):
         if not rel:
             rel = "index.html"
 
+        # 0) 增量书架清单特殊处理：优先读课件文件夹里的那一份，
+        #    这样以后往离线包丢新 PDF，不用重装 EXE 也能更新书架
+        if rel == "pdfs/catalog.json" and LOCAL_COURSE is not None:
+            extra = LOCAL_COURSE / rel
+            if extra.is_file():
+                return self.serve_file(extra, head_only)
+
         # 1) 内置网页资源优先：保证界面永远是随程序更新的那一份，
         #    不会被课件文件夹里的旧网页文件盖住
         f = WEB_DIR / rel

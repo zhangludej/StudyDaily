@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 VIDEOS = ROOT / "StudyDaily" / "videos"
 BOOKS = ROOT / "StudyDaily" / "workbooks"
+PDFS = ROOT / "StudyDaily" / "pdfs"
 
 
 def readme(kind: str) -> str:
@@ -23,6 +24,17 @@ def readme(kind: str) -> str:
 所有视频都在 videos 文件夹里（约 15GB），不需要联网、不需要账号、不上传任何东西。
 兴趣课堂不连网：如果某一集找不到，界面会提示你把 videos 文件夹放好，
 不会卡在联网等待上。
+
+PDF 课件
+--------
+首页 → 兴趣课堂，除了 16 门视频栏目，还有 3 个课件栏目：
+· 识字字卡：40 集，田字格 + 大字 + 拼音，一页一字，可描红
+· 拼音卡：四线三格，跟着课程走
+· 课堂讲解页：124 集主课的重点板书/字卡画面（从视频里自动挑的静止画面）
+课件一页一页翻，不进每日任务、不复习，看完只记一个小勾。
+识字字卡和拼音卡每集还有一份 printable.pdf，拷出来就能打印。
+以后想加课件：把新页放进 pdfs/ 并更新 pdfs/catalog.json，重启 App 就能看到，
+不用重装、不用重新打包。
 """
     if kind == "pc":
         return """每日学习 · 电脑离线版
@@ -39,6 +51,7 @@ def readme(kind: str) -> str:
 StudyDaily.exe   主程序，双击运行（约 41MB）
 videos\\          851 集视频（u01~u04 主课 + i01~i16 兴趣课），别删
 workbooks\\       练习册 619 页
+pdfs\\           PDF 课件（字卡 / 拼音卡 / 讲解页 + 可打印 PDF）
 使用说明.txt      就是本文件
 
 窗口怎么用
@@ -69,6 +82,7 @@ workbooks\\       练习册 619 页
 StudyDaily.apk   安装包（约 41MB，证书和旧版一致，可直接覆盖安装，不丢进度）
 videos\\          851 集视频（u01~u04 主课 + i01~i16 兴趣课），别删
 workbooks\\       练习册 619 页
+pdfs\\           PDF 课件（字卡 / 拼音卡 / 讲解页 + 可打印 PDF）
 使用说明.txt      就是本文件
 
 提示
@@ -83,10 +97,13 @@ def build(name: str, app_file: Path) -> Path:
     top = name
     videos = sorted(p for p in VIDEOS.rglob("*") if p.is_file())
     books = sorted(p for p in BOOKS.rglob("*") if p.is_file()) if BOOKS.is_dir() else []
+    pdfs = sorted(p for p in PDFS.rglob("*") if p.is_file() and "_tmp" not in p.parts) \
+        if PDFS.is_dir() else []
     total = (sum(p.stat().st_size for p in videos)
-             + sum(p.stat().st_size for p in books) + app_file.stat().st_size)
-    print("[%s] %d 个视频 + %d 页练习册，合计 %.2f GB"
-          % (name, len(videos), len(books), total / 1024 ** 3), flush=True)
+             + sum(p.stat().st_size for p in books)
+             + sum(p.stat().st_size for p in pdfs) + app_file.stat().st_size)
+    print("[%s] %d 个视频 + %d 页练习册 + %d 个课件文件，合计 %.2f GB"
+          % (name, len(videos), len(books), len(pdfs), total / 1024 ** 3), flush=True)
 
     tmp = out.with_suffix(".zip.tmp")
     # 视频已压缩过，用 STORED 直接搬运，速度快且无损
@@ -103,6 +120,10 @@ def build(name: str, app_file: Path) -> Path:
             z.write(p, top + "/workbooks/" + p.relative_to(BOOKS).as_posix())
             if i % 200 == 0 or i == len(books):
                 print("  练习册 %d/%d" % (i, len(books)), flush=True)
+        for i, p in enumerate(pdfs, 1):
+            z.write(p, top + "/pdfs/" + p.relative_to(PDFS).as_posix())
+            if i % 500 == 0 or i == len(pdfs):
+                print("  课件 %d/%d" % (i, len(pdfs)), flush=True)
     tmp.replace(out)  # 写完才替换，避免留下半截坏包
     print("[%s] 完成 %.2f GB -> %s" % (name, out.stat().st_size / 1024 ** 3, out), flush=True)
     return out

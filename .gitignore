@@ -1,5 +1,6 @@
 # 大体积视频课件不上传（GitHub 限制），请自行放入 StudyDaily/videos/
 StudyDaily/videos/
+StudyDaily/pdfs/
 StudyDaily/progress.json
 
 # 安卓构建产物（prepare_assets.sh 会生成）
@@ -30,3 +31,4 @@ StudyDailyPC/app.ico
 StudyDailyPC/web/
 StudyDailyPC/__pycache__/
 StudyDailyPC/videos/
+StudyDailyPC/pdfs/

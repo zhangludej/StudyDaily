@@ -34,7 +34,7 @@ def stage_web() -> Path:
     """
     src = HERE / "web"
     dst = HERE / "build-pyi" / "web"
-    skip = {"workbooks"}   # 海报（含兴趣课堂 i01~i16）留在本地，一并内置
+    skip = {"workbooks", "pdfs"}   # 大体积课件走离线包，不打进 EXE
     dst.mkdir(parents=True, exist_ok=True)
     for item in src.iterdir():
         if item.name in skip:
