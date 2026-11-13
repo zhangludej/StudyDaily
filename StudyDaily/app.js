@@ -25,6 +25,122 @@
   var activeTab = 'today';
   var praiseIdx = 0;
 
+  // ---------------- 同屏课件 ----------------
+  // 视频播着时，下面跟着翻课件页。讲解页本身是从这个视频里抽的，
+  // catalog 里带了 cues（每页对应第几秒），所以不需要 AI 也能自动跟随。
+  var CW = (function () {
+    var KEY_ON = 'studydaily.cwOn.v1';
+    var books = [], byVideo = {};
+    var on = false, cur = null, index = 0, manualUntil = 0;
+    try { on = localStorage.getItem(KEY_ON) === '1'; } catch (e) {}
+
+    function saveOn() { try { localStorage.setItem(KEY_ON, on ? '1' : '0'); } catch (e) {} }
+    function has() { return books.length > 0; }
+
+    function indexCatalog(c) {
+      books = []; byVideo = {};
+      ((c && c.units) || []).forEach(function (u) {
+        ((u && u.lessons) || []).forEach(function (l) {
+          if (l.type !== 'pdf' || !l.pages || !l.pages.length) return;
+          var b = {
+            id: l.id, title: l.title, unitName: u.name || '',
+            pages: l.pages.slice(), cues: (l.cues || []).slice(),
+            videoId: l.videoId || ''
+          };
+          books.push(b);
+          if (b.videoId) byVideo[b.videoId] = b;
+        });
+      });
+    }
+
+    function following() {
+      return !!(cur && cur.videoId && cur.videoId === currentId && cur.cues.length);
+    }
+    function showPage(i) {
+      if (!cur) return;
+      index = Math.max(0, Math.min(cur.pages.length - 1, i));
+      $('#cwImg').src = encodePath(cur.pages[index]);
+      $('#cwLabel').textContent = (index + 1) + ' / ' + cur.pages.length;
+      $('#cwPrev').disabled = index === 0;
+      $('#cwNext').disabled = index >= cur.pages.length - 1;
+    }
+    function updateTag() {
+      var el = $('#cwFollow');
+      if (!el) return;
+      var manual = Date.now() < manualUntil;
+      el.classList.toggle('manual', manual || !following());
+      el.textContent = !following() ? '手动翻页'
+        : (manual ? '手动翻页中' : '自动跟随');
+      var hint = $('#cwHint');
+      if (hint) hint.textContent = !following()
+        ? '这一集没有配套讲解页，可以自己选一册翻'
+        : (manual ? '12 秒后继续跟着视频翻' : '跟着视频自动翻页，手动翻页后 12 秒恢复');
+    }
+    function fillSelect() {
+      var sel = $('#cwBook');
+      sel.innerHTML = '';
+      books.forEach(function (b, i) {
+        var o = document.createElement('option');
+        o.value = String(i);
+        o.textContent = (b.unitName ? b.unitName + ' · ' : '') + b.title;
+        sel.appendChild(o);
+      });
+    }
+    function hidePanel() {
+      $('#cwPanel').classList.add('hidden');
+      $('#playerView').classList.remove('cw-on');
+      $('#cwToggle').classList.remove('on');
+      cur = null;
+    }
+    function attach(videoId) {
+      var toggle = $('#cwToggle');
+      toggle.classList.toggle('hidden', !has() || currentType !== 'video');
+      if (!on || !has() || currentType !== 'video') { hidePanel(); return; }
+      fillSelect();
+      var b = byVideo[videoId] || books[0];
+      $('#cwBook').value = String(books.indexOf(b));
+      cur = b; manualUntil = 0;
+      $('#cwTitle').textContent = b.unitName || '课件';
+      $('#cwPanel').classList.remove('hidden');
+      $('#playerView').classList.add('cw-on');
+      toggle.classList.add('on');
+      showPage(0); updateTag();
+    }
+    function changeBook(i) {
+      cur = books[i] || null; manualUntil = 0;
+      if (!cur) return;
+      $('#cwTitle').textContent = cur.unitName || '课件';
+      showPage(0); updateTag();
+    }
+    function setOn(v) {
+      on = !!v; saveOn();
+      if (on) attach(currentId); else hidePanel();
+    }
+    function turn(d) {
+      if (!cur) return;
+      manualUntil = Date.now() + 12000;
+      showPage(index + d);
+      updateTag();
+    }
+    function onTime(t) {
+      if (!on || !cur) return;
+      if (Date.now() < manualUntil) { updateTag(); return; }
+      if (following()) {
+        var target = 0;
+        for (var i = 0; i < cur.cues.length; i++) {
+          if (t + 0.25 >= cur.cues[i]) target = i;
+        }
+        if (target !== index) showPage(target);
+      }
+      updateTag();
+    }
+    return {
+      indexCatalog: indexCatalog, has: has, attach: attach, onTime: onTime,
+      turn: turn, setOn: setOn, isOn: function () { return on; },
+      changeBook: changeBook, close: hidePanel
+    };
+  })();
+
   function esc(s) {
     return String(s == null ? '' : s)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -988,6 +1104,7 @@
 
   function init(c) {
     catalog = c;
+    CW.indexCatalog(c);
     $('#courseTitle').textContent = catalog.title || '今天学什么';
     $('#demoTag').classList.toggle('hidden', !catalog.demo);
     if (catalog.demo) {
@@ -1470,6 +1587,7 @@
     v.addEventListener('timeupdate', function () {
       if (currentType !== 'video' || !isFinite(v.duration) || v.duration <= 0) return;
       $('#vProgressFill').style.width = Math.min(100, (v.currentTime / v.duration) * 100) + '%';
+      CW.onTime(v.currentTime);   // 同屏课件：按时间点自动翻页
       if (!currentId || completedGuard) return;
       var now = Date.now();
       if (interestMode) {
@@ -1632,10 +1750,13 @@
     setPlayingUI(false);
     var pr = v.play();
     if (pr && pr.catch) pr.catch(function () { setPlayingUI(false); });
+    CW.attach(currentId);   // 开关若已打开，下面挂上这一集的讲解页
   }
 
   function openPdf(l) {
     seekLocked = true;
+    CW.close();             // 全屏看 PDF 时不需要同屏条
+    $('#cwToggle').classList.add('hidden');
     $('#videoWrap').classList.add('hidden');
     $('#pdfViewer').classList.remove('hidden');
     $('#playerHint').textContent = '左右滑动也能翻页';
@@ -1677,6 +1798,7 @@
     var v = $('#video');
     try { v.pause(); } catch (e) {}
     setFullscreen(false);
+    CW.close();
     currentId = null;
     completedGuard = true;
     $('#playerView').classList.add('hidden');
@@ -1965,6 +2087,15 @@
       cancelNext(); Speech.stop(); closePlayer(); renderAll();
     });
     $('#videoTapLayer').addEventListener('click', function () { togglePlay(); });
+
+    // ---- 同屏课件：开关 / 选册 / 翻页 / 关闭 ----
+    $('#cwToggle').addEventListener('click', function () { Sfx.tap(); CW.setOn(!CW.isOn()); });
+    $('#cwClose').addEventListener('click', function () { Sfx.tap(); CW.setOn(false); });
+    $('#cwPrev').addEventListener('click', function () { CW.turn(-1); });
+    $('#cwNext').addEventListener('click', function () { CW.turn(1); });
+    $('#cwBook').addEventListener('change', function (e) {
+      CW.changeBook(Number(e.target.value) || 0);
+    });
 
     // ---- 进度条：默认锁定；长按 0.6s 解锁（家长操作），解锁后可点/拖换进度 ----
     (function () {

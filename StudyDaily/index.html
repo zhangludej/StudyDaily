@@ -100,6 +100,7 @@
     <div class="player-head">
       <button id="backBtn" class="round-back" aria-label="返回">←</button>
       <div class="player-title" id="playerTitle"></div>
+      <button id="cwToggle" class="cw-toggle hidden" aria-label="显示或隐藏课件">课件</button>
     </div>
 
     <div id="videoWrap" class="video-wrap">
@@ -124,6 +125,25 @@
         </svg>
       </button>
       <div id="videoError" class="video-error hidden"></div>
+    </div>
+
+    <!-- 同屏课件：视频播着，下面跟着翻页（默认关，右上角「课件」打开） -->
+    <div id="cwPanel" class="cw-panel hidden">
+      <div class="cw-head">
+        <span id="cwTitle" class="cw-title">课堂讲解页</span>
+        <select id="cwBook" class="cw-book" aria-label="选择课件册"></select>
+        <span id="cwFollow" class="cw-follow">自动跟随</span>
+        <button id="cwClose" class="cw-close" aria-label="关闭课件">×</button>
+      </div>
+      <div class="cw-body">
+        <button id="cwPrev" class="cw-arrow" aria-label="上一页">‹</button>
+        <img id="cwImg" alt="课件页">
+        <button id="cwNext" class="cw-arrow" aria-label="下一页">›</button>
+      </div>
+      <div class="cw-foot">
+        <span id="cwLabel">1 / 1</span>
+        <span id="cwHint">跟着视频自动翻页，手动翻页后 12 秒恢复</span>
+      </div>
     </div>
 
     <div id="pdfViewer" class="pdf-viewer hidden">

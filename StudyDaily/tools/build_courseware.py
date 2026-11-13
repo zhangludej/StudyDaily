@@ -127,8 +127,8 @@ def pinyin_card(token, idx, total, label):
 
 # ---------------------------------------------------------------- 抽帧
 
-def still_frames(video, out_dir, ffmpeg, max_pages=14, sample_every=2.0):
-    """每 sample_every 秒抽一帧，找连续静止段，取段中间帧当讲解页。
+def analyze(video, ffmpeg, max_pages=14, sample_every=2.0, need_frames=True):
+    """抽帧并挑出静止段中间帧，返回 (选中的帧序号, 帧图像列表或 None)。
 
     帧通过 image2pipe 直接读进内存，不落临时文件：批量生成上百集时
     不会产生几万个临时 jpg，也避开批量删除的安全限制。
@@ -148,9 +148,11 @@ def still_frames(video, out_dir, ffmpeg, max_pages=14, sample_every=2.0):
             blobs.append(raw[start:i + 2]); start = None; i += 1
         i += 1
     if len(blobs) < 4:
-        return []
-    frames = [Image.open(io.BytesIO(b)).convert("RGB") for b in blobs]
-    small = [im.resize((120, 68)) for im in frames]
+        return [], ([] if need_frames else None)
+    frames = [Image.open(io.BytesIO(b)).convert("RGB") for b in blobs] if need_frames else None
+    small = [(im.resize((120, 68)) if need_frames
+              else Image.open(io.BytesIO(b)).convert("RGB").resize((120, 68)))
+             for im, b in zip(frames or [None] * len(blobs), blobs)]
     diffs = [sum(ImageStat.Stat(ImageChops.difference(small[i], small[i - 1])).mean) / 3
              for i in range(1, len(small))]
 
@@ -169,7 +171,7 @@ def still_frames(video, out_dir, ffmpeg, max_pages=14, sample_every=2.0):
     picks = []
     for a, b in segments:
         mid = (a + b) // 2
-        if 0 <= mid < len(frames):
+        if 0 <= mid < len(small):
             picks.append(mid)
     # 相似页去重 + 数量上限
     kept, prev = [], None
@@ -177,21 +179,27 @@ def still_frames(video, out_dir, ffmpeg, max_pages=14, sample_every=2.0):
         sm = small[idx]
         if prev is not None and sum(ImageStat.Stat(ImageChops.difference(sm, prev)).mean) / 3 < 7:
             continue
-        kept.append((frames[idx], sm))
+        kept.append(idx)
         prev = sm
         if len(kept) >= max_pages:
             break
+    return kept, frames
+
+
+def still_frames(video, out_dir, ffmpeg, max_pages=14, sample_every=2.0):
+    """生成讲解页图，并返回每页对应的视频秒数（自动跟随用）。"""
+    kept, frames = analyze(video, ffmpeg, max_pages, sample_every, True)
     if not kept:
-        return []
+        return [], []
     pages_dir = out_dir / "pages"
     pages_dir.mkdir(parents=True, exist_ok=True)
     for old in pages_dir.glob("page-*.jpg"):   # 覆盖式重跑，不留旧页
         old.unlink()
     out = []
-    for i, (frame, _) in enumerate(kept, 1):
+    for i, idx in enumerate(kept, 1):
         # 统一贴到 3:4 奶油底页面上，App 里翻页时视觉与字卡一致
         page, pd = card_base("课堂讲解页", "第 %d 页 / 共 %d 页" % (i, len(kept)))
-        frame = frame.copy()
+        frame = frames[idx].copy()
         frame.thumbnail((W - 120, 720))
         x, y = (W - frame.width) // 2, 300 + (720 - frame.height) // 2
         page.paste(frame, (x, y))
@@ -201,7 +209,7 @@ def still_frames(video, out_dir, ffmpeg, max_pages=14, sample_every=2.0):
         dst = pages_dir / ("page-%03d.jpg" % i)
         page.save(dst, quality=88)
         out.append(dst)
-    return out
+    return out, [round(idx * sample_every, 1) for idx in kept]
 
 
 # ---------------------------------------------------------------- 解析与组装
@@ -225,6 +233,52 @@ def make_printable(images, pdf_path):
     rgb[0].save(pdf_path, save_all=True, append_images=rgb[1:], resolution=110.0)
 
 
+def rebuild_cues(courses, pdfs, ffmpeg):
+    """页图已经生成好了，只重新解码视频算每页对应的时间点，不重画页。
+
+    抽帧参数与生成时完全一致，因此选出的帧序号一一对应 page-001..N。
+    给 catalog 补 videoId（主课 id）和 cues（每页对应秒数），前端据此
+    在视频播放时自动翻到对应课件页。
+    """
+    cat_path = pdfs / "catalog.json"
+    cat = json.loads(cat_path.read_text(encoding="utf-8"))
+    all_lessons = [(u, l) for u in courses["units"] for l in u["lessons"]]
+    by_order = {i: l for i, (_, l) in enumerate(all_lessons, 1)}
+
+    unit = next((u for u in cat["units"] if u["id"] == "cw-video"), None)
+    if unit is None:
+        raise SystemExit("catalog.json 里没有 cw-video 栏目")
+    mismatches = []
+    t0 = time.time()
+    for n, lesson in enumerate(unit["lessons"], 1):
+        l = by_order[n]
+        lesson["videoId"] = l["id"]
+        video = HERE / l["file"]
+        if not video.is_file():
+            lesson["cues"] = []
+            continue
+        kept, _ = analyze(video, ffmpeg, 14, 2.0, need_frames=False)
+        lesson["cues"] = [round(idx * 2.0, 1) for idx in kept]
+        if len(lesson["cues"]) != len(lesson["pages"]):
+            mismatches.append((n, len(lesson["pages"]), len(lesson["cues"])))
+        if n % 20 == 0:
+            print("[时间戳] %d/%d 累计%.0fs" % (n, len(unit["lessons"]), time.time() - t0), flush=True)
+
+    if mismatches:
+        # 帧序列有差异时，用「按视频时长均分」兜底，保证每页都有时间点
+        print("帧序列与页图不一致的集：", mismatches[:8])
+        for n, npages, _ in mismatches:
+            l = by_order[n]
+            dur = float(l.get("durationSec") or 0)
+            unit["lessons"][n - 1]["cues"] = [
+                round(dur * (i + 1) / (npages + 1), 1) for i in range(npages)]
+
+    cat_path.write_text(json.dumps(cat, ensure_ascii=False, indent=2), encoding="utf-8")
+    total = sum(len(x.get("cues", [])) for x in unit["lessons"])
+    print("完成：%d 课 / %d 个时间点 → %s（%.0fs）"
+          % (len(unit["lessons"]), total, cat_path, time.time() - t0))
+
+
 def rel(p):
     return str(p.relative_to(HERE)).replace("\\", "/")
 
@@ -235,15 +289,21 @@ def main():
     ap.add_argument("--root", default=str(HERE))
     ap.add_argument("--sample", action="store_true", help="只出 5 张字卡 + 1 集抽帧样张")
     ap.add_argument("--full", action="store_true", help="全量 124 集")
+    ap.add_argument("--cues-only", action="store_true",
+                    help="只给已生成的 catalog.json 补 videoId / cues（不重画页图）")
     args = ap.parse_args()
-    if not args.sample and not args.full:
-        ap.error("请指定 --sample 或 --full")
+    if not (args.sample or args.full or args.cues_only):
+        ap.error("请指定 --sample / --full / --cues-only 之一")
 
     HERE = Path(args.root).resolve()
     ffmpeg = find_ffmpeg()
     courses = json.loads((HERE / "courses.json").read_text(encoding="utf-8"))
     pdfs = HERE / "pdfs"
     pdfs.mkdir(exist_ok=True)
+
+    if args.cues_only:
+        return rebuild_cues(courses, pdfs, ffmpeg)
+
     out_units = []
 
     # ---- 1) 识字字卡（40 集）
@@ -311,7 +371,7 @@ def main():
         if not video.is_file():
             print("[抽帧] 跳过（无视频）", l["file"]); continue
         d = pdfs / "cw-video" / ("%03d" % i)
-        pages = still_frames(video, d, ffmpeg)
+        pages, cues = still_frames(video, d, ffmpeg)
         if not pages:
             continue
         lessons_v.append({
@@ -319,6 +379,7 @@ def main():
             "title": "%s · %s" % (u["name"], l["title"][:28]),
             "type": "pdf", "file": "", "pages": [rel(p) for p in pages],
             "poster": rel(pages[0]), "durationSec": 0, "order": i,
+            "videoId": l["id"], "cues": cues,
         })
         if i % 10 == 0 or args.sample:
             print("[抽帧] %d/%d 本集%d页 累计%.0fs" % (i, len(all_lessons), len(pages), time.time() - t0), flush=True)
