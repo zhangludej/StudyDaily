@@ -16,6 +16,7 @@
   var serverProgress = false;
   var appMode = false; // 运行在安卓 App 壳里（内置服务），文案与浏览器模式区分开
   var currentId = null, currentType = 'video', completedGuard = false;
+  var seekLocked = true; // 进度条默认锁定，长按 0.6 秒解锁（家长操作），换课自动重新锁定
   var interestMode = false; // 正在播放兴趣课堂的课（自由点播，不算每日任务）
   var pdfPages = [], pdfIndex = 0;
   var pendingPosition = 0, lastPosSave = 0;
@@ -1601,6 +1602,9 @@
   }
 
   function openVideo(l) {
+    seekLocked = true;
+    var bar = document.querySelector('.vprogress');
+    if (bar) bar.classList.remove('armed');
     $('#videoWrap').classList.remove('hidden');
     $('#pdfViewer').classList.add('hidden');
     $('#playerHint').textContent = '不想看了可以点左上角返回';
@@ -1615,6 +1619,7 @@
   }
 
   function openPdf(l) {
+    seekLocked = true;
     $('#videoWrap').classList.add('hidden');
     $('#pdfViewer').classList.remove('hidden');
     $('#playerHint').textContent = '左右滑动也能翻页';
@@ -1692,7 +1697,7 @@
     Sfx.unlock();
     interestMode = true;
     currentId = l.id;
-    currentType = 'video';
+    currentType = l.type === 'pdf' ? 'pdf' : 'video';
     completedGuard = false;
     var r = IT.rec(l.id);
     pendingPosition = (r && r.positionSec) || 0;
@@ -1708,6 +1713,7 @@
     $('#vProgressFill').style.width = '0%';
     setDoneLabel('看完了', false);
     window.scrollTo(0, 0);
+    if (currentType === 'pdf') { openPdf(l); return; }
     Speech.sayLesson(l.id, lessonSpeech(l));
     openVideo(l);
   }
@@ -1943,6 +1949,38 @@
       cancelNext(); Speech.stop(); closePlayer(); renderAll();
     });
     $('#videoTapLayer').addEventListener('click', function () { togglePlay(); });
+
+    // ---- 进度条：默认锁定；长按 0.6s 解锁（家长操作），解锁后可点/拖换进度 ----
+    (function () {
+      var bar = document.querySelector('.vprogress');
+      if (!bar) return;
+      var holdTimer = null;
+      function seekTo(clientX) {
+        var v = $('#video');
+        if (!currentId || currentType !== 'video' || !isFinite(v.duration) || v.duration <= 0) return;
+        var r = bar.getBoundingClientRect();
+        var ratio = Math.max(0, Math.min(1, (clientX - r.left) / r.width));
+        try { v.currentTime = ratio * v.duration; } catch (e) {}
+        $('#vProgressFill').style.width = (ratio * 100) + '%';
+      }
+      bar.addEventListener('pointerdown', function (e) {
+        if (!seekLocked) { seekTo(e.clientX); return; }
+        clearTimeout(holdTimer);
+        holdTimer = setTimeout(function () {
+          seekLocked = false;
+          bar.classList.add('armed');
+          Sfx.tap();
+          Speech.say('家长模式，进度条已解锁', true);
+          seekTo(e.clientX);
+        }, 600);
+      });
+      bar.addEventListener('pointermove', function (e) {
+        if (!seekLocked && e.buttons) seekTo(e.clientX);
+      });
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) {
+        bar.addEventListener(ev, function () { clearTimeout(holdTimer); });
+      });
+    })();
     $('#fsBtn').addEventListener('click', function (e) {
       e.stopPropagation();
       Sfx.tap();

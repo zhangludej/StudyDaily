@@ -309,6 +309,7 @@ input { font-family: inherit; }
   background: linear-gradient(180deg, rgba(10,16,32,0), rgba(10,16,32,.62));
 }
 .vprogress { flex: 1; height: 8px; border-radius: 999px; background: rgba(255,255,255,.28); overflow: hidden; }
+.vprogress.armed { height: 14px; box-shadow: 0 0 0 3px rgba(255,209,102,.85); cursor: pointer; }
 .vprogress-fill { height: 100%; width: 0%; border-radius: 999px; background: #7FE3AC; transition: width .25s linear; }
 .vbtn {
   width: 42px; height: 42px; flex: 0 0 42px; border-radius: 50%;
